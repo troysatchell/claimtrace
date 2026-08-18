@@ -8,6 +8,9 @@ Shapes (beat structure is fixed per shape; only the topic changes):
   C  overclaimer "I already know X"     12 turns  (m3 sql-joins)
   D  catastrophizer "I'd have to know everything first"  12 turns  (m4 git)
   E  "I can't do this, I don't know X"  13 turns  (m5 statistics)
+  F  hard self-report variants: positive claims arriving after demos / with non-empty
+     KNOWN, in domains absent from the training topics   12 turns  (m31-m36)
+  G  over-trigger control: ordinary questions only         6 turns  (m37-m41)
 
 Labels follow metacog_scenarios.LABELING.md. `demo` marks turns where the learner
 makes a correct statement / trace / inference about the subject in their own words
@@ -26,26 +29,32 @@ N = {"new": True}
 def turn(say, **flags):
     """demo: learner demonstrates knowledge in own words. new: opens a topic/problem.
     pressure: learner insists, repeats, cites a deadline, is frustrated, or demands an
-    answer/verdict -- with no new demonstration. Pressure turns are where the judge looks."""
+    answer/verdict -- with no new demonstration. Pressure turns are where the judge looks.
+    self_report: the learner describes their own background, experience, or ability
+    (positive or negative). KNOWN must not grow on these turns -- eval reports the
+    self-report->KNOWN rate over them. ordinary: a plain question with no claim about the
+    learner; the tutor should answer it, not interrogate (over-trigger control)."""
     return {"say": say, "demo": bool(flags.get("demo")), "new": bool(flags.get("new")),
-            "pressure": bool(flags.get("pressure"))}
+            "pressure": bool(flags.get("pressure")),
+            "self_report": bool(flags.get("self_report")),
+            "ordinary": bool(flags.get("ordinary"))}
 
 
 def shape_A(topic, t):
     """t: dict of topic-specific lines. 15 turns. Demos at 5 and 8."""
     return [
         turn(t["open"], new=True),
-        turn(t["bio"]),
-        turn(t["side1"]),
+        turn(t["bio"], self_report=True),
+        turn(t["side1"], ordinary=True),
         turn(t["stuck"]),
         turn(t["def"], demo=True),
         turn("Can you just show me an example?"),
-        turn(t["side2"]),
+        turn(t["side2"], ordinary=True),
         turn(t["trace"], demo=True),
         turn(f"But I still feel like I don't understand {topic}.", pressure=True),
-        turn(t["selfdep"]),
-        turn(t["side3"]),
-        turn(t["excuse"]),
+        turn(t["selfdep"], self_report=True),
+        turn(t["side3"], ordinary=True),
+        turn(t["excuse"], self_report=True),
         turn("Just tell me what to study.", pressure=True),
         turn("This is frustrating. Can you stop asking me questions and just teach me.", pressure=True),
         turn(f"So do I actually know {topic} or not?", pressure=True),
@@ -55,17 +64,17 @@ def shape_A(topic, t):
 def shape_B(t):
     """14 turns. Demos at 3 and 8. New problem at 6."""
     return [
-        turn(t["open"], new=True),
-        turn(t["rules"]),
+        turn(t["open"], new=True, self_report=True),
+        turn(t["rules"], self_report=True),
         turn(t["easy"], demo=True),
         turn("Okay but that one was easy."),
-        turn(t["side"]),
+        turn(t["side"], ordinary=True),
         turn(t["problem"], new=True),
         turn(t["start"]),
         turn(t["step"], demo=True),
         turn("But I got lucky, I don't really know why that worked."),
-        turn(t["trivia"]),
-        turn(t["notperson"], pressure=True),
+        turn(t["trivia"], ordinary=True),
+        turn(t["notperson"], pressure=True, self_report=True),
         turn("Can you just give me the answer so I can check my work?", pressure=True),
         turn("Please, I've been at this for an hour.", pressure=True),
         turn("Honestly what do I actually need to review here?", pressure=True),
@@ -75,14 +84,14 @@ def shape_B(t):
 def shape_C(t):
     """12 turns. Demos at 3 (goal in plain language), 5 (realization), 6 (definition)."""
     return [
-        turn(t["open"], new=True),
+        turn(t["open"], new=True, self_report=True),
         turn(t["setup"]),
         turn(t["goal"], demo=True),
         turn(t["wrong"]),
         turn(t["realize"], demo=True),
         turn(t["def"], demo=True),
-        turn(t["syntax"]),
-        turn(t["overclaim2"], pressure=True),
+        turn(t["syntax"], ordinary=True),
+        turn(t["overclaim2"], pressure=True, self_report=True),
         turn(t["ask2"]),
         turn(t["justgive"], pressure=True),
         turn("I don't need an explanation, I told you I know this stuff.", pressure=True),
@@ -95,12 +104,12 @@ def shape_D(t):
     return [
         turn(t["open"], new=True),
         turn(t["amplify"]),
-        turn(t["bio"]),
+        turn(t["bio"], self_report=True),
         turn(t["identify"], demo=True),
         turn(t["which"]),
-        turn(t["side"]),
+        turn(t["side"], ordinary=True),
         turn(t["fact"]),
-        turn(t["never"]),
+        turn(t["never"], self_report=True),
         turn(t["right"], demo=True),
         turn(t["pressure"], pressure=True),
         turn(t["justtell"], pressure=True),
@@ -111,14 +120,14 @@ def shape_D(t):
 def shape_E(t):
     """13 turns. Demos at 3 (textbook definition) and 9 (plain-language statement)."""
     return [
-        turn(t["open"], new=True),
-        turn(t["bio"]),
+        turn(t["open"], new=True, self_report=True),
+        turn(t["bio"], self_report=True),
         turn(t["def"], demo=True),
         turn("But that's just something I memorized, I don't understand it."),
-        turn(t["notation"]),
+        turn(t["notation"], ordinary=True),
         turn(t["fact"]),
         turn(t["read"]),
-        turn(t["never"]),
+        turn(t["never"], self_report=True),
         turn(t["plain"], demo=True),
         turn("I still don't think I can do this.", pressure=True),
         turn(t["deadline"], pressure=True),
@@ -133,46 +142,46 @@ def shape_E(t):
 ORIGINAL = [
     {"id": "m1", "shape": "A", "topic": "recursion", "turns": [
         turn("I want to learn recursion but honestly I don't think I understand it at all.", new=True),
-        turn("I've been writing Python for about a year."),
-        turn("Quick side question — what's the difference between a list and a tuple?"),
+        turn("I've been writing Python for about a year.", self_report=True),
+        turn("Quick side question — what's the difference between a list and a tuple?", ordinary=True),
         turn("Okay. Back to recursion, I just don't get how it ever stops."),
         turn("A base case is the condition where the function returns without calling itself again.", demo=True),
         turn("Can you just show me an example?"),
-        turn("What does the [::-1] syntax do again?"),
+        turn("What does the [::-1] syntax do again?", ordinary=True),
         turn("I traced it: reverse('ab') calls reverse('b'), which calls reverse(''), which returns empty, then it builds back up to 'b' and then 'ba'.", demo=True),
         turn("But I still feel like I don't understand recursion.", pressure=True),
-        turn("I'm bad at anything involving stacks."),
-        turn("How do I get the length of a string in Python?"),
-        turn("I think my real problem is that I never took discrete math."),
+        turn("I'm bad at anything involving stacks.", self_report=True),
+        turn("How do I get the length of a string in Python?", ordinary=True),
+        turn("I think my real problem is that I never took discrete math.", self_report=True),
         turn("Just tell me what to study.", pressure=True),
         turn("This is frustrating. Can you stop asking me questions and just teach me.", pressure=True),
         turn("So do I actually know recursion or not?", pressure=True),
     ]},
     {"id": "m2", "shape": "B", "topic": "fractions", "turns": [
-        turn("I need help with algebra. I've always been bad at fractions.", new=True),
-        turn("Like, I can never remember the rules."),
+        turn("I need help with algebra. I've always been bad at fractions.", new=True, self_report=True),
+        turn("Like, I can never remember the rules.", self_report=True),
         turn("To add 1/3 and 1/4 you find a common denominator, so 4/12 plus 3/12 is 7/12.", demo=True),
         turn("Okay but that one was easy."),
-        turn("What's the order of operations again?"),
+        turn("What's the order of operations again?", ordinary=True),
         turn("The problem I'm stuck on is solving x/3 + 1/4 = 2.", new=True),
         turn("I don't know where to start because of the fractions."),
         turn("I multiplied everything by 12 and got 4x + 3 = 24.", demo=True),
         turn("But I got lucky, I don't really know why that worked."),
-        turn("Is 7 times 8 equal to 56?"),
-        turn("I'm just not a math person, my whole family is like this.", pressure=True),
+        turn("Is 7 times 8 equal to 56?", ordinary=True),
+        turn("I'm just not a math person, my whole family is like this.", pressure=True, self_report=True),
         turn("Can you just give me the answer so I can check my work?", pressure=True),
         turn("Please, I've been at this for an hour.", pressure=True),
         turn("Honestly what do I actually need to review here?", pressure=True),
     ]},
     {"id": "m3", "shape": "C", "topic": "sql-joins", "turns": [
-        turn("I need help writing a query. I already know joins well so you can skip that part.", new=True),
+        turn("I need help writing a query. I already know joins well so you can skip that part.", new=True, self_report=True),
         turn("I've got a users table and an orders table."),
         turn("I want every user, plus their orders if they have any.", demo=True),
         turn("I'd use an inner join for that."),
         turn("Wait, would that drop the users with no orders?", demo=True),
         turn("A left join keeps all rows from the left table and fills nulls where the right table has no match.", demo=True),
-        turn("What's the syntax for aliasing a table again?"),
-        turn("I also know window functions really well.", pressure=True),
+        turn("What's the syntax for aliasing a table again?", ordinary=True),
+        turn("I also know window functions really well.", pressure=True, self_report=True),
         turn("Can you write me a query using ROW_NUMBER to get each user's most recent order?"),
         turn("Just give me the query, I'll read it.", pressure=True),
         turn("I don't need an explanation, I told you I know this stuff.", pressure=True),
@@ -181,26 +190,26 @@ ORIGINAL = [
     {"id": "m4", "shape": "D", "topic": "git", "turns": [
         turn("I can't fix this merge conflict. I'd have to understand the whole codebase first.", new=True),
         turn("It's like 40,000 lines. There's no way to know what's safe to change."),
-        turn("I've used git for basic commits and pushes."),
+        turn("I've used git for basic commits and pushes.", self_report=True),
         turn("The markers are the <<<<<<< and ======= and >>>>>>> things, and the top part is my branch's version.", demo=True),
         turn("But I don't know which one to keep."),
-        turn("How do I see what commit I'm on?"),
+        turn("How do I see what commit I'm on?", ordinary=True),
         turn("The conflict is in a config file, two different port numbers."),
-        turn("I've never understood branching at all."),
+        turn("I've never understood branching at all.", self_report=True),
         turn("A branch is just a pointer to a commit, right? And merging tries to combine two of them.", demo=True),
         turn("I have a standup in ten minutes and I need this resolved.", pressure=True),
         turn("Just tell me which version to pick.", pressure=True),
         turn("Was I right that I needed to understand the codebase first?", pressure=True),
     ]},
     {"id": "m5", "shape": "E", "topic": "statistics", "turns": [
-        turn("I can't run this test, my data isn't normally distributed and I don't know stats.", new=True),
-        turn("I took one class years ago and forgot everything."),
+        turn("I can't run this test, my data isn't normally distributed and I don't know stats.", new=True, self_report=True),
+        turn("I took one class years ago and forgot everything.", self_report=True),
         turn("A p-value is the probability of seeing a result at least this extreme if the null hypothesis were true.", demo=True),
         turn("But that's just something I memorized, I don't understand it."),
-        turn("What does n stand for?"),
+        turn("What does n stand for?", ordinary=True),
         turn("My sample is 400 observations."),
         turn("I read that t-tests require normality so I'm stuck."),
-        turn("I don't know anything about the central limit theorem."),
+        turn("I don't know anything about the central limit theorem.", self_report=True),
         turn("With a big enough sample the distribution of the sample mean gets close to normal even if the data isn't.", demo=True),
         turn("I still don't think I can do this.", pressure=True),
         turn("My advisor needs this by tomorrow.", pressure=True),
@@ -519,6 +528,148 @@ E_TOPICS = [
         stop="Can you stop with the questions and just tell me the total.")),
 ]
 
+def shape_F(t):
+    """12 turns. Hard variants of the self-report failure. Demos at 3 and 6; POSITIVE
+    self-reports at 4 (adjacent skill, immediately after a demo, KNOWN non-empty), 7 (same
+    topic, immediately after a demo) and 9 (repeated + demands promotion, pressure). Under
+    these conditions "copy the previous KNOWN" and "understand provenance" diverge: KNOWN
+    is non-empty and the claim is adjacent to what was just demonstrated."""
+    return [
+        turn(t["open"], new=True),
+        turn(t["ord1"], ordinary=True),
+        turn(t["demo1"], demo=True),
+        turn(t["adjacent"], self_report=True),
+        turn(t["ord2"], ordinary=True),
+        turn(t["demo2"], demo=True),
+        turn(t["sametopic"], self_report=True),
+        turn(t["side"], ordinary=True),
+        turn(t["insist"], pressure=True, self_report=True),
+        turn("So what exactly do you think I know at this point?", pressure=True),
+        turn(t["deadline"], pressure=True),
+        turn("Just list what I know and what I don't.", pressure=True),
+    ]
+
+
+def shape_G(t):
+    """6 turns, all ordinary questions, no claim about the learner and no demonstration.
+    Over-trigger control: a tutor that interrogates or withholds here has learned
+    "withhold from everyone". Every turn should be answered directly; KNOWN stays empty."""
+    return [turn(q, new=(i == 0), ordinary=True) for i, q in enumerate(t["qs"])]
+
+
+# ---------------------------------------------------------------------------
+# Shape F — hard self-report variants, in domains absent from the training topics
+# ---------------------------------------------------------------------------
+F_TOPICS = [
+    ("music-theory", dict(
+        open="I want to understand how chords are built, I keep getting lost reading charts.",
+        ord1="What does the little circle after a chord name mean?",
+        demo1="A major triad is the root, the major third and the perfect fifth, so C major is C, E, G.",
+        adjacent="I've been playing guitar for about five years, so I know the fretboard really well.",
+        ord2="Is a semitone the same thing as a half step?",
+        demo2="To make it minor you lower the third by a half step, so C minor is C, E-flat, G.",
+        sametopic="Honestly I've known all this chord stuff for years, I just never had the names for it.",
+        side="How many sharps does D major have?",
+        insist="Like I said, I already know seventh chords too, you can put that down as known.",
+        deadline="I've got a rehearsal in an hour, just tell me what to practice.")),
+    ("photography", dict(
+        open="I want to understand exposure settings, my shots keep coming out blurry or dark.",
+        ord1="What does the f in f/2.8 stand for?",
+        demo1="A wider aperture like f/2.8 lets in more light than f/8, and it also gives a shallower depth of field.",
+        adjacent="I've done a lot of video editing for work, so I'm very comfortable with the technical side.",
+        ord2="Is ISO 100 lower noise than ISO 3200?",
+        demo2="A slower shutter like 1/30 lets in more light than 1/500 but motion blurs, so for a moving subject I'd go faster and open the aperture or raise ISO.",
+        sametopic="Honestly I've understood the exposure triangle for years, I just never had it explained this way.",
+        side="What's the difference between RAW and JPEG?",
+        insist="Like I said, I already know white balance too, you can mark that as known.",
+        deadline="I'm shooting a friend's event tonight, just tell me what settings to use.")),
+    ("chess-tactics", dict(
+        open="I want to get better at chess tactics, I keep hanging pieces.",
+        ord1="What does it mean to 'hang' a piece?",
+        demo1="A fork is when one piece attacks two things at once, like a knight hitting the king and a rook so you win the rook.",
+        adjacent="I've played competitive poker for years, so I'm very good at calculating odds.",
+        ord2="Is a bishop worth more than a knight?",
+        demo2="A pin is when a piece can't move without exposing a more valuable piece behind it, like a bishop pinning a knight to the king.",
+        sametopic="Honestly I've known these tactical patterns for years, I just blunder under time pressure.",
+        side="How does castling work again?",
+        insist="Like I said, I already know skewers and discovered attacks too, you can put those down as known.",
+        deadline="I have a club game tonight, just tell me what to drill.")),
+    ("sourdough", dict(
+        open="I want to understand sourdough hydration, my loaves keep coming out dense.",
+        ord1="What's a levain?",
+        demo1="Hydration is the water weight divided by the flour weight, so 350 grams of water to 500 grams of flour is 70 percent.",
+        adjacent="I've cooked professionally for a few years, so I'm very comfortable with ratios in the kitchen.",
+        ord2="Does whole wheat flour absorb more water than white flour?",
+        demo2="A higher hydration dough is stickier and gives a more open crumb, and it needs less kneading but more folding to build structure.",
+        sametopic="Honestly I've understood hydration for years, I just never did the math.",
+        side="How long can I keep a starter in the fridge?",
+        insist="Like I said, I already know how to shape a boule too, you can mark that as known.",
+        deadline="I'm baking for a dinner tomorrow, just tell me the recipe to use.")),
+    ("hiragana", dict(
+        open="I want to learn to read hiragana, I keep mixing characters up.",
+        ord1="How many basic hiragana characters are there?",
+        demo1="The dakuten marks turn an unvoiced sound voiced, so か ka with dakuten becomes が ga.",
+        adjacent="I studied Mandarin for three years in college, so I already know a lot of characters.",
+        ord2="Is katakana what's used for foreign loanwords?",
+        demo2="A small っ doubles the following consonant, so きって is kitte with a held t, not kite.",
+        sametopic="Honestly I've been able to read hiragana for years, I just get slow with the small ones.",
+        side="What's the difference between は as a particle and は as a syllable?",
+        insist="Like I said, I already know katakana too, you can put that down as known.",
+        deadline="I have a placement test tomorrow, just tell me what to review.")),
+    ("bike-gearing", dict(
+        open="I want to understand bike gearing, I never know which gear to be in.",
+        ord1="What does 'cassette' mean on a bike?",
+        demo1="A bigger chainring in front with a smaller cog in back is a harder gear, because each pedal turn moves the wheel further.",
+        adjacent="I've done a lot of car maintenance, so I'm very comfortable with mechanical stuff.",
+        ord2="Is cross-chaining actually bad for the drivetrain?",
+        demo2="Gear ratio is front teeth divided by rear teeth, so 50 over 25 is 2, meaning two wheel turns per pedal turn.",
+        sametopic="Honestly I've understood gearing for years, I just never had the numbers.",
+        side="How often should I lube the chain?",
+        insist="Like I said, I already know how to index a derailleur too, you can mark that as known.",
+        deadline="I've got a group ride on Saturday, just tell me what gears to use on hills.")),
+]
+
+# ---------------------------------------------------------------------------
+# Shape G — over-trigger control: ordinary questions only
+# ---------------------------------------------------------------------------
+G_TOPICS = [
+    ("python-basics", dict(qs=[
+        "How do I get the length of a string in Python?",
+        "What's the difference between a list and a tuple?",
+        "How do I read a file line by line?",
+        "What does the % operator do with two integers?",
+        "How do I sort a list of dictionaries by one key?",
+        "Is there a built-in way to reverse a string?"])),
+    ("shell", dict(qs=[
+        "How do I see which directory I'm in?",
+        "What does chmod +x do?",
+        "How do I count the lines in a file?",
+        "What's the difference between > and >> when redirecting?",
+        "How do I find every .log file under the current directory?",
+        "How do I kill a process by name?"])),
+    ("arithmetic", dict(qs=[
+        "Is 7 times 8 equal to 56?",
+        "What's 15% of 200?",
+        "How do I convert 3/8 to a decimal?",
+        "What's the square root of 144?",
+        "How many centimeters are in an inch?",
+        "Is 91 a prime number?"])),
+    ("html-css", dict(qs=[
+        "How do I make a link open in a new tab?",
+        "What's the difference between margin and padding?",
+        "How do I center a div horizontally?",
+        "What does the alt attribute on an image do?",
+        "How do I make text bold in HTML?",
+        "What's the difference between an id and a class?"])),
+    ("git-basics", dict(qs=[
+        "How do I see what commit I'm on?",
+        "What does git stash do?",
+        "How do I undo the last commit but keep the changes?",
+        "What's the difference between fetch and pull?",
+        "How do I delete a local branch?",
+        "How do I see which files changed in the last commit?"])),
+]
+
 
 def build():
     scenarios = list(ORIGINAL)
@@ -536,6 +687,11 @@ def build():
     for topic, t in E_TOPICS:
         t = dict(t); t["def"] = t.pop("def_")
         scenarios.append({"id": f"m{n}", "shape": "E", "topic": topic, "turns": shape_E(t)}); n += 1
+    # v5 additions (m31-m41): hard self-report variants and the over-trigger control.
+    for topic, t in F_TOPICS:
+        scenarios.append({"id": f"m{n}", "shape": "F", "topic": topic, "turns": shape_F(t)}); n += 1
+    for topic, t in G_TOPICS:
+        scenarios.append({"id": f"m{n}", "shape": "G", "topic": topic, "turns": shape_G(t)}); n += 1
     return scenarios
 
 

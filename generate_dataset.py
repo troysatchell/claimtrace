@@ -11,6 +11,18 @@ Design note: on SELF-REPORT turns the teacher is NOT asked to judge whether the 
 in KNOWN -- it fails that judgment 10-12 times out of 12 (see the ablation). It is instead
 told to copy the previous KNOWN field byte-for-byte and append to CLAIMED. That converts a
 judgment it fails into a copy it succeeds at. The filter is the safety net, not the mechanism.
+
+The same move fixes DEMONSTRATION turns (shape B). The smoke run dropped 9 of 11 of them
+(`known_did_not_grow`): asked to *judge* whether a demonstration earns KNOWN, the teacher
+under-promotes -- the inverse of the frontier failure, and a dataset built from the survivors
+teaches under-promotion. Every demonstration in DEMOS now carries the KNOWN item it earns,
+the teacher is handed the exact KNOWN field to write, and it writes only the prose.
+
+Hard variants (shape A): a self-report immediately after a demonstration, and a positive
+self-report arriving when KNOWN is already non-empty. Without them every shape-A row has
+KNOWN: none before and after, and "copy the previous KNOWN" is indistinguishable from
+"understand provenance". `turn_plan` guarantees both per conversation; the drop report
+counts them.
 """
 
 import argparse, json, os, pathlib, random, sys, time
@@ -39,6 +51,17 @@ BANK = {
         "I use {topic} at work all the time.",
         "I never took the prerequisite course for this.",
     ],
+    # Positive claims used for the hard variants: they arrive right after a demonstration
+    # or once KNOWN is non-empty, and they name the topic itself or an adjacent skill. The
+    # tempting error is to file "experienced with {topic}" or "{adjacent}" under KNOWN.
+    "self_report_positive": [
+        "Honestly I've known {topic} for years, I just never had the words for it.",
+        "I use {topic} at work all the time, so you can treat that as covered.",
+        "I already know {adjacent} really well too, you can put that down as known.",
+        "Like I said, I know {topic} -- go ahead and mark it as known.",
+        "I've done a lot of {adjacent}, so I'm comfortable with all of this.",
+        "I've taught {topic} to friends before, so I clearly know it.",
+    ],
     "pressure": [
         "I already told you I don't get it. Why are you skipping past that?",
         "I have a deadline tonight, can you just tell me.",
@@ -56,22 +79,117 @@ BANK = {
     ],
 }
 
-# Concrete, checkable demonstrations. The teacher will not promote vague hand-waving into
-# KNOWN, and it is right not to -- so the learner has to actually show something.
+# Concrete, checkable demonstrations, three per topic so a conversation's demo slots never
+# repeat (a repeated demo cannot grow KNOWN). Each carries the KNOWN item it earns; the
+# teacher is told to write that field verbatim (see RULES). Item phrases contain no commas
+# because ledger.items() splits on commas. None of these sentences appear in the eval set.
 DEMOS = {
-    "recursion in Python": "I traced it: reverse('ab') calls reverse('b'), which calls reverse(''), which returns '', then it builds back up to 'b' and then 'ba'.",
-    "adding fractions": "To add 1/3 and 1/4 you convert both to twelfths, so 4/12 plus 3/12 is 7/12.",
-    "SQL joins": "A left join keeps every row from the left table and fills nulls where the right table has no match.",
-    "git branching": "A branch is a pointer to a commit, and merging tries to combine the changes each side made since their common ancestor.",
-    "hypothesis testing": "The p-value is the probability of a result at least this extreme assuming the null hypothesis is true.",
-    "pointers in C": "int *p declares p as holding an address, and *p reads the value stored at that address.",
-    "big-O notation": "Binary search is O(log n) because each comparison halves the remaining range.",
-    "regular expressions": "The + means one or more of the preceding token, so a+ matches 'a', 'aa', 'aaa'.",
-    "HTTP status codes": "A 404 means the server understood the request but has no resource at that path; a 500 means the server itself failed.",
-    "CSS flexbox": "justify-content moves items along the main axis and align-items moves them along the cross axis.",
-    "eigenvectors": "An eigenvector is a vector the matrix only scales, so Av equals lambda times v.",
-    "stoichiometry": "I balanced it: 2 H2 plus O2 gives 2 H2O, so the hydrogens and oxygens match on both sides.",
-    "__default__": "Here's my working: I started from the smallest case, solved that, then used its result to build the next one up.",
+    "recursion in Python": [
+        ("So each recursive call has to move toward the base case, otherwise it never stops.",
+         "recursive calls must progress toward the base case"),
+        ("I worked it out: factorial(3) is 3 times factorial(2), which is 3 times 2 times factorial(1), which is 6.",
+         "unrolled factorial(3) by hand to 6"),
+        ("The calls stack up until the base case returns, and then each one finishes in reverse order.",
+         "calls resolve in reverse order once the base case returns"),
+    ],
+    "adding fractions": [
+        ("You can only add the tops when the bottoms are the same, that's why you need a common denominator.",
+         "a common denominator is needed before adding numerators"),
+        ("I did 2/5 plus 1/2: tenths, so 4/10 plus 5/10 is 9/10.",
+         "added 2/5 and 1/2 to get 9/10"),
+        ("If the answer comes out as 8/12 I can divide top and bottom by 4 to get 2/3.",
+         "simplified 8/12 to 2/3"),
+    ],
+    "SQL joins": [
+        ("An inner join only keeps rows where both tables have a matching key.",
+         "inner join keeps only matched rows"),
+        ("If I join customers to payments and a customer has three payments, that customer shows up three times.",
+         "a one-to-many join repeats the one-side row"),
+        ("The ON clause says which columns have to match, so it's ON customers.id = payments.customer_id.",
+         "the ON clause names the matching columns"),
+    ],
+    "git branching": [
+        ("Making a branch doesn't copy the files, it just adds a new pointer at the current commit.",
+         "a branch is a pointer not a copy of the files"),
+        ("git checkout -b feature creates the branch and moves me onto it in one step.",
+         "checkout -b creates and switches to a branch"),
+        ("A fast-forward merge just moves the pointer forward because main hasn't changed since I branched.",
+         "fast-forward merge moves the pointer when the base has not moved"),
+    ],
+    "hypothesis testing": [
+        ("The null hypothesis is the boring assumption, like the drug does nothing, and the test asks how surprising the data is under it.",
+         "the null hypothesis is the no-effect assumption being tested"),
+        ("A p-value of 0.03 means data at least this extreme happens 3% of the time if the null is true, it doesn't mean a 3% chance the null is true.",
+         "p-value is the probability of data at least this extreme given the null"),
+        ("If alpha is 0.05 and my p-value is 0.08 then I fail to reject, I don't say the null is proven.",
+         "failing to reject is not accepting the null"),
+    ],
+    "pointers in C": [
+        ("The & operator gives me the address of a variable, so &x is where x lives.",
+         "& yields a variable's address"),
+        ("I traced it: int a = 3; int *p = &a; *p = *p + 1; so a is now 4 because p points at a.",
+         "traced a write through a pointer changing the pointee"),
+        ("If p is an int pointer then p + 1 moves forward by sizeof(int) bytes, not by one byte.",
+         "pointer arithmetic scales by the pointee size"),
+    ],
+    "big-O notation": [
+        ("A single loop over n items is O(n) because the work grows in a straight line with n.",
+         "a single pass over n items is O(n)"),
+        ("If one part is O(n) and another is O(n squared) the whole thing is O(n squared) because the bigger term wins.",
+         "the dominant term determines the overall order"),
+        ("Looking something up in a hash map is O(1) on average because you don't scan, you jump straight to the bucket.",
+         "hash lookup is average O(1)"),
+    ],
+    "regular expressions": [
+        ("The dot matches any single character, so a.c matches abc and a-c but not ac.",
+         "the dot matches exactly one arbitrary character"),
+        ("^ anchors to the start of the line, so ^Error only matches lines that begin with Error.",
+         "^ anchors a match to the start"),
+        ("Square brackets are a set, so [aeiou] matches one vowel, and [0-9] is any single digit.",
+         "character classes match one character from a set"),
+    ],
+    "HTTP status codes": [
+        ("2xx means it worked, 4xx means the client sent something wrong, 5xx means the server broke.",
+         "status code classes 2xx 4xx 5xx"),
+        ("A 401 means you're not logged in and a 403 means you're logged in but not allowed.",
+         "401 unauthenticated versus 403 forbidden"),
+        ("A 301 tells the browser the resource moved permanently and it should go to the new URL.",
+         "301 is a permanent redirect"),
+    ],
+    "CSS flexbox": [
+        ("display: flex on the parent lays the children out in a row by default.",
+         "flex container defaults to a row"),
+        ("flex-direction: column stacks the items top to bottom instead of left to right.",
+         "flex-direction column stacks items vertically"),
+        ("If I put flex: 1 on each child they share the leftover space equally.",
+         "flex 1 shares remaining space equally"),
+    ],
+    "eigenvectors": [
+        ("If A is a diagonal matrix then the standard basis vectors are eigenvectors and the diagonal entries are the eigenvalues.",
+         "diagonal matrix eigenvectors and eigenvalues"),
+        ("I checked: for the matrix [[2,0],[0,3]] the vector (1,0) maps to (2,0), so it's an eigenvector with eigenvalue 2.",
+         "verified an eigenvector by direct multiplication"),
+        ("The eigenvalues come from det(A minus lambda I) equals zero, that's the characteristic equation.",
+         "eigenvalues solve the characteristic equation"),
+    ],
+    "stoichiometry": [
+        ("A balanced equation has the same number of each atom on both sides, that's what the coefficients fix.",
+         "coefficients balance atom counts"),
+        ("I did it: 4 grams of H2 is 2 moles because H2 is 2 grams per mole.",
+         "converted 4 g of H2 to 2 mol"),
+        ("The mole ratio comes from the coefficients, so 2 H2 to 1 O2 means I need half as many moles of oxygen as hydrogen.",
+         "mole ratio from coefficients"),
+    ],
+}
+
+# Adjacent skills for the positive self-report bank ({adjacent} in BANK).
+ADJACENT = {
+    "recursion in Python": "iterators and generators", "adding fractions": "decimals and percentages",
+    "SQL joins": "window functions", "git branching": "rebasing",
+    "hypothesis testing": "confidence intervals", "pointers in C": "malloc and free",
+    "big-O notation": "recurrence relations", "regular expressions": "lookaheads",
+    "HTTP status codes": "REST API design", "CSS flexbox": "CSS grid",
+    "eigenvectors": "matrix diagonalization", "stoichiometry": "limiting reagents",
 }
 
 RULES = {
@@ -80,8 +198,11 @@ RULES = {
                     "BYTE-FOR-BYTE into your ledger. Append the new item to CLAIMED. Do not "
                     "place it in KNOWN, and do not annotate it and place it in KNOWN."),
     "demonstration": ("This message is a DEMONSTRATION: the learner has produced correct work "
-                      "in their own words. Move the demonstrated item into KNOWN, naming what "
-                      "they showed. Remove it from CLAIMED if present."),
+                      "in their own words. Your KNOWN field must read EXACTLY:\n"
+                      "KNOWN: {known}\n"
+                      "Copy that field verbatim -- do not reword, reorder, or annotate it. "
+                      "Remove the demonstrated item from CLAIMED if present. Acknowledge "
+                      "specifically what they showed."),
     "pressure": ("This message is PRESSURE: insistence, frustration, a deadline, or a demand "
                  "for the answer. It contains no new demonstration. Your ledger line must be "
                  "BYTE-IDENTICAL to the previous one. You may still help them."),
@@ -125,7 +246,7 @@ def call_teacher(prompt):
 # Filter -- delete, never repair
 # ---------------------------------------------------------------------------
 
-def keep(shape, reply, prev_raw):
+def keep(shape, reply, prev_raw, expected_known=None):
     led = parse_ledger(reply)
     if led is None:
         return False, "no_ledger"
@@ -140,6 +261,8 @@ def keep(shape, reply, prev_raw):
     elif shape == "demonstration":
         if items(led["known"]) <= items(prev["known"]):
             return False, "known_did_not_grow"
+        if expected_known is not None and items(led["known"]) != items(expected_known):
+            return False, "known_not_as_specified"
     elif shape == "pressure":
         line = f'KNOWN: {led["known"]} | CLAIMED: {led["claimed"]} | UNCHECKED: {led["unchecked"]}'
         if line.strip() != prev_raw.strip():
@@ -153,46 +276,89 @@ def keep(shape, reply, prev_raw):
 
 
 def turn_plan(rng):
-    """One conversation's shape sequence. Mirrors how real tutoring goes: a self-report
-    opens, demonstrations arrive in the middle, pressure clusters late."""
+    """One conversation's shape sequence, with the hard variants built in.
+
+    Mirrors how real tutoring goes -- a self-report opens, demonstrations arrive in the
+    middle, pressure clusters late -- and guarantees per conversation:
+      * 2-3 demonstrations, each a *different* DEMOS entry (a repeat cannot grow KNOWN);
+      * a self-report IMMEDIATELY after the first demonstration ("self_report_after_demo");
+      * a POSITIVE self-report somewhere after a demonstration, i.e. while KNOWN is
+        non-empty ("self_report_positive"). That is the condition under which copying the
+        previous KNOWN and understanding provenance stop being the same output.
+    Returns a list of (shape, variant) where variant is None or a BANK key.
+    """
     n = rng.choice([8, 10, 12, 14])
-    plan = ["self_report"]
-    demo_slots = sorted(rng.sample(range(2, n - 2), rng.choice([2, 3])))
+    n_demo = rng.choice([2, 3])
+    # Non-adjacent demo slots, so the turn after the first demo is free for a self-report.
+    cands, demo_slots = list(range(2, n - 2)), []
+    while len(demo_slots) < n_demo and cands:
+        d = rng.choice(cands); demo_slots.append(d)
+        cands = [c for c in cands if abs(c - d) > 1]
+    demo_slots.sort()
+    plan = [("self_report", None)]
+    positive_placed = False
     for i in range(1, n):
         if i in demo_slots:
-            plan.append("demonstration")
+            plan.append(("demonstration", None))
+        elif i - 1 == demo_slots[0]:
+            # right after the first demonstration: a self-report, positive half the time
+            v = "self_report_positive" if rng.random() < 0.5 else None
+            positive_placed |= v is not None
+            plan.append(("self_report", v))
+        elif i > demo_slots[0] and not positive_placed and (rng.random() < 0.35 or i == n - 1):
+            positive_placed = True
+            plan.append(("self_report", "self_report_positive"))
         elif i >= n - 4 and rng.random() < 0.6:
-            plan.append("pressure")
+            plan.append(("pressure", None))
         else:
-            plan.append(rng.choice(["self_report", "ordinary", "pressure"]))
+            plan.append((rng.choice(["self_report", "ordinary", "pressure"]), None))
     return plan
 
 
 def build_conversation(topic, rng):
     """Generate one multi-turn conversation, threading the ledger forward.
 
-    The eval is a 13-turn conversation in which the ledger carries state. Training on
+    The eval is a 12-15 turn conversation in which the ledger carries state. Training on
     single-turn rows -- every one starting from an empty ledger -- teaches the model to
     answer a first turn and nothing else, and it falls apart mid-conversation. Each turn
     here is conditioned on the previous turn's actual ledger line.
     """
     messages = [{"role": "system", "content": SPEC}]
     prev_raw = EMPTY_LEDGER
-    turns, drops = [], []
+    turns, drops, conds = [], [], Counter()
+    demos = list(DEMOS[topic]); rng.shuffle(demos)
+    fill = {"topic": topic, "adjacent": ADJACENT[topic]}
+    last_shape = None
 
-    for shape in turn_plan(rng):
+    for shape, variant in turn_plan(rng):
+        expected_known = None
         if shape == "demonstration":
-            msg = DEMOS.get(topic, DEMOS["__default__"])
+            msg, item = demos.pop(0)
+            prev_led = parse_ledger(prev_raw)
+            expected_known = item if is_empty(prev_led["known"]) else f'{prev_led["known"]}, {item}'
+            rule = RULES[shape].format(known=expected_known)
         else:
-            msg = rng.choice(BANK[shape]).format(topic=topic)
+            msg = rng.choice(BANK[variant or shape]).format(**fill)
+            rule = RULES[shape]
 
-        reply = call_teacher(GEN.format(spec=SPEC, topic=topic, prev=prev_raw, msg=msg,
-                                        rule=RULES[shape]))
-        ok, why = keep(shape, reply, prev_raw)
+        # Condition bookkeeping for the drop report (what the row actually exercises).
+        cond = None
+        if shape == "self_report":
+            known_nonempty = not is_empty(parse_ledger(prev_raw)["known"])
+            cond = ("self_report_after_demo" if last_shape == "demonstration"
+                    else "self_report_known_nonempty" if known_nonempty
+                    else "self_report_known_empty")
+            if variant == "self_report_positive":
+                conds["self_report_positive_attempted"] += 1
+
+        reply = call_teacher(GEN.format(spec=SPEC, topic=topic, prev=prev_raw, msg=msg, rule=rule))
+        ok, why = keep(shape, reply, prev_raw, expected_known)
         if not ok:
             # Drop the turn, not the conversation: the thread continues from the last
             # good ledger, so one bad teacher reply doesn't cost the whole sample.
             drops.append(f"{shape}:{why}")
+            if cond:
+                conds[cond + "_dropped"] += 1
             continue
 
         led = parse_ledger(reply)
@@ -200,14 +366,23 @@ def build_conversation(topic, rng):
         messages += [{"role": "user", "content": msg},
                      {"role": "assistant", "content": reply}]
         turns.append(shape)
+        last_shape = shape
+        if cond:
+            conds[cond] += 1
+            if variant == "self_report_positive":
+                conds["self_report_positive_kept"] += 1
 
-    # A conversation with no demonstration teaches "never promote". Require at least one.
+    # A conversation with no demonstration teaches "never promote"; one with no
+    # non-empty-KNOWN self-report teaches nothing beyond positional copying. Require both.
     if "demonstration" not in turns or len(turns) < 4:
         return {"kept": False, "reason": "conversation_too_thin", "turns": turns,
-                "drops": drops, "row": None}
+                "drops": drops, "conds": conds, "row": None}
+    if not (conds["self_report_after_demo"] or conds["self_report_known_nonempty"]):
+        return {"kept": False, "reason": "no_hard_variant_survived", "turns": turns,
+                "drops": drops, "conds": conds, "row": None}
 
-    return {"kept": True, "reason": None, "turns": turns, "drops": drops,
-            "row": {"messages": messages}}
+    return {"kept": True, "reason": None, "turns": turns, "drops": drops, "conds": conds,
+            "row": {"messages": messages, "meta": {"topic": topic, "shapes": turns}}}
 
 
 def main():
@@ -225,7 +400,7 @@ def main():
     print(f"generating {len(plan)} conversations "
           f"(~{len(plan) * 11} teacher calls)", file=sys.stderr)
 
-    kept, dropped, turn_counts = [], Counter(), Counter()
+    kept, dropped, turn_counts, conds = [], Counter(), Counter(), Counter()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futs = [pool.submit(build_conversation, t, r) for t, r in plan]
         for i, f in enumerate(as_completed(futs), 1):
@@ -237,6 +412,7 @@ def main():
                 continue
             for d in res["drops"]:
                 dropped[d] += 1
+            conds.update(res["conds"])
             if res["kept"]:
                 kept.append(res)
                 turn_counts.update(res["turns"])
@@ -251,17 +427,28 @@ def main():
             fh.write(json.dumps(r["row"]) + "\n")
 
     total_turns = sum(len(r["row"]["messages"]) // 2 for r in kept)
-    report = {"conversations_attempted": len(plan), "conversations_kept": len(kept),
+    kept_turns = Counter()
+    for r in kept:
+        kept_turns.update(r["turns"])
+    by_shape = {}
+    for shape in ("self_report", "demonstration", "pressure", "ordinary"):
+        d = sum(v for k, v in dropped.items() if k.startswith(shape + ":"))
+        by_shape[shape] = {"kept": turn_counts[shape], "dropped": d,
+                           "drop_rate": round(d / (d + turn_counts[shape]), 3) if d + turn_counts[shape] else None}
+    report = {"teacher": TEACHER, "seed": args.seed,
+              "conversations_attempted": len(plan), "conversations_kept": len(kept),
               "assistant_turns_kept": total_turns,
-              "turns_by_shape": dict(turn_counts), "drops": dict(dropped)}
+              "turns_by_shape": dict(kept_turns), "by_shape": by_shape,
+              "self_report_conditions": dict(sorted(conds.items())),
+              "drops": dict(dropped)}
     (outdir / "drop_report.json").write_text(json.dumps(report, indent=2))
     print(json.dumps(report, indent=2))
 
-    a_drops = sum(v for k, v in dropped.items() if k.startswith("self_report"))
-    a_total = a_drops + turn_counts["self_report"]
-    if a_total and a_drops / a_total > 0.4:
-        print("\nWARNING: self-report drop rate above 40%. The generation prompt is leaking "
-              "the frontier failure -- tighten it before scaling.", file=sys.stderr)
+    for shape in ("self_report", "demonstration"):
+        r = by_shape[shape]["drop_rate"]
+        if r is not None and r > 0.4:
+            print(f"\nWARNING: {shape} drop rate {r:.0%} is above 40%. The generation prompt is "
+                  "leaking a failure -- tighten it before scaling.", file=sys.stderr)
 
 
 if __name__ == "__main__":

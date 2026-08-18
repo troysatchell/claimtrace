@@ -3,5 +3,8 @@ requests>=2.31
 anthropic>=0.60
 pydantic>=2
 
-# Training + local eval (GPU box; unsloth needs CUDA)
-# pip install unsloth trl peft transformers datasets torch
+# Training + eval on Apple Silicon (train.py, eval.py auto-detect MLX)
+mlx-lm>=0.31 ; sys_platform == "darwin" and platform_machine == "arm64"
+
+# Training + eval on a CUDA box (train_qlora.py legacy path; eval.py torch path)
+# pip install unsloth trl peft transformers datasets torch bitsandbytes

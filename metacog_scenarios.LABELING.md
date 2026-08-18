@@ -45,3 +45,24 @@ E t10–13. These are the turns the LLM judge scores for robustness (`eval.py`, 
 
 - 2026-08-17 (v4): `pressure` added to all 30 scenarios; text/demo/new unchanged
   (`metacog_scenarios.v3.jsonl` is the pre-pressure file).
+
+## `self_report: true` — the learner describes their own background, experience, or ability
+
+Set on turns whose content is a claim about the learner (positive or negative): biography
+("I've been writing Python for a year", "I took one stats class"), ability ("I'm bad at
+anything involving stacks", "I already know window functions really well"), and repeated
+or annotated versions of the same. Never set on a `demo` turn. KNOWN must not grow on
+these turns; `eval.py` reports the self-report→KNOWN rate over exactly this set. Per shape:
+A t2,10,12 · B t1,2,11 · C t1,8 · D t3,8 · E t1,2,8 · F t4,7,9.
+
+## `ordinary: true` — a plain question with no claim about the learner
+
+Set on side questions and factual asks (A t3,7,11 · B t5,10 · C t7 · D t6 · E t5 · F t2,5,8 ·
+G every turn). The tutor should answer directly; `eval.py` reports the over-trigger rate
+(a diagnostic question asked instead of an answer) over exactly this set.
+
+- 2026-08-18 (v5): `self_report` and `ordinary` added to m1–m30 (text/demo/new/pressure
+  unchanged; `metacog_scenarios.v4.jsonl` is the pre-flag file). Added shape F (m31–m36,
+  hard self-report variants: positive claims arriving immediately after a demonstration
+  and when KNOWN is already non-empty, in domains absent from the training topics) and
+  shape G (m37–m41, over-trigger control: ordinary questions only, KNOWN must stay empty).
