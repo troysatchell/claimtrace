@@ -2,9 +2,10 @@
 """Generate and filter the SFT dataset.
 
     export ANTHROPIC_API_KEY=...
-    python generate_dataset.py --n 300 --out data/
+    python generate_dataset.py --n 60 --out data/
 
-Writes data/dataset.jsonl (kept rows) and data/drop_report.json (per-shape drop rates).
+Writes data/dataset.jsonl (one multi-turn conversation per line) and
+data/drop_report.json (per-shape drop rates).
 
 Design note: on SELF-REPORT turns the teacher is NOT asked to judge whether the item belongs
 in KNOWN -- it fails that judgment 10-12 times out of 12 (see the ablation). It is instead
@@ -151,23 +152,67 @@ def keep(shape, reply, prev_raw):
     return True, None
 
 
-def build_one(shape, topic, prev_raw, rng):
-    if shape == "demonstration":
-        msg = DEMOS.get(topic, DEMOS["__default__"])
-    else:
-        msg = rng.choice(BANK[shape]).format(topic=topic)
-    reply = call_teacher(GEN.format(spec=SPEC, topic=topic, prev=prev_raw, msg=msg,
-                                    rule=RULES[shape]))
-    ok, why = keep(shape, reply, prev_raw)
-    row = {"messages": [{"role": "system", "content": SPEC},
-                        {"role": "user", "content": msg},
-                        {"role": "assistant", "content": reply}]}
-    return {"shape": shape, "topic": topic, "kept": ok, "reason": why, "row": row}
+def turn_plan(rng):
+    """One conversation's shape sequence. Mirrors how real tutoring goes: a self-report
+    opens, demonstrations arrive in the middle, pressure clusters late."""
+    n = rng.choice([8, 10, 12, 14])
+    plan = ["self_report"]
+    demo_slots = sorted(rng.sample(range(2, n - 2), rng.choice([2, 3])))
+    for i in range(1, n):
+        if i in demo_slots:
+            plan.append("demonstration")
+        elif i >= n - 4 and rng.random() < 0.6:
+            plan.append("pressure")
+        else:
+            plan.append(rng.choice(["self_report", "ordinary", "pressure"]))
+    return plan
+
+
+def build_conversation(topic, rng):
+    """Generate one multi-turn conversation, threading the ledger forward.
+
+    The eval is a 13-turn conversation in which the ledger carries state. Training on
+    single-turn rows -- every one starting from an empty ledger -- teaches the model to
+    answer a first turn and nothing else, and it falls apart mid-conversation. Each turn
+    here is conditioned on the previous turn's actual ledger line.
+    """
+    messages = [{"role": "system", "content": SPEC}]
+    prev_raw = EMPTY_LEDGER
+    turns, drops = [], []
+
+    for shape in turn_plan(rng):
+        if shape == "demonstration":
+            msg = DEMOS.get(topic, DEMOS["__default__"])
+        else:
+            msg = rng.choice(BANK[shape]).format(topic=topic)
+
+        reply = call_teacher(GEN.format(spec=SPEC, topic=topic, prev=prev_raw, msg=msg,
+                                        rule=RULES[shape]))
+        ok, why = keep(shape, reply, prev_raw)
+        if not ok:
+            # Drop the turn, not the conversation: the thread continues from the last
+            # good ledger, so one bad teacher reply doesn't cost the whole sample.
+            drops.append(f"{shape}:{why}")
+            continue
+
+        led = parse_ledger(reply)
+        prev_raw = f'KNOWN: {led["known"]} | CLAIMED: {led["claimed"]} | UNCHECKED: {led["unchecked"]}'
+        messages += [{"role": "user", "content": msg},
+                     {"role": "assistant", "content": reply}]
+        turns.append(shape)
+
+    # A conversation with no demonstration teaches "never promote". Require at least one.
+    if "demonstration" not in turns or len(turns) < 4:
+        return {"kept": False, "reason": "conversation_too_thin", "turns": turns,
+                "drops": drops, "row": None}
+
+    return {"kept": True, "reason": None, "turns": turns, "drops": drops,
+            "row": {"messages": messages}}
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--n", type=int, default=300, help="target kept rows")
+    ap.add_argument("--n", type=int, default=60, help="target kept conversations")
     ap.add_argument("--out", default="data")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=0)
@@ -176,15 +221,13 @@ def main():
     rng = random.Random(args.seed)
     outdir = pathlib.Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
 
-    # Shape A carries the project; shape D exists to stop the model over-triggering.
-    mix = (["self_report"] * 40 + ["demonstration"] * 25
-           + ["pressure"] * 25 + ["ordinary"] * 10)
-    # Overgenerate to absorb filter losses.
-    plan = [(rng.choice(mix), rng.choice(TOPICS)) for _ in range(int(args.n * 1.6))]
+    plan = [(rng.choice(TOPICS), random.Random(rng.random())) for _ in range(int(args.n * 1.3))]
+    print(f"generating {len(plan)} conversations "
+          f"(~{len(plan) * 11} teacher calls)", file=sys.stderr)
 
-    kept, dropped = [], Counter()
+    kept, dropped, turn_counts = [], Counter(), Counter()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futs = [pool.submit(build_one, s, t, EMPTY_LEDGER, rng) for s, t in plan]
+        futs = [pool.submit(build_conversation, t, r) for t, r in plan]
         for i, f in enumerate(as_completed(futs), 1):
             try:
                 res = f.result()
@@ -192,26 +235,30 @@ def main():
                 dropped["api_error"] += 1
                 print(f"  error: {e}", file=sys.stderr)
                 continue
+            for d in res["drops"]:
+                dropped[d] += 1
             if res["kept"]:
                 kept.append(res)
+                turn_counts.update(res["turns"])
             else:
-                dropped[f'{res["shape"]}:{res["reason"]}'] += 1
-            if i % 25 == 0:
-                print(f"  {i}/{len(plan)} generated, {len(kept)} kept", file=sys.stderr)
+                dropped[res["reason"]] += 1
+            if i % 10 == 0:
+                print(f"  {i}/{len(plan)} conversations, {len(kept)} kept", file=sys.stderr)
 
     kept = kept[:args.n]
     with open(outdir / "dataset.jsonl", "w") as fh:
         for r in kept:
             fh.write(json.dumps(r["row"]) + "\n")
 
-    by_shape = Counter(r["shape"] for r in kept)
-    report = {"generated": len(plan), "kept": len(kept),
-              "kept_by_shape": dict(by_shape), "drops": dict(dropped)}
+    total_turns = sum(len(r["row"]["messages"]) // 2 for r in kept)
+    report = {"conversations_attempted": len(plan), "conversations_kept": len(kept),
+              "assistant_turns_kept": total_turns,
+              "turns_by_shape": dict(turn_counts), "drops": dict(dropped)}
     (outdir / "drop_report.json").write_text(json.dumps(report, indent=2))
-
     print(json.dumps(report, indent=2))
+
     a_drops = sum(v for k, v in dropped.items() if k.startswith("self_report"))
-    a_total = a_drops + by_shape["self_report"]
+    a_total = a_drops + turn_counts["self_report"]
     if a_total and a_drops / a_total > 0.4:
         print("\nWARNING: self-report drop rate above 40%. The generation prompt is leaking "
               "the frontier failure -- tighten it before scaling.", file=sys.stderr)
