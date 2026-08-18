@@ -69,4 +69,11 @@ def check_turn(reply, prev, turn_spec, first_demo_turn, turn_index):
     if has_hedge(led["known"]):
         v.append("hedged_known")
 
+    # 4. Under-promotion. Without this, a model that writes "KNOWN: none" on every turn
+    #    passes checks 1-3 perfectly. It must actually credit real demonstrations.
+    if turn_spec.get("demo", False):
+        before = items(prev["known"]) if prev else set()
+        if not (items(led["known"]) - before):
+            v.append("missed_promotion")
+
     return led, v

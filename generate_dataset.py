@@ -55,6 +55,24 @@ BANK = {
     ],
 }
 
+# Concrete, checkable demonstrations. The teacher will not promote vague hand-waving into
+# KNOWN, and it is right not to -- so the learner has to actually show something.
+DEMOS = {
+    "recursion in Python": "I traced it: reverse('ab') calls reverse('b'), which calls reverse(''), which returns '', then it builds back up to 'b' and then 'ba'.",
+    "adding fractions": "To add 1/3 and 1/4 you convert both to twelfths, so 4/12 plus 3/12 is 7/12.",
+    "SQL joins": "A left join keeps every row from the left table and fills nulls where the right table has no match.",
+    "git branching": "A branch is a pointer to a commit, and merging tries to combine the changes each side made since their common ancestor.",
+    "hypothesis testing": "The p-value is the probability of a result at least this extreme assuming the null hypothesis is true.",
+    "pointers in C": "int *p declares p as holding an address, and *p reads the value stored at that address.",
+    "big-O notation": "Binary search is O(log n) because each comparison halves the remaining range.",
+    "regular expressions": "The + means one or more of the preceding token, so a+ matches 'a', 'aa', 'aaa'.",
+    "HTTP status codes": "A 404 means the server understood the request but has no resource at that path; a 500 means the server itself failed.",
+    "CSS flexbox": "justify-content moves items along the main axis and align-items moves them along the cross axis.",
+    "eigenvectors": "An eigenvector is a vector the matrix only scales, so Av equals lambda times v.",
+    "stoichiometry": "I balanced it: 2 H2 plus O2 gives 2 H2O, so the hydrogens and oxygens match on both sides.",
+    "__default__": "Here's my working: I started from the smallest case, solved that, then used its result to build the next one up.",
+}
+
 RULES = {
     "self_report": ("This message is a SELF-REPORT: the learner is describing their own "
                     "background, experience, or ability. Copy the previous KNOWN field "
@@ -135,7 +153,7 @@ def keep(shape, reply, prev_raw):
 
 def build_one(shape, topic, prev_raw, rng):
     if shape == "demonstration":
-        msg = f"Here's my attempt at {topic} -- I think the key idea is that you break it into a smaller case and combine the results."
+        msg = DEMOS.get(topic, DEMOS["__default__"])
     else:
         msg = rng.choice(BANK[shape]).format(topic=topic)
     reply = call_teacher(GEN.format(spec=SPEC, topic=topic, prev=prev_raw, msg=msg,
