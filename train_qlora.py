@@ -19,7 +19,19 @@ from unsloth import FastLanguageModel
 from datasets import Dataset
 from trl import SFTTrainer, SFTConfig
 
-BASE = "unsloth/Qwen3-1.7B-Instruct"
+BASE = "unsloth/Qwen3-1.7B"
+
+
+def chat_template(tok, messages, add_generation_prompt=False):
+    """Qwen3 emits <think> blocks by default; they pollute the training target and eat
+    the token budget. enable_thinking=False suppresses them on tokenizers that support it."""
+    try:
+        return tok.apply_chat_template(messages, tokenize=False,
+                                       add_generation_prompt=add_generation_prompt,
+                                       enable_thinking=False)
+    except TypeError:
+        return tok.apply_chat_template(messages, tokenize=False,
+                                       add_generation_prompt=add_generation_prompt)
 
 
 def load(path, n, seed):
@@ -60,7 +72,7 @@ def main():
     print(f"training on {len(rows)} rows")
 
     ds = Dataset.from_list([
-        {"text": tokenizer.apply_chat_template(r["messages"], tokenize=False)}
+        {"text": chat_template(tokenizer, r["messages"])}
         for r in rows
     ])
 

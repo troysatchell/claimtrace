@@ -56,7 +56,11 @@ def load_model(name):
 
 
 def generate(mdl, tok, messages, max_new_tokens=900):
-    text = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    try:
+        text = tok.apply_chat_template(messages, tokenize=False,
+                                       add_generation_prompt=True, enable_thinking=False)
+    except TypeError:
+        text = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     ids = tok(text, return_tensors="pt").to(mdl.device)
     with torch.no_grad():
         out = mdl.generate(**ids, max_new_tokens=max_new_tokens, do_sample=False,
