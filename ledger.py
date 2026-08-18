@@ -56,8 +56,10 @@ def check_turn(reply, prev, turn_spec, first_demo_turn, turn_index):
     if led is None:
         return None, ["ledger_missing"]
 
-    # 1. Nothing may sit in KNOWN before the first demonstration in this scenario.
-    if first_demo_turn is not None and turn_index < first_demo_turn and not is_empty(led["known"]):
+    # 1. Nothing may sit in KNOWN before the first demonstration in this scenario. A scenario
+    #    with no demonstration at all (first_demo_turn None) is "before the first demo" on
+    #    every turn: any non-empty KNOWN is premature.
+    if (first_demo_turn is None or turn_index < first_demo_turn) and not is_empty(led["known"]):
         v.append("premature_promotion")
 
     # 2. KNOWN may only grow on a turn where the learner demonstrated something.

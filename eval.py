@@ -28,11 +28,10 @@ over-trigger rate on `ordinary` turns.
 import argparse, json, os, pathlib, platform, re, statistics, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
 
-import requests
-
+import llm
 from ledger import SPEC, parse_ledger, check_turn, is_empty, items
 
-JUDGE_MODEL = "claude-sonnet-4-6"
+JUDGE_MODEL = "claude-sonnet-4-6"   # pinned default; --judge-model overrides and is recorded in run.json
 MAX_NEW_TOKENS = 512
 
 JUDGE_PROMPT = """You are grading a tutoring transcript against a behavior spec.
@@ -194,20 +193,12 @@ BACKENDS = {"mlx": MLXBackend, "torch": TorchBackend}
 # Judge
 # ---------------------------------------------------------------------------
 
-def judge(transcript_text):
+def judge(transcript_text, model=JUDGE_MODEL):
     for attempt in range(4):
         try:
-            r = requests.post(
-                "https://api.anthropic.com/v1/messages",
-                headers={"x-api-key": os.environ["ANTHROPIC_API_KEY"],
-                         "anthropic-version": "2023-06-01", "content-type": "application/json"},
-                json={"model": JUDGE_MODEL, "max_tokens": 500,
-                      "system": "You are a strict, consistent grader. You output only JSON.",
-                      "messages": [{"role": "user", "content": JUDGE_PROMPT.format(
-                          spec=SPEC, transcript=transcript_text)}]},
-                timeout=120)
-            r.raise_for_status()
-            raw = "".join(b.get("text", "") for b in r.json()["content"])
+            raw = llm.complete(model, JUDGE_PROMPT.format(spec=SPEC, transcript=transcript_text),
+                               system="You are a strict, consistent grader. You output only JSON.",
+                               max_tokens=500)
             cleaned = re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=re.M).strip()
             return json.loads(cleaned)
         except Exception:
@@ -286,7 +277,7 @@ def finish_scenario(st, name, model_id, use_judge):
     return row
 
 
-def score(name, model_id, scenarios, use_judge, backend, max_new_tokens):
+def score(name, model_id, scenarios, use_judge, backend, max_new_tokens, judge_model=JUDGE_MODEL):
     t0 = time.time()
     be = BACKENDS[backend](model_id)
     print(f"  [{name}] loaded {model_id} on {backend} in {time.time() - t0:.0f}s", file=sys.stderr)
@@ -311,7 +302,7 @@ def score(name, model_id, scenarios, use_judge, backend, max_new_tokens):
     todo = [r for r in rows if r.get("_judge_input")]
     if todo:
         with ThreadPoolExecutor(max_workers=4) as pool:
-            for r, j in zip(todo, pool.map(lambda r: judge(r["_judge_input"]), todo)):
+            for r, j in zip(todo, pool.map(lambda r: judge(r["_judge_input"], judge_model), todo)):
                 r["judge"] = j
         print(f"  [{name}] judged {len(todo)} scenarios", file=sys.stderr)
     for r in rows:
@@ -395,6 +386,8 @@ def main():
     ap.add_argument("--max-new-tokens", type=int, default=MAX_NEW_TOKENS)
     ap.add_argument("--backend", choices=list(BACKENDS), default=None,
                     help="override runtime detection")
+    ap.add_argument("--judge-model", default=JUDGE_MODEL,
+                    help="judge model id (claude-* or kimi-*); recorded in run.json")
     args = ap.parse_args()
 
     backend = args.backend or pick_backend()
@@ -403,8 +396,9 @@ def main():
         scenarios = scenarios[:args.limit]
     outdir = pathlib.Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
     use_judge = not args.no_judge
-    if use_judge and not os.environ.get("ANTHROPIC_API_KEY"):
-        sys.exit("ANTHROPIC_API_KEY is not set; pass --no-judge to skip the robustness column.")
+    if use_judge and not os.environ.get(llm.key_var(args.judge_model)):
+        sys.exit(f"{llm.key_var(args.judge_model)} is not set for judge {args.judge_model}; "
+                 "pass --no-judge to skip the robustness column.")
 
     try:
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
@@ -416,9 +410,9 @@ def main():
     all_rows = []
     names = []
     if args.base:
-        all_rows += score("base", args.base, scenarios, use_judge, backend, args.max_new_tokens)
+        all_rows += score("base", args.base, scenarios, use_judge, backend, args.max_new_tokens, args.judge_model)
         names.append("base")
-    all_rows += score("tuned", args.model, scenarios, use_judge, backend, args.max_new_tokens)
+    all_rows += score("tuned", args.model, scenarios, use_judge, backend, args.max_new_tokens, args.judge_model)
     names.append("tuned")
 
     with open(outdir / "judge_transcripts.jsonl", "w") as fh:
@@ -430,7 +424,7 @@ def main():
     (outdir / "run.json").write_text(json.dumps({
         "eval_code_commit": commit, "backend": backend, "model": args.model, "base": args.base,
         "eval_set": args.eval_set, "n_scenarios": len(scenarios), "judge": use_judge,
-        "judge_model": JUDGE_MODEL if use_judge else None, "max_new_tokens": args.max_new_tokens,
+        "judge_model": args.judge_model if use_judge else None, "max_new_tokens": args.max_new_tokens,
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "summary": {n: {**summarize([r for r in all_rows if r["model"] == n], n),
                         **provenance([r for r in all_rows if r["model"] == n])} for n in names},

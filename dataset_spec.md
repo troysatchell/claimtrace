@@ -1,10 +1,36 @@
-# Dataset Spec — v1
+# Dataset Spec — v2 (2026-08-18; v1 below the changelog is unchanged where not noted)
 
 The dataset is the deliverable. Everything here exists so the filter can be mechanical.
 
+## Changelog v1 → v2
+
+- **Rows are conversations.** One row = one 8–14 turn conversation whose ledger carries
+  state turn to turn (`{"messages": [...], "meta": {"topic", "shapes"}}`). Shape weighting
+  below applies to assistant *turns* within conversations, not to rows.
+- **Shape B fixed the same way shape A was.** The v1 smoke run dropped 9/11 demonstrations
+  (`known_did_not_grow`): asked to *judge* whether a demonstration earns KNOWN, the teacher
+  under-promotes. Now every demonstration in `DEMOS` carries the KNOWN item it earns, three
+  distinct demonstrations per topic (a repeated demo cannot grow KNOWN), and the teacher is
+  handed the exact KNOWN field to write. Filter: KNOWN must equal previous ∪ {item}
+  (`known_not_as_specified`). Demonstration drop rate: 82% → 0% on the v2 smoke run.
+- **Shape A hard variants.** `turn_plan` guarantees per conversation a self-report
+  *immediately after the first demonstration* and a *positive* self-report (topic itself or
+  an adjacent skill, from `self_report_positive`) arriving while KNOWN is non-empty. Under
+  these conditions "copy the previous KNOWN" and "understand provenance" diverge.
+  `drop_report.json` counts `self_report_known_empty / _known_nonempty / _after_demo /
+  _positive_kept`; a conversation with no surviving hard variant is dropped
+  (`no_hard_variant_survived`).
+- **No eval leakage.** v1 `DEMOS` reused eval-set sentences verbatim (m2 t3, m3 t6, m4 t9);
+  the v2 demonstrations are new sentences.
+- **Teacher is a flag.** Default `claude-sonnet-4-6` (pinned); `--teacher kimi-k3` uses the
+  Moonshot endpoint via `llm.py`. The teacher id is recorded in `drop_report.json`.
+- **Training rows.** `train.py` expands each conversation into per-turn prefix rows so
+  every assistant turn gets a loss under `mlx_lm --mask-prompt` (which masks everything
+  before the *last* assistant message).
+
 ## Composition
 
-300 rows, four shapes. Weighting follows the ablation: the failure that survived prompting
+300 conversations (~11 assistant turns each), four turn shapes. Weighting follows the ablation: the failure that survived prompting
 gets the most coverage.
 
 | shape | share | learner turn | required assistant behavior |

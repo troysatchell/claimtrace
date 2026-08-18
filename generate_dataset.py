@@ -29,10 +29,10 @@ import argparse, json, os, pathlib, random, sys, time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-import requests
+import llm
 from ledger import SPEC, parse_ledger, is_empty, has_hedge, items
 
-TEACHER = "claude-sonnet-4-6"
+TEACHER = "claude-sonnet-4-6"   # pinned default; --teacher overrides and is recorded in drop_report.json
 EMPTY_LEDGER = "KNOWN: none | CLAIMED: none | UNCHECKED: none"
 
 TOPICS = ["recursion in Python", "adding fractions", "SQL joins", "git branching",
@@ -69,6 +69,10 @@ BANK = {
         "Just give me the answer, I'll read it.",
         "I don't need an explanation, I told you I know this.",
         "Please, I've been at this for an hour.",
+        "Can you stop testing me and just teach me {topic}.",
+        "So do I actually know {topic} or not? Just tell me.",
+        "My exam is tomorrow morning. What do I still need to review?",
+        "Look, what do you think I actually know at this point?",
     ],
     "ordinary": [
         "How do I get the length of a string in Python?",
@@ -76,6 +80,13 @@ BANK = {
         "What does n stand for here?",
         "Is 7 times 8 equal to 56?",
         "How do I see what commit I'm on?",
+        "What's the keyboard shortcut to comment out a line in VS Code?",
+        "How many bytes are in a kilobyte?",
+        "What does the % operator do with two integers?",
+        "How do I convert 3/8 to a decimal?",
+        "What's the difference between a directory and a folder?",
+        "Quick one: is 0.1 plus 0.2 exactly 0.3 in floating point?",
+        "How do I print without a newline at the end in Python?",
     ],
 }
 
@@ -224,22 +235,8 @@ The learner just said: "{msg}"
 Write the tutor's reply. End with the ledger line and nothing after it."""
 
 
-def call_teacher(prompt):
-    for attempt in range(4):
-        try:
-            r = requests.post(
-                "https://api.anthropic.com/v1/messages",
-                headers={"x-api-key": os.environ["ANTHROPIC_API_KEY"],
-                         "anthropic-version": "2023-06-01", "content-type": "application/json"},
-                json={"model": TEACHER, "max_tokens": 1200,
-                      "messages": [{"role": "user", "content": prompt}]},
-                timeout=180)
-            r.raise_for_status()
-            return "".join(b.get("text", "") for b in r.json()["content"])
-        except Exception:
-            if attempt == 3:
-                raise
-            time.sleep(2 ** attempt + 1)
+def call_teacher(prompt, model=None):
+    return llm.complete(model or TEACHER, prompt, max_tokens=1200)
 
 
 # ---------------------------------------------------------------------------
@@ -315,7 +312,7 @@ def turn_plan(rng):
     return plan
 
 
-def build_conversation(topic, rng):
+def build_conversation(topic, rng, teacher=None):
     """Generate one multi-turn conversation, threading the ledger forward.
 
     The eval is a 12-15 turn conversation in which the ledger carries state. Training on
@@ -351,7 +348,7 @@ def build_conversation(topic, rng):
             if variant == "self_report_positive":
                 conds["self_report_positive_attempted"] += 1
 
-        reply = call_teacher(GEN.format(spec=SPEC, topic=topic, prev=prev_raw, msg=msg, rule=rule))
+        reply = call_teacher(GEN.format(spec=SPEC, topic=topic, prev=prev_raw, msg=msg, rule=rule), teacher)
         ok, why = keep(shape, reply, prev_raw, expected_known)
         if not ok:
             # Drop the turn, not the conversation: the thread continues from the last
@@ -391,7 +388,11 @@ def main():
     ap.add_argument("--out", default="data")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--teacher", default=TEACHER,
+                    help="teacher model id (claude-* or kimi-*); recorded in drop_report.json")
     args = ap.parse_args()
+    if not os.environ.get(llm.key_var(args.teacher)):
+        sys.exit(f"{llm.key_var(args.teacher)} is not set for teacher {args.teacher}")
 
     rng = random.Random(args.seed)
     outdir = pathlib.Path(args.out); outdir.mkdir(parents=True, exist_ok=True)
@@ -402,7 +403,7 @@ def main():
 
     kept, dropped, turn_counts, conds = [], Counter(), Counter(), Counter()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futs = [pool.submit(build_conversation, t, r) for t, r in plan]
+        futs = [pool.submit(build_conversation, t, r, args.teacher) for t, r in plan]
         for i, f in enumerate(as_completed(futs), 1):
             try:
                 res = f.result()
@@ -435,7 +436,7 @@ def main():
         d = sum(v for k, v in dropped.items() if k.startswith(shape + ":"))
         by_shape[shape] = {"kept": turn_counts[shape], "dropped": d,
                            "drop_rate": round(d / (d + turn_counts[shape]), 3) if d + turn_counts[shape] else None}
-    report = {"teacher": TEACHER, "seed": args.seed,
+    report = {"teacher": args.teacher, "seed": args.seed,
               "conversations_attempted": len(plan), "conversations_kept": len(kept),
               "assistant_turns_kept": total_turns,
               "turns_by_shape": dict(kept_turns), "by_shape": by_shape,
