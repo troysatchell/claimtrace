@@ -1,0 +1,975 @@
+{
+  "mode": "baseline",
+  "commit": null,
+  "dirty": true,
+  "dirty_paths": [
+    "<entire tree — Trained_SLM is not a git repository; citations are valid against the working tree at sweep time, pinned by tree_snapshot below>"
+  ],
+  "tree_snapshot": {
+    "metacog_precheck.py": "8d86448cbe6765477dc8885c2022486a045f8b610efbab6da49d62077a6dc7a3",
+    "metacog_scenarios.jsonl": "684e2209b96d3c23f5992ab4d35be15afaef3803a37d1ea782211a2a7fe7329b",
+    "Train_Your_Own_Small_Learning_Model.pdf": "e4844d5fe483a44a11a9a443a673b61866fd37e99822b484377af9fad05660b6"
+  },
+  "date": "2026-08-17T18:15:20Z",
+  "config_hash": "7ca15791f3f11c9756c29a07577c869b4c87e45a6ab29b46e860a05ee90512a7",
+  "inventory_status": "PRE-SKIM — first extraction; the user has not yet skimmed inventory.md. Re-run baseline after edits.",
+  "ticket_mapping": {
+    "status": "BLOCKED",
+    "provider": "linear",
+    "team": "Troysatchell",
+    "reason": "tickets.project is null and the Troysatchell team spans 8 projects (LabelHunter, PlugForge, FleetGraph, Clavira Pilot Readiness, ShipShape Audit Remediation, AgentForge, Verilo, Week 2 Multimodal Evidence Agent) — none of them is this repo. Sweeping the whole team would report other projects' work as this project's orphans.",
+    "unblock": "Create a Linear project for this SLM work under Troysatchell, set tickets.project to its exact name in audit/requirements.config.yaml, and re-run."
+  },
+  "requirements": [
+    {
+      "id": "SLM-R1",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 33,
+          "note": "MODELS list — the ablation vehicle that would produce plateau numbers"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 81,
+          "note": "strategies() — three prompting strategies"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Fix call() so the precheck runs, add a stated reliability bar to the ablation report, run ≥30 scenarios per cell, and record whether the best strategy plateaus below the bar.",
+      "notes": "No completed run and no stated reliability bar exist, so the 'hard test' is unproven. metacog_precheck.py is, by its own docstring (line 6: 'deterministic checks -- no LLM judge'), a cheap precursor to the ablation, and it is currently non-runnable: call() (lines 122-126) builds `fn` but never invokes or returns it, so every reply is None and all 30 conversations fail at parse_ledger before any API request is made (verify.precheck exit: 30/30 FAILED, empty table)."
+    },
+    {
+      "id": "SLM-R2",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 38,
+          "note": "SPEC constant — candidate falsifiable spec (ledger line format + promotion rule), embedded in the system prompt"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Write a standalone BEHAVIOR_SPEC.md (or README section) of one or two sentences a stranger can apply pass/fail to any single output; have SPEC, the judge rubric, and the generation prompt cite it.",
+      "notes": "SPEC (lines 38-44) is falsifiable but is a multi-sentence system prompt, not a one-or-two-sentence standalone spec; no spec document exists."
+    },
+    {
+      "id": "SLM-R3",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 38,
+          "note": "SPEC — tutor eliciting learner beliefs (teaching behavior)"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 83,
+          "note": "'You are a tutor.' system prompt prefix"
+        },
+        {
+          "file": "metacog_scenarios.jsonl",
+          "line": 1,
+          "note": "scenario m1: learner asking to learn recursion (learning context); lines 1-5 all tutoring dialogues"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Target is a metacognitive-honesty tutoring behavior — squarely a learning/teaching behavior."
+    },
+    {
+      "id": "SLM-R4",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add a generate.py that prompts a frontier teacher with the spec-derived generation prompt, applies a programmatic quality filter (e.g. the score_turn checks), and writes a JSONL dataset with pre/post-filter counts.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R5",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add a train.py (Unsloth/TRL) loading a small Instruct base in 4-bit with LoRA adapters, consuming the generated dataset; commit the config.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R6",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when eval.py (SLM-R24) exists: run it for base and tuned on the same eval set and commit the two-row results table.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R7",
+      "verdict": "ASSUMED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 38,
+          "note": "SPEC — single target behavior (metacognitive ledger)"
+        },
+        {
+          "file": "metacog_scenarios.jsonl",
+          "line": 1,
+          "note": "topics across lines 1-5: recursion, fractions, sql-joins, git, statistics — five subjects, one tutoring context"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": "'One context' means the interaction context (1:1 tutoring), not a single subject; five subject topics under one tutoring behavior are acceptable.",
+      "suggested_scope": null,
+      "notes": "Below the flood cap this should have been asked, not assumed; recorded as ASSUMED because the run was unattended. See needs_ruling."
+    },
+    {
+      "id": "SLM-R8",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Process/ordering rule. The repo is not a git repository, so harness-before-training ordering cannot be established. `git init` and commit the harness before the first training log to make this checkable."
+    },
+    {
+      "id": "SLM-R9",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Process/conduct rule; nothing traceable yet. Its checkable form is SLM-R43 (v2 dataset, unchanged training config)."
+    },
+    {
+      "id": "SLM-R10",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when the harness exists: define its metrics as spec adherence / robustness on target-behavior scenarios (the precheck's ledger_rate / unearned / no_elicit at metacog_precheck.py:155-170 are the right shape) and use no capability benchmark.",
+      "notes": "No eval harness exists to trace metrics for. The precheck's deterministic metrics (score_turn, lines 155-170) are behavior-targeted, which is the intended direction."
+    },
+    {
+      "id": "SLM-R11",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 33,
+          "note": "MODELS — 2 frontier models"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 223,
+          "note": "jobs = model × strategy × scenario loop"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 242,
+          "note": "results table emitter"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Fix call() (return fn(model_id, system, messages)), state the reliability bar, expand to ≥30 scenarios, run, and commit the numbers with the report.",
+      "notes": "Script exists but produced no numbers. metacog_precheck.py is, by its own docstring (line 6: 'deterministic checks -- no LLM judge'), a cheap precursor to the ablation, and it is currently non-runnable: call() (lines 122-126) builds `fn` but never invokes or returns it, so every reply is None and all 30 conversations fail at parse_ledger before any API request is made (verify.precheck exit: 30/30 FAILED, empty table)."
+    },
+    {
+      "id": "SLM-R12",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Presentation event (Architecture Defense, due 4 hrs after assignment per timeline p.3). Not code-traceable."
+    },
+    {
+      "id": "SLM-R13",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 34,
+          "note": "anthropic / claude-opus-5 pinned"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 35,
+          "note": "kimi / kimi-k3 pinned (Moonshot — different family)"
+        }
+      ],
+      "verification": {
+        "command": "set -a && . ./.env && set +a && curl -s -w '\\nHTTP %{http_code}\\n' https://api.anthropic.com/v1/models/claude-opus-5 -H \"x-api-key: $ANTHROPIC_API_KEY\" -H 'anthropic-version: 2023-06-01'  &&  set -a && . ./.env && set +a && curl -s https://api.moonshot.ai/v1/models -H \"Authorization: Bearer $MOONSHOT_API_KEY\"",
+        "result_excerpt": "{\"type\":\"model\",\"id\":\"claude-opus-5\",\"display_name\":\"Claude Opus 5\",\"created_at\":\"2026-07-24T00:00:00Z\",...}\nHTTP 200\n['kimi-k2.6', 'kimi-k2.7-code', 'kimi-k2.7-code-highspeed', 'kimi-k3']\nHTTP 200"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Verified = both pinned ids resolve at their providers with the .env keys (read-only GET /models, no generation). This does NOT mean the ablation has run on them — that is SLM-R11/R29."
+    },
+    {
+      "id": "SLM-R14",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 83,
+          "note": "zero_shot = SPEC"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 84,
+          "note": "few_shot = SPEC + FEW_SHOT in-context examples"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 85,
+          "note": "structured = STRUCTURED system prompt"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 223,
+          "note": "job loop runs every strategy per model"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Not VERIFIED because verify.precheck fails before any strategy executes (see SLM-R29)."
+    },
+    {
+      "id": "SLM-R15",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_scenarios.jsonl",
+          "line": 1,
+          "note": "scenario m1 (lines 1-5 = 5 scenarios total, 66 turns)"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 223,
+          "note": "job loop iterates all scenarios per model×strategy cell"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add at least 25 more long tutoring scenarios in the same JSONL shape (id/topic/turns[say,demo,new]) to reach the 30-per-cell floor.",
+      "notes": "verify.scenario_count → 5 scenarios; the brief's floor is 30 per model×strategy."
+    },
+    {
+      "id": "SLM-R16",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Create a shared judge module (rubric prompt derived from the Behavior Spec, returns score + reasoning) and import it from both the ablation script and eval.py so both use the identical rubric.",
+      "notes": "metacog_precheck.py is deterministic by design (line 6: 'no LLM judge'); there is no LLM-as-judge and no shared rubric module."
+    },
+    {
+      "id": "SLM-R17",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 242,
+          "note": "table header: model | strategy | ledger rate | unearned | no-elicit | clean runs | median first break"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 259,
+          "note": "table.md written"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add mean Spec-adherence and Robustness columns (per model×strategy) computed from the shared judge scores; keep the mechanical columns as extra diagnostics.",
+      "notes": "Per-model×strategy table exists but reports ledger-specific mechanical metrics, not the two named metrics; the captured run produced a header-only table (0 rows)."
+    },
+    {
+      "id": "SLM-R18",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add an ablation report (markdown) with a paragraph naming the failure mode that survives the best prompt, once the run produces numbers.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R19",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add a sweep config/script training ≥4 checkpoints at N, N/2, N/4, N/8 (or a justified alternative) and commit per-checkpoint logs.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R20",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when eval.py and the sweep exist: run eval.py per checkpoint on the same --eval-set (own + held-out) and commit results.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R21",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add a plot/table script producing Spec adherence and Robustness vs N from the per-checkpoint results.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R22",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "State and justify the minimum viable N in the Brainlift, citing the curve.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R23",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Push the tuned model to a public HF repo and record repo id + commit hash in the README/eval config.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R24",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add eval.py with --model and --eval-set that runs generation, judging, and aggregation in one command and writes the full results table.",
+      "notes": "verify.eval NOT RUN — eval.py does not exist."
+    },
+    {
+      "id": "SLM-R25",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with eval.py: write per-example judge records (score + reasoning) to a JSONL next to the table. The precheck's transcripts.jsonl writer (metacog_precheck.py:238-240) is a starting shape but records mechanical violations, not judge output.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R26",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with eval.py: load scenarios from the --eval-set path (no hard-coded set) and document the schema (the precheck's --scenarios loader at metacog_precheck.py:213/218 shows the pattern).",
+      "notes": null
+    },
+    {
+      "id": "SLM-R27",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add a submission section to the README recording the HF model revision hash and the eval-code git commit hash (requires initializing git).",
+      "notes": null
+    },
+    {
+      "id": "SLM-R28",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Demo-video content; not code-traceable. A single-prompt base-vs-tuned runner in the repo would make the live segment demonstrable — none exists yet (see SLM-R38)."
+    },
+    {
+      "id": "SLM-R29",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 122,
+          "note": "def call(...) — dispatch that never returns a reply"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 124,
+          "note": "fn assigned for anthropic, never invoked"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 126,
+          "note": "fn assigned for kimi, never invoked"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 185,
+          "note": "run_one: reply = call(...) receives None"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Make call() return fn(model_id, system, messages); then a grader can rerun a single cell. Consider adding --models/--strategies/--limit flags so one sample point is cheap to reproduce.",
+      "notes": "Script is present but a grader cannot rerun even one point: metacog_precheck.py is, by its own docstring (line 6: 'deterministic checks -- no LLM judge'), a cheap precursor to the ablation, and it is currently non-runnable: call() (lines 122-126) builds `fn` but never invokes or returns it, so every reply is None and all 30 conversations fail at parse_ledger before any API request is made (verify.precheck exit: 30/30 FAILED, empty table)."
+    },
+    {
+      "id": "SLM-R30",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Commit per-checkpoint training logs from the data-efficiency sweep with the config needed to reproduce one N.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R31",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Calendar deadline (MVP, Tuesday midnight)."
+    },
+    {
+      "id": "SLM-R32",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Calendar deadline (Early Submission, Thursday midnight)."
+    },
+    {
+      "id": "SLM-R33",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Calendar deadline (Final Submission, Sunday noon)."
+    },
+    {
+      "id": "SLM-R34",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 38,
+          "note": "SPEC constant — candidate spec, multi-sentence, embedded in prompt"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Same as SLM-R2: a finalized ≤2-sentence standalone spec.",
+      "notes": "Same artifact as SLM-R2; not finalized as a standalone one-to-two-sentence spec."
+    },
+    {
+      "id": "SLM-R35",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add ABLATION_REPORT.md: method, results table (SLM-R17), surviving-failure-mode paragraph (SLM-R18), reliability bar.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R36",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add the LLM-as-judge scoring module to the harness (shared with the ablation per SLM-R16).",
+      "notes": null
+    },
+    {
+      "id": "SLM-R37",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 155,
+          "note": "score_turn — three mechanical checks"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 161,
+          "note": "ledger_missing"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 167,
+          "note": "unearned_promotion"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 170,
+          "note": "explained_without_eliciting"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Reuse score_turn/parse_ledger inside eval.py so every base/tuned example gets the behavioral check alongside the judge score.",
+      "notes": "Behavioral checks for the spec's failure modes exist, but only inside the ablation precheck; no eval harness applies them to base/tuned model outputs."
+    },
+    {
+      "id": "SLM-R38",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with eval.py: accept two --model values (or run twice) and emit a side-by-side delta table.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R39",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add a smoke target (Makefile/script) chaining generate → train → eval on a tiny batch and commit its log.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R40",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when generate.py (SLM-R4) exists: commit the v1 dataset (or manifest) with pre/post-filter counts.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R41",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when train.py (SLM-R5) exists: run once and commit the training log + checkpoint reference.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R42",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when eval.py exists: commit the first base-vs-tuned table + judge JSONL.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R43",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "After MVP: write a diagnosis note for one failure mode, produce a v2 dataset targeting it, retrain with the identical config.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R44",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "After MVP: commit an updated results table with an explicit delta column vs MVP, plus the judge JSONL.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R45",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Two checkpoints at different N evaluated on the same set, or a dated note explaining the delay.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R46",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Commit a dataset schema/sample, a draft checkpoint reference, and a BRAINLIFT.md stub.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R47",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Publish the final dataset (HF Hub dataset repo) and link it from the README.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R48",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Public HF model (SLM-R23) plus a running inference demo (HF Space or hosted endpoint) linked from the README.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R49",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with eval.py: two results tables (own set, staff held-out set), each with base and tuned rows.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R50",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when SLM-R19–R22 ship: the ≥4-point curve with justified minimum N.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R51",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add BRAINLIFT.md with the behavior thesis and the evidence-backed data → behavior conclusion.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R52",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Demo video; not code-traceable. Link it from the README when produced."
+    },
+    {
+      "id": "SLM-R53",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Optional stretch — no action required until the core arc is done: preference pairs + DPO run + delta vs SFT.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R54",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Optional stretch — no action required until the core arc is done: adversarial eval set + robustness column.",
+      "notes": null
+    },
+    {
+      "id": "SLM-R55",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Optional stretch — no action required until the core arc is done: second constraint + evidence both hold.",
+      "notes": null
+    }
+  ],
+  "orphan_tickets": [],
+  "needs_ruling": [
+    {
+      "id": "SLM-R7",
+      "cluster": "spec-scope",
+      "question": "Does 'one context' mean the tutoring interaction context (so five different subject topics in metacog_scenarios.jsonl are fine), rather than a single subject? (yes/no: is multi-subject tutoring acceptable as one context?)",
+      "traced_under": "Yes — one context = 1:1 tutoring; multi-subject is acceptable."
+    }
+  ],
+  "commands_run": [
+    {
+      "command": "python3 -c \"import json;rows=[json.loads(l) for l in open('metacog_scenarios.jsonl') if l.strip()];print('scenarios',len(rows),'turns',sum(len(r['turns']) for r in rows))\"",
+      "result": "exit 0 — scenarios 5 turns 66",
+      "bears_on": [
+        "SLM-R15",
+        "SLM-R3",
+        "SLM-R7"
+      ],
+      "note": null
+    },
+    {
+      "command": "python3 -m py_compile metacog_precheck.py && echo compile-ok",
+      "result": "exit 0 — compile-ok",
+      "bears_on": [
+        "SLM-R29"
+      ],
+      "note": "Syntax only; runtime failure found by verify.precheck."
+    },
+    {
+      "command": "set -a && . ./.env && set +a && curl -s -w '\\nHTTP %{http_code}\\n' https://api.anthropic.com/v1/models/claude-opus-5 -H \"x-api-key: $ANTHROPIC_API_KEY\" -H 'anthropic-version: 2023-06-01'",
+      "result": "HTTP 200 — model object for claude-opus-5 returned",
+      "bears_on": [
+        "SLM-R13"
+      ],
+      "note": "Read-only GET; no generation."
+    },
+    {
+      "command": "set -a && . ./.env && set +a && curl -s https://api.moonshot.ai/v1/models -H \"Authorization: Bearer $MOONSHOT_API_KEY\"",
+      "result": "HTTP 200 — model ids: kimi-k2.6, kimi-k2.7-code, kimi-k2.7-code-highspeed, kimi-k3",
+      "bears_on": [
+        "SLM-R13"
+      ],
+      "note": "Read-only GET; no generation."
+    },
+    {
+      "command": "set -a && . ./.env && set +a && python3 metacog_precheck.py --scenarios metacog_scenarios.jsonl --out audit/requirements/runs/precheck",
+      "result": "exit 0 (script swallows per-conversation exceptions) — 30/30 conversations FAILED with \"'NoneType' object has no attribute 'strip'\"; table.md header-only; transcripts.jsonl empty; zero API requests made",
+      "bears_on": [
+        "SLM-R1",
+        "SLM-R11",
+        "SLM-R14",
+        "SLM-R17",
+        "SLM-R29"
+      ],
+      "note": "Output written to audit/requirements/runs/precheck/. No cost incurred: call() never invokes the provider."
+    },
+    {
+      "command": "python3 eval.py --model <hf-repo-id> --eval-set <path>",
+      "result": "NOT RUN",
+      "bears_on": [
+        "SLM-R6",
+        "SLM-R20",
+        "SLM-R24",
+        "SLM-R38",
+        "SLM-R42",
+        "SLM-R49"
+      ],
+      "note": "eval.py does not exist in the repo."
+    }
+  ]
+}

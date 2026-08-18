@@ -1,0 +1,47 @@
+# requirements-audit per-repo config — Trained_SLM
+# Written by /requirements-audit (baseline, 2026-08-17). Hand-edit freely; the skill re-reads it every run.
+
+docs:
+  - id: SLM
+    path: "Train_Your_Own_Small_Learning_Model.pdf"
+    sha256: e4844d5fe483a44a11a9a443a673b61866fd37e99822b484377af9fad05660b6
+
+tickets:
+  provider: linear
+  team: Troysatchell
+  # The Troysatchell team spans 8 unrelated projects (LabelHunter, PlugForge, FleetGraph, ...)
+  # and none of them is this repo. Left null on purpose: the ticket dimension reports BLOCKED
+  # until a Linear project exists for this project. Set the exact project name here when created.
+  project: null
+
+# The repo is a flat single-directory project (no src/ tree yet). Root is the evidence root;
+# add subdirs here as they appear (e.g. eval/, data/, train/, docs/) — the trace only searches
+# what is listed.
+code_roots:
+  - .
+exclude:
+  - .git
+  - __pycache__
+  - .venv
+  - venv
+  - node_modules
+  - results
+  - audit/requirements
+
+pm_skill: null
+
+pdf_tool: "node ~/.claude/skills/requirements-audit/scripts/pdf/pdf2md.mjs"
+
+# Behavioral verification commands. Keys are labels the inventory's "Acceptance evidence"
+# field references; values run from the repo root. `.env` uses `export KEY=...` lines, so
+# sourcing it is enough. Output goes under audit/requirements/runs/ (the only writable tree).
+verify:
+  precheck: "set -a && . ./.env && set +a && python3 metacog_precheck.py --scenarios metacog_scenarios.jsonl --out audit/requirements/runs/precheck"
+  scenario_count: "python3 -c \"import json;rows=[json.loads(l) for l in open('metacog_scenarios.jsonl') if l.strip()];print('scenarios',len(rows),'turns',sum(len(r['turns']) for r in rows))\""
+  precheck_compile: "python3 -m py_compile metacog_precheck.py && echo compile-ok"
+  # Read-only key + pinned-model-id probes (GET /models; no generation, no cost).
+  probe_anthropic: "set -a && . ./.env && set +a && curl -s -o /dev/null -w '%{http_code}\\n' https://api.anthropic.com/v1/models/claude-sonnet-5 -H \"x-api-key: $ANTHROPIC_API_KEY\" -H 'anthropic-version: 2023-06-01'"
+  probe_kimi: "set -a && . ./.env && set +a && curl -s https://api.moonshot.ai/v1/models -H \"Authorization: Bearer $MOONSHOT_API_KEY\" | python3 -c \"import sys,json;d=json.load(sys.stdin);print([m['id'] for m in d.get('data',[])] or d)\""
+  # Required by the brief (Verification Requirements). Does not exist yet — recorded NOT RUN until it does.
+  eval: "python3 eval.py --model <hf-repo-id> --eval-set <path>"
+verify_urls: {}

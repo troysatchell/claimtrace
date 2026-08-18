@@ -1,0 +1,25 @@
+# secrets
+.env
+.env.*
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# training artifacts (push checkpoints to HF Hub, not git)
+ckpt/
+
+# course brief PDF + its verbatim text cache (third-party material; the audit's
+# inventory.md carries the quoted requirements). Remove these two lines to include.
+Train_Your_Own_Small_Learning_Model.pdf
+audit/requirements/source-SLM.md
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# ignore vscode AI rules
+.github/instructions/codacy.instructions.md

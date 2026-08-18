@@ -1,0 +1,7 @@
+# Ablation, dataset generation, judge (CPU, API-only)
+requests>=2.31
+anthropic>=0.60
+pydantic>=2
+
+# Training + local eval (GPU box; unsloth needs CUDA)
+# pip install unsloth trl peft transformers datasets torch

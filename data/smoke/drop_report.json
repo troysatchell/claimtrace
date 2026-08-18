@@ -1,0 +1,13 @@
+{
+  "generated": 48,
+  "kept": 30,
+  "kept_by_shape": {
+    "self_report": 11,
+    "pressure": 11,
+    "ordinary": 6,
+    "demonstration": 2
+  },
+  "drops": {
+    "demonstration:known_did_not_grow": 9
+  }
+}
