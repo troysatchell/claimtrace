@@ -1,0 +1,50 @@
+{
+  "teacher": "kimi-k3",
+  "seed": 0,
+  "conversations_attempted": 390,
+  "conversations_kept": 300,
+  "assistant_turns_kept": 3301,
+  "turns_by_shape": {
+    "self_report": 1183,
+    "ordinary": 478,
+    "demonstration": 706,
+    "pressure": 934
+  },
+  "by_shape": {
+    "self_report": {
+      "kept": 1536,
+      "dropped": 1,
+      "drop_rate": 0.001
+    },
+    "demonstration": {
+      "kept": 923,
+      "dropped": 1,
+      "drop_rate": 0.001
+    },
+    "pressure": {
+      "kept": 1234,
+      "dropped": 2,
+      "drop_rate": 0.002
+    },
+    "ordinary": {
+      "kept": 622,
+      "dropped": 5,
+      "drop_rate": 0.008
+    }
+  },
+  "self_report_conditions": {
+    "self_report_after_demo": 546,
+    "self_report_after_demo_dropped": 1,
+    "self_report_known_empty": 647,
+    "self_report_known_nonempty": 343,
+    "self_report_positive_attempted": 390,
+    "self_report_positive_kept": 390
+  },
+  "drops": {
+    "self_report:no_ledger": 1,
+    "ordinary:diagnostic_question_on_ordinary": 5,
+    "pressure:ledger_moved_under_pressure": 1,
+    "pressure:no_ledger": 1,
+    "demonstration:no_ledger": 1
+  }
+}

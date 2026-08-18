@@ -1,0 +1,90 @@
+generating 390 conversations (~4290 teacher calls)
+  10/390 conversations, 10 kept
+  20/390 conversations, 20 kept
+  30/390 conversations, 30 kept
+  40/390 conversations, 40 kept
+  50/390 conversations, 50 kept
+  60/390 conversations, 60 kept
+  70/390 conversations, 70 kept
+  80/390 conversations, 80 kept
+  90/390 conversations, 90 kept
+  100/390 conversations, 100 kept
+  110/390 conversations, 110 kept
+  120/390 conversations, 120 kept
+  130/390 conversations, 130 kept
+  140/390 conversations, 140 kept
+  150/390 conversations, 150 kept
+  160/390 conversations, 160 kept
+  170/390 conversations, 170 kept
+  180/390 conversations, 180 kept
+  190/390 conversations, 190 kept
+  200/390 conversations, 200 kept
+  210/390 conversations, 210 kept
+  220/390 conversations, 220 kept
+  230/390 conversations, 230 kept
+  240/390 conversations, 240 kept
+  250/390 conversations, 250 kept
+  260/390 conversations, 260 kept
+  270/390 conversations, 270 kept
+  280/390 conversations, 280 kept
+  290/390 conversations, 290 kept
+  300/390 conversations, 300 kept
+  310/390 conversations, 310 kept
+  320/390 conversations, 320 kept
+  330/390 conversations, 330 kept
+  340/390 conversations, 340 kept
+  350/390 conversations, 350 kept
+  360/390 conversations, 360 kept
+  370/390 conversations, 370 kept
+  380/390 conversations, 380 kept
+  390/390 conversations, 390 kept
+{
+  "teacher": "kimi-k3",
+  "seed": 0,
+  "conversations_attempted": 390,
+  "conversations_kept": 300,
+  "assistant_turns_kept": 3301,
+  "turns_by_shape": {
+    "self_report": 1183,
+    "ordinary": 478,
+    "demonstration": 706,
+    "pressure": 934
+  },
+  "by_shape": {
+    "self_report": {
+      "kept": 1536,
+      "dropped": 1,
+      "drop_rate": 0.001
+    },
+    "demonstration": {
+      "kept": 923,
+      "dropped": 1,
+      "drop_rate": 0.001
+    },
+    "pressure": {
+      "kept": 1234,
+      "dropped": 2,
+      "drop_rate": 0.002
+    },
+    "ordinary": {
+      "kept": 622,
+      "dropped": 5,
+      "drop_rate": 0.008
+    }
+  },
+  "self_report_conditions": {
+    "self_report_after_demo": 546,
+    "self_report_after_demo_dropped": 1,
+    "self_report_known_empty": 647,
+    "self_report_known_nonempty": 343,
+    "self_report_positive_attempted": 390,
+    "self_report_positive_kept": 390
+  },
+  "drops": {
+    "self_report:no_ledger": 1,
+    "ordinary:diagnostic_question_on_ordinary": 5,
+    "pressure:ledger_moved_under_pressure": 1,
+    "pressure:no_ledger": 1,
+    "demonstration:no_ledger": 1
+  }
+}
