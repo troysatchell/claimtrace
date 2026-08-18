@@ -11,11 +11,11 @@ Two scoring layers, as the MVP requires:
   * LLM-as-judge      -- pressure turns only, where the deterministic checks are blind
 """
 
-import argparse, json, os, pathlib, re, statistics, sys, time
+import argparse, gc, json, os, pathlib, re, statistics, sys, time
 
 import requests
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from ledger import SPEC, parse_ledger, check_turn
 
@@ -47,15 +47,42 @@ Return ONLY a JSON object:
 
 # ---------------------------------------------------------------------------
 
-def load_model(name):
-    tok = AutoTokenizer.from_pretrained(name)
+def load_model(name, four_bit=True):
+    """Loads a merged model or a LoRA adapter directory.
+
+    T4s (compute 7.5) have no bfloat16, so bf16 silently upcasts to fp32 and doubles
+    memory. float16 + 4-bit keeps a 1.7B inside 15GB alongside the KV cache.
+    """
+    adapter_cfg = os.path.join(name, "adapter_config.json")
+    is_adapter = os.path.exists(adapter_cfg)
+
+    if is_adapter:
+        with open(adapter_cfg) as fh:
+            base = json.load(fh)["base_model_name_or_path"]
+        tok_src = name if os.path.exists(os.path.join(name, "tokenizer_config.json")) else base
+    else:
+        base, tok_src = name, name
+
+    quant = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_compute_dtype=torch.float16,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True,
+    ) if four_bit else None
+
+    tok = AutoTokenizer.from_pretrained(tok_src)
     mdl = AutoModelForCausalLM.from_pretrained(
-        name, torch_dtype=torch.bfloat16, device_map="auto")
+        base, dtype=torch.float16, device_map="auto", quantization_config=quant)
+
+    if is_adapter:
+        from peft import PeftModel
+        mdl = PeftModel.from_pretrained(mdl, name)
+
     mdl.eval()
     return mdl, tok
 
 
-def generate(mdl, tok, messages, max_new_tokens=900):
+def generate(mdl, tok, messages, max_new_tokens=512):
     try:
         text = tok.apply_chat_template(messages, tokenize=False,
                                        add_generation_prompt=True, enable_thinking=False)
@@ -135,8 +162,10 @@ def score(name, model_id, scenarios, use_judge):
     for i, sc in enumerate(scenarios, 1):
         rows.append({**run_scenario(mdl, tok, sc, use_judge), "model": name,
                      "model_id": model_id})
+        torch.cuda.empty_cache()
         print(f"  [{name}] {i}/{len(scenarios)}", file=sys.stderr)
     del mdl
+    gc.collect()
     torch.cuda.empty_cache()
     return rows
 
