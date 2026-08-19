@@ -1,4 +1,4 @@
-# Requirements gaps — Trained_SLM (2026-08-18T22:00:22-0500, commit 5db661c952cc)
+# Requirements gaps — Trained_SLM (2026-08-18T22:20:44-0500, commit fc1bc9345cdb)
 
 ## Unticketed requirements (ticket dimension BLOCKED — every gap is unticketed)
 
@@ -29,13 +29,6 @@
 - **Meaning in code:** A stated minimum viable N with justification tied to the curve, recorded in the Brainlift.
 - **What is missing:** Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report→KNOWN'); N not yet named.
 - **Suggested scope:** Fill in from results/data-efficiency-curve/table.md.
-
-### SLM-R41 — PARTIAL
-- **Quote:** "first real QLoRA training run completed."
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.3
-- **Meaning in code:** A completed QLoRA training run producing an adapter/checkpoint, with its training log committed.
-- **What is missing:** A full-size run is complete with log + checkpoint sha256, but it is bf16 LoRA; the full-size QLoRA run (q270) was training at sweep time (results/train/q270/log.txt). No HF revision yet (SLM-R23).
-- **Suggested scope:** q270 finishes ≈22:05 CDT; then publish (SLM-R23) for the HF revision.
 
 ### SLM-R43 — PARTIAL
 - **Quote:** "At least one specific failure mode diagnosed from your MVP eval, and resolved via a data change (v2 dataset) — not a training-config change."

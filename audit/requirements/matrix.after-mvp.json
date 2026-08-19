@@ -2,13 +2,12 @@
   "mode": "compare",
   "label": "mvp",
   "baselineRef": "matrix.baseline.json",
-  "commit": "5db661c952cc1cdc6443941be0d875534ee68113",
+  "commit": "fc1bc9345cdbc7f99f45ad3b07d9a2b6ec236122",
   "dirty": true,
   "dirty_paths": [
-    "results/pipeline-qlora.log",
-    "results/train/q270/log.txt"
+    "results/pipeline-qlora.log"
   ],
-  "date": "2026-08-18T22:00:22-0500",
+  "date": "2026-08-18T22:20:44-0500",
   "config_hash": "c0d2c2507f6f3db6300901caa5ca073493c30b2cfce6c764a0d52abe5376a6ec",
   "ticket_mapping": {
     "status": "BLOCKED",
@@ -1089,32 +1088,35 @@
     },
     {
       "id": "SLM-R41",
-      "verdict": "PARTIAL",
+      "verdict": "VERIFIED",
       "tickets": [
         "BLOCKED"
       ],
       "evidence": [
         {
-          "file": "results/train/n270/log.txt",
+          "file": "results/train/q270/log.txt",
           "line": 1,
-          "note": "completed 2000-iter run (bf16 LoRA)"
+          "note": "run_id=q270 base=ckpt/base-q4 (4-bit) \u2014 QLoRA"
         },
         {
-          "file": "results/train/n270/summary.json",
-          "line": 623,
-          "note": "final adapter sha256"
+          "file": "results/train/q270/summary.json",
+          "line": 3,
+          "note": "training commit; final adapter sha256 6a6af4f1ac8e\u2026"
         },
         {
-          "file": "results/smoke-loop/log.txt",
-          "line": 4,
-          "note": "QLoRA path (base=ckpt/base-q4) completed on the smoke batch"
+          "file": "results/train/q270/lora_config.yaml",
+          "line": 1,
+          "note": "model: ckpt/base-q4, LoRA r=16, 16 layers"
         }
       ],
-      "verification": null,
+      "verification": {
+        "command": "python3 train.py --n 270 --run-id q270 (via run_pipeline_qlora.sh)",
+        "result_excerpt": "summary.json: optimizer_steps 500, effective_batch 4, final_val_loss 0.941, final_adapter sha256 6a6af4f1ac8eee74\u2026, wall 113.7 min"
+      },
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "q270 finishes \u224822:05 CDT; then publish (SLM-R23) for the HF revision.",
-      "notes": "A full-size run is complete with log + checkpoint sha256, but it is bf16 LoRA; the full-size QLoRA run (q270) was training at sweep time (results/train/q270/log.txt). No HF revision yet (SLM-R23)."
+      "suggested_scope": "\u2014",
+      "notes": "Full-size QLoRA run q270 complete 22:20 CDT (4-bit frozen base ckpt/base-q4). Its base-vs-tuned eval (results/base-vs-tuned/) is running."
     },
     {
       "id": "SLM-R42",

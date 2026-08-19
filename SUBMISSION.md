@@ -13,7 +13,7 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 | One-command eval | `python3 eval.py --model <hf-repo-id or ckpt/q270/adapters> --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out <dir>` → `<dir>/table.md`, `<dir>/judge_transcripts.jsonl`, `<dir>/run.json` | same | ✅ |
 | Full loop generate → train → eval on a smoke batch | `smoke.sh`; log `results/smoke-loop/log.txt` | `./smoke.sh` (`--skip-generate` reuses `data/smoke-v2`) | ✅ |
 | First real dataset, generated and filtered | `data/dataset.jsonl` (300 conversations, 3,301 turns), `data/drop_report.json`, `data/generate.log`; spec `dataset_spec.md` | `python3 generate_dataset.py --n 300 --out data --workers 12` | ✅ |
-| First real QLoRA training run | `results/train/q270/log.txt`, `lora_config.yaml`, `summary.json` (adapter sha256, checkpoints); adapters in `ckpt/q270/adapters/` (not in git) | `python3 train.py --n 270 --run-id q270` | ⏳ training (bf16 LoRA run `n270` complete: `results/train/n270/`) |
+| First real QLoRA training run | `results/train/q270/log.txt`, `lora_config.yaml`, `summary.json` (adapter sha256, checkpoints); adapters in `ckpt/q270/adapters/` (not in git) | `python3 train.py --n 270 --run-id q270` | ✅ done 22:20 CDT (500 optimizer steps, val loss 3.24 → 0.94, adapter sha256 `6a6af4f1ac8e…`); bf16 LoRA twin `n270`: `results/train/n270/` |
 | First base-vs-tuned numbers + raw judge transcripts | QLoRA: `results/base-vs-tuned/` (table.md, judge_transcripts.jsonl, run.json, NOTES.md). bf16 LoRA: `results/base-vs-tuned-lora-bf16/` | eval command above | ⏳ QLoRA eval follows training; LoRA ✅ |
 
 ## Verification requirements

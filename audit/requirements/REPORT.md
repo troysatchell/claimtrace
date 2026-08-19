@@ -1,17 +1,17 @@
 # Requirements Audit — Trained_SLM (claimtrace)
-**Commit:** 5db661c952cc (dirty: results/pipeline-qlora.log, results/train/q270/log.txt) · **Date:** 2026-08-18T22:00:22-0500 · **Docs:** SLM (p.1–4) · **Mode:** compare `mvp` vs `matrix.baseline.json` (2026-08-17)
+**Commit:** fc1bc9345cdb (dirty: results/pipeline-qlora.log) · **Date:** 2026-08-18T22:20:44-0500 · **Docs:** SLM (p.1–4) · **Mode:** compare `mvp` vs `matrix.baseline.json` (2026-08-17)
 
 ## Summary
-- VERIFIED: 23
+- VERIFIED: 24
 - IMPLEMENTED-UNVERIFIED: 9
-- PARTIAL: 11
+- PARTIAL: 10
 - MISSING: 4
 - N/A: 7
 - ASSUMED: 1
 
-The MVP bundle (SLM-R34–R42) is present and re-runnable except for one item: **the full-size QLoRA
-training run is not finished** (SLM-R41 PARTIAL — the completed n270 run is bf16 LoRA; the QLoRA run of
-record `q270` started 20:25 CDT and its base-vs-tuned eval lands afterwards). The base-vs-tuned numbers
+The MVP bundle (SLM-R34–R42) is present and re-runnable including the full-size QLoRA training run
+(SLM-R41 VERIFIED — `q270`, 4-bit base, finished 22:20 CDT; its base-vs-tuned eval into `results/base-vs-tuned/`
+was running at render time; the bf16 LoRA twin `n270` carries the MVP numbers). The base-vs-tuned numbers
 exist and carry the behavior claim (SLM-R6/R42: 0/41 → 20/41 clean; self-report→KNOWN 0.24 → 0.01;
 base holds the ledger format on 100% of turns so the delta is provenance, not formatting), with full
 per-example judge output. The model and dataset are now public on the Hugging Face Hub with recorded revisions
@@ -72,7 +72,7 @@ per-example judge output. The model and dataset are now public on the Hugging Fa
 | SLM-R38 | and a base-vs-tuned comparison mechanism. | BLOCKED | eval.py:465, eval.py:381 | VERIFIED |
 | SLM-R39 | Full loop — generate → train → eval — runs end to end, demonstrated on… | BLOCKED | smoke.sh:19, smoke.sh:22, results/smoke-loop/log.txt:1 | VERIFIED |
 | SLM-R40 | First real dataset generated and filtered; | BLOCKED | data/drop_report.json:5, data/dataset.jsonl:1 | VERIFIED |
-| SLM-R41 | first real QLoRA training run completed. | BLOCKED | results/train/n270/log.txt:1, results/train/n270/summary.json:623, results/smoke-loop/log.txt:4 | PARTIAL |
+| SLM-R41 | first real QLoRA training run completed. | BLOCKED | results/train/q270/log.txt:1, results/train/q270/summary.json:3, results/train/q270/lora_config.yaml:1 | VERIFIED |
 | SLM-R42 | First base-vs-tuned eval numbers submitted, using the format in Verifi… | BLOCKED | results/base-vs-tuned-lora-bf16/table.md:3, results/base-vs-tuned-lora-bf16/table.md:4, results/base-vs-tuned-lora-bf16/NOTES.md:13 | VERIFIED |
 | SLM-R43 | At least one specific failure mode diagnosed from your MVP eval, and r… | BLOCKED | results/base-vs-tuned-lora-bf16/NOTES.md:84, BRAINLIFT.md:67 | PARTIAL |
 | SLM-R44 | Updated base-vs-tuned eval numbers showing the delta from MVP, submitt… | BLOCKED | — | MISSING |
@@ -93,7 +93,6 @@ per-example judge output. The model and dataset are now public on the Hugging Fa
 - **SLM-R20 — PARTIAL**: Only n270 evaluated so far; n135 trained not evaluated. Staff held-out set not yet available (schema documented, README.md line 111). *Suggested:* Ships when the sweep pipeline finishes; add the staff set path when provided.
 - **SLM-R21 — PARTIAL**: Plotting code present; no curve produced yet. *Suggested:* Ships with the sweep (results/data-efficiency-curve/curve.png).
 - **SLM-R22 — PARTIAL**: Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report→KNOWN'); N not yet named. *Suggested:* Fill in from results/data-efficiency-curve/table.md.
-- **SLM-R41 — PARTIAL**: A full-size run is complete with log + checkpoint sha256, but it is bf16 LoRA; the full-size QLoRA run (q270) was training at sweep time (results/train/q270/log.txt). No HF revision yet (SLM-R23). *Suggested:* q270 finishes ≈22:05 CDT; then publish (SLM-R23) for the HF revision.
 - **SLM-R43 — PARTIAL**: Diagnosis written; v2 dataset not generated yet (Early submission item). *Suggested:* Add a wrong_attempt shape (+ plain-language demos, brevity constraint) to generate_dataset.py, regenerate as data/v3, retrain with the identical config, diff configs.
 - **SLM-R44 — MISSING**: Early-submission item; follows SLM-R43. *Suggested:* Re-run eval.py on the v2-trained adapter; report delta vs results/base-vs-tuned.
 - **SLM-R45 — PARTIAL**: Two Ns trained, one evaluated; sweep evals queued. *Suggested:* Ships with the sweep pipeline.
@@ -145,7 +144,7 @@ None (ticket dimension BLOCKED).
 | SLM-R38 | MISSING | VERIFIED | eval.py:465, eval.py:381 |
 | SLM-R39 | MISSING | VERIFIED | smoke.sh:19, smoke.sh:22, results/smoke-loop/log.txt:1 |
 | SLM-R40 | MISSING | VERIFIED | data/drop_report.json:5, data/dataset.jsonl:1 |
-| SLM-R41 | MISSING | PARTIAL | results/train/n270/log.txt:1, results/train/n270/summary.json:623, results/smoke-loop/log.txt:4 |
+| SLM-R41 | MISSING | VERIFIED | results/train/q270/log.txt:1, results/train/q270/summary.json:3, results/train/q270/lora_config.yaml:1 |
 | SLM-R42 | MISSING | VERIFIED | results/base-vs-tuned-lora-bf16/table.md:3, results/base-vs-tuned-lora-bf16/table.md:4, results/base-vs-tuned-lora-bf16/NOTES.md:13 |
 | SLM-R43 | MISSING | PARTIAL | results/base-vs-tuned-lora-bf16/NOTES.md:84, BRAINLIFT.md:67 |
 | SLM-R45 | MISSING | PARTIAL | results/train/n135/summary.json:1, results/base-vs-tuned-lora-bf16/run.json:1 |
@@ -299,6 +298,10 @@ done: 10 checkpoints, final adapter sha256=... wall=92.4min peak_mem=10.7GB
 **SLM-R40** — `wc -l data/dataset.jsonl`
 ```
 300 data/dataset.jsonl
+```
+**SLM-R41** — `python3 train.py --n 270 --run-id q270 (via run_pipeline_qlora.sh)`
+```
+summary.json: optimizer_steps 500, effective_batch 4, final_val_loss 0.941, final_adapter sha256 6a6af4f1ac8eee74…, wall 113.7 min
 ```
 **SLM-R42** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-`
 ```

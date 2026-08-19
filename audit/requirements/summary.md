@@ -1,6 +1,6 @@
-The MVP bundle (SLM-R34–R42) is present and re-runnable except for one item: **the full-size QLoRA
-training run is not finished** (SLM-R41 PARTIAL — the completed n270 run is bf16 LoRA; the QLoRA run of
-record `q270` started 20:25 CDT and its base-vs-tuned eval lands afterwards). The base-vs-tuned numbers
+The MVP bundle (SLM-R34–R42) is present and re-runnable including the full-size QLoRA training run
+(SLM-R41 VERIFIED — `q270`, 4-bit base, finished 22:20 CDT; its base-vs-tuned eval into `results/base-vs-tuned/`
+was running at render time; the bf16 LoRA twin `n270` carries the MVP numbers). The base-vs-tuned numbers
 exist and carry the behavior claim (SLM-R6/R42: 0/41 → 20/41 clean; self-report→KNOWN 0.24 → 0.01;
 base holds the ledger format on 100% of turns so the delta is provenance, not formatting), with full
 per-example judge output. The model and dataset are now public on the Hugging Face Hub with recorded revisions
