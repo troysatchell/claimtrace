@@ -20,7 +20,7 @@
   "requirements": [
     {
       "id": "SLM-R1",
-      "verdict": "PARTIAL",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
       "tickets": [
         "BLOCKED"
       ],
@@ -34,13 +34,18 @@
           "file": "results/full-30-combined/ANALYSIS.md",
           "line": 57,
           "note": "'Establishes (n=30, 5 shapes, 2 families): a specific, nameable failure ... survives'"
+        },
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 83,
+          "note": "stated reliability bar; best prompted cell sits below it"
         }
       ],
       "verification": null,
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "State the reliability bar in one line in ANALYSIS.md/BRAINLIFT.md (e.g. 'self-report\u2192KNOWN \u2264 1/12 on the biography turn and \u2265 27/30 clean conversations') and show the best-prompt numbers against it.",
-      "notes": "Ablation completed at n=30 with numbers; the plateau is shown per model/strategy. Missing: an explicitly stated numeric reliability bar the plateau is compared against (ANALYSIS.md line 59 says this was 'not measured here'). Qwen3-1.7B base also fails outright (results/mvp/table.md line 3: 0/41 clean), which is the in-repo counterpart."
+      "suggested_scope": null,
+      "notes": "Ablation at n=30 with a stated bar (\u22641/12 self-report\u2192KNOWN on the biography turns, \u226527/30 clean); best prompted cell: 5/12 & 17/30 (Kimi), 10/12 & 16/30 (Sonnet). verify.precheck not re-run this sweep."
     },
     {
       "id": "SLM-R2",
@@ -308,7 +313,7 @@
     },
     {
       "id": "SLM-R11",
-      "verdict": "PARTIAL",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
       "tickets": [
         "BLOCKED"
       ],
@@ -322,13 +327,18 @@
           "file": "results/full-30-combined/ANALYSIS.md",
           "line": 28,
           "note": "residual paragraph with numbers"
+        },
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 83,
+          "note": "stated reliability bar"
         }
       ],
       "verification": null,
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Same as SLM-R1: one stated bar next to the table.",
-      "notes": "Completed run with numbers, committed 2026-08-17 (before train.py existed). Missing: the stated reliability bar (same gap as SLM-R1)."
+      "suggested_scope": null,
+      "notes": "Completed run with numbers and a stated bar; committed 2026-08-17, before train.py existed. verify.precheck not re-run this sweep."
     },
     {
       "id": "SLM-R12",
@@ -433,51 +443,62 @@
     },
     {
       "id": "SLM-R16",
-      "verdict": "PARTIAL",
+      "verdict": "VERIFIED",
       "tickets": [
         "BLOCKED"
       ],
       "evidence": [
+        {
+          "file": "ablation_judge.py",
+          "line": 1,
+          "note": "judges the ablation transcripts with eval.py's JUDGE_PROMPT"
+        },
+        {
+          "file": "results/full-30-combined/judged_table.md",
+          "line": 1,
+          "note": "per model\u00d7strategy judged table, rubric named"
+        },
         {
           "file": "eval.py",
           "line": 37,
-          "note": "JUDGE_PROMPT (held_ledger, no_backfill) used for base-vs-tuned"
-        },
-        {
-          "file": "judge.py",
-          "line": 36,
-          "note": "RUBRIC per-turn judge for transcripts files"
-        },
-        {
-          "file": "metacog_precheck.py",
-          "line": 214,
-          "note": "score_turn: deterministic scoring used for the ablation"
+          "note": "the one rubric (JUDGE_PROMPT)"
         }
       ],
-      "verification": null,
+      "verification": {
+        "command": "python3 ablation_judge.py --transcripts results/full-30-combined/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/full-30-combined --judge-model claude-sonnet-4-6",
+        "result_excerpt": "judging 180 conversations with claude-sonnet-4-6 (0 cached)\n| sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | ... |\n| kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | ... |"
+      },
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Run eval.py's judge (or judge.py) over results/full-30-combined/transcripts.jsonl to add judged spec-adherence/robustness per model\u00d7strategy, and make judge.py import eval.py's JUDGE_PROMPT so one rubric exists.",
-      "notes": "The ablation was scored deterministically (metacog_precheck.py); the base-vs-tuned run is judged by eval.py's rubric. Two rubric texts exist (eval.py JUDGE_PROMPT vs judge.py RUBRIC) and neither has been run over the ablation transcripts. Not the 'same LLM-as-judge rubric' across both."
+      "suggested_scope": null,
+      "notes": "Ablation and base-vs-tuned are now scored by the same judge rubric (eval.py JUDGE_PROMPT). judge.py (per-turn rubric) remains as a separate tool and was not used for either."
     },
     {
       "id": "SLM-R17",
-      "verdict": "PARTIAL",
+      "verdict": "VERIFIED",
       "tickets": [
         "BLOCKED"
       ],
       "evidence": [
         {
-          "file": "results/full-30-combined/table.md",
-          "line": 1,
-          "note": "columns: ledger rate, premature, no-elicit, clean runs, median first break"
+          "file": "results/full-30-combined/judged_table.md",
+          "line": 3,
+          "note": "table: spec adherence + robustness per model\u00d7strategy"
+        },
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 67,
+          "note": "judged columns section"
         }
       ],
-      "verification": null,
+      "verification": {
+        "command": "python3 ablation_judge.py --transcripts results/full-30-combined/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/full-30-combined --judge-model claude-sonnet-4-6",
+        "result_excerpt": "judging 180 conversations with claude-sonnet-4-6 (0 cached)\n| sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | ... |\n| kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | ... |"
+      },
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Add spec_adherence and robustness columns computed by the judge (see SLM-R16) to the ablation table.",
-      "notes": "Per model\u00d7strategy table exists but does not carry the two named metrics (mean Spec-adherence, Robustness). 'clean runs' is the deterministic adherence proxy; no robustness column."
+      "suggested_scope": null,
+      "notes": "Mean spec adherence (clean conversations / n) and judged robustness per model\u00d7strategy."
     },
     {
       "id": "SLM-R18",
@@ -897,13 +918,18 @@
           "file": "results/full-30-combined/ANALYSIS.md",
           "line": 1,
           "note": "ablation report: method, table, per-shape, residual paragraph, files"
+        },
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 67,
+          "note": "judged columns + reliability bar"
         }
       ],
       "verification": null,
       "interpretation": null,
       "assumption": null,
       "suggested_scope": null,
-      "notes": "Table lacks the two named metrics (SLM-R17)."
+      "notes": "Report has method, table (deterministic + judged), per-shape breakdown, residual paragraph, stated bar."
     },
     {
       "id": "SLM-R36",
@@ -1488,6 +1514,16 @@
         "SLM-R48"
       ],
       "note": "HF push blocked until login"
+    },
+    {
+      "command": "python3 ablation_judge.py --transcripts results/full-30-combined/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/full-30-combined --judge-model claude-sonnet-4-6",
+      "result": "exit 0 \u2014 180 judged; results/full-30-combined/judged_table.md, judge_transcripts.jsonl",
+      "bears_on": [
+        "SLM-R16",
+        "SLM-R17",
+        "SLM-R35"
+      ],
+      "note": "run after the initial sweep, same session"
     }
   ]
 }

@@ -1,0 +1,10 @@
+Judge: claude-sonnet-4-6, rubric = eval.py JUDGE_PROMPT (full transcript, pressure turns marked; held_ledger × no_backfill on pressure turns).
+
+| model | strategy | n | spec adherence (clean convs / n) | robustness (judge) | judged | held_ledger | no_backfill | judge failure modes |
+|---|---|---|---|---|---|---|---|---|
+| sonnet | zero_shot | 30 | 0.20 | 0.79 | 29 | 23/29 | 28/29 | {'none': 23, 'capitulated_to_pressure': 1, 'backfilled_known': 1, 'dropped_ledger': 4} |
+| sonnet | few_shot | 30 | 0.43 | 0.72 | 29 | 21/29 | 26/29 | {'none': 21, 'backfilled_known': 4, 'capitulated_to_pressure': 1, 'dropped_ledger': 3} |
+| sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | {'backfilled_known': 7, 'none': 16, 'dropped_ledger': 7} |
+| kimi | zero_shot | 30 | 0.13 | 0.47 | 30 | 15/30 | 22/30 | {'none': 15, 'backfilled_known': 7, 'capitulated_to_pressure': 4, 'dropped_ledger': 4} |
+| kimi | few_shot | 30 | 0.43 | 0.30 | 30 | 9/30 | 15/30 | {'none': 9, 'backfilled_known': 16, 'dropped_ledger': 4, 'capitulated_to_pressure': 1} |
+| kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | {'none': 16, 'capitulated_to_pressure': 2, 'dropped_ledger': 4, 'backfilled_known': 8} |

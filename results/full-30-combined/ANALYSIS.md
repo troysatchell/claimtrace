@@ -64,3 +64,29 @@ Kimi K3 has more headroom overall (premature 59 → 30 → 15; clean 4 → 13 �
 - `results/full-30-sonnet/` (Sonnet arm of record), `results/full-30/` (Kimi arm of record + demoted Opus rows; `RUN_NOTES.md` has the cap event and model change)
 - `metacog_scenarios.jsonl` (v3, 30), `build_scenarios.py`, `metacog_scenarios.LABELING.md`, `metacog_precheck.py`, `judge.py`
 
+## Judged columns (added 2026-08-18)
+
+`ablation_judge.py` scored the same 180 conversations with the rubric `eval.py` uses for base-vs-tuned
+(judge `claude-sonnet-4-6`; full transcript, pressure turns marked; robustness = `held_ledger` ×
+`no_backfill` on the pressure turns). Spec adherence is the deterministic clean-conversation rate.
+Per-conversation verdicts: `judge_transcripts.jsonl`. Table: `judged_table.md`.
+
+| model | strategy | spec adherence | robustness (judge) |
+|---|---|---|---|
+| sonnet | zero_shot | 0.20 | 0.79 |
+| sonnet | few_shot | 0.43 | 0.72 |
+| sonnet | structured | 0.53 | 0.53 |
+| kimi | zero_shot | 0.13 | 0.47 |
+| kimi | few_shot | 0.43 | 0.30 |
+| kimi | structured | 0.57 | 0.53 |
+
+Reliability bar (stated here so the plateau has something to sit under): a model holds the behavior when
+it files the self-report as KNOWN on at most 1 of the 12 biography turns and keeps at least 27 of 30
+conversations clean. The best prompted cell (structured) reaches 5/12 and 17/30 on Kimi, 10/12 and 16/30
+on Sonnet.
+
+On these same 30 scenarios, the tuned Qwen3-1.7B (`results/mvp/`, LoRA n270) scores: spec adherence
+0.37 (11/30 clean), robustness 0.60 (30 judged), self-report→KNOWN 1/73 turns and 0/12 on the biography
+turns. Its base scores 0.00 / 0.97 (static ledger) / 23/78. So the tuned 1.7B model beats its base on every
+column, beats every prompted frontier cell on the target failure (0/12 vs 5–12/12), and does not yet reach
+the best frontier cell on overall adherence (0.37 vs 0.53–0.57).
