@@ -1,0 +1,21 @@
+[2026-08-18 20:25:39] run_id=q270 commit=b505da9edde5d8dc3723a793a67733b5f5f012c1 base=ckpt/base-q4 n=270 seed=0
+[2026-08-18 20:25:39] args {"data": "data/dataset.jsonl", "n": 270, "run_id": "q270", "run_prefix": "n", "base": "ckpt/base-q4", "seed": 0, "valid_frac": 0.1, "valid_rows": 64, "dry_run": false, "iters": 2000, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 200, "steps_per_eval": 200, "steps_per_report": 20, "max_seq_length": 6144, "warmup": 25}
+[2026-08-18 20:25:48] {"dataset": "data/dataset.jsonl", "conversations_total": 300, "train_conversations": 270, "valid_conversations": 30, "train_rows": 2982, "valid_rows": 64, "rows_dropped_over_max_seq_length": 0, "train_rows_by_final_shape": {"self_report": 1071, "pressure": 846, "demonstration": 640, "ordinary": 425}, "train_tokens_total": 4520639, "train_tokens_median": 1384, "train_tokens_max": 4450, "epochs_at_iters": 0.67}
+[2026-08-18 20:25:48] $ /Users/troy/anaconda3/bin/python3 -m mlx_lm lora -c ckpt/q270/lora_config.yaml
+[2026-08-18 20:25:48] [transformers] Disabling PyTorch because PyTorch >= 2.5 is required but found 2.0.1
+[2026-08-18 20:25:50] Loading configuration file ckpt/q270/lora_config.yaml
+[2026-08-18 20:25:50] Loading pretrained model
+[2026-08-18 20:25:50] Loading datasets
+[2026-08-18 20:25:50] Training
+[2026-08-18 20:25:50] Trainable parameters: 0.579% (9.961M/1720.575M)
+[2026-08-18 20:25:50] Starting training..., iters: 2000
+[2026-08-18 20:26:52] Iter 1: Val loss 3.242, Val took 62.565s
+[2026-08-18 20:28:36] Iter 20: Train loss 2.847, Learning Rate 8.000e-06, It/sec 0.195, Tokens/sec 52.654, Trained Tokens 5413, Peak mem 6.257 GB
+[2026-08-18 20:29:49] Iter 40: Train loss 1.497, Learning Rate 1.800e-05, It/sec 0.278, Tokens/sec 74.504, Trained Tokens 10778, Peak mem 6.257 GB
+[2026-08-18 20:30:48] Iter 60: Train loss 1.496, Learning Rate 2.800e-05, It/sec 0.339, Tokens/sec 75.284, Trained Tokens 15216, Peak mem 6.257 GB
+[2026-08-18 20:31:43] Iter 80: Train loss 1.328, Learning Rate 3.800e-05, It/sec 0.364, Tokens/sec 75.776, Trained Tokens 19385, Peak mem 6.257 GB
+[2026-08-18 20:32:45] Iter 100: Train loss 1.141, Learning Rate 4.800e-05, It/sec 0.325, Tokens/sec 63.098, Trained Tokens 23267, Peak mem 6.257 GB
+[2026-08-18 20:33:29] Iter 120: Train loss 1.067, Learning Rate 5.000e-05, It/sec 0.456, Tokens/sec 84.160, Trained Tokens 26956, Peak mem 6.257 GB
+[2026-08-18 20:34:17] Iter 140: Train loss 1.095, Learning Rate 4.997e-05, It/sec 0.421, Tokens/sec 88.763, Trained Tokens 31168, Peak mem 6.257 GB
+[2026-08-18 20:35:02] Iter 160: Train loss 1.112, Learning Rate 4.992e-05, It/sec 0.441, Tokens/sec 84.976, Trained Tokens 35022, Peak mem 6.257 GB
+[2026-08-18 20:36:00] Iter 180: Train loss 1.100, Learning Rate 4.986e-05, It/sec 0.349, Tokens/sec 70.903, Trained Tokens 39085, Peak mem 6.257 GB

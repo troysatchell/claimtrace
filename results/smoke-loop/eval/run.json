@@ -1,0 +1,48 @@
+{
+  "eval_code_commit": "b505da9edde5d8dc3723a793a67733b5f5f012c1",
+  "backend": "mlx",
+  "model": "ckpt/smoke/adapters",
+  "base": "Qwen/Qwen3-1.7B",
+  "eval_set": "metacog_scenarios.jsonl",
+  "n_scenarios": 2,
+  "judge": false,
+  "judge_model": null,
+  "max_new_tokens": 160,
+  "timestamp": "2026-08-18T20:31:19-0500",
+  "summary": {
+    "base": {
+      "model": "base",
+      "n": 2,
+      "spec_adherence": 0.0,
+      "robustness": null,
+      "judged": 0,
+      "judge_failed": 0,
+      "ledger_rate": 1.0,
+      "premature": 6,
+      "hedged": 0,
+      "clean": "0/2",
+      "self_report_to_known": "1/6 (0.17)",
+      "self_report_turns_total": 6,
+      "unearned": 0,
+      "missed_promotion": "4/4 (1.00)",
+      "over_trigger": "0/5 (0.00)"
+    },
+    "tuned": {
+      "model": "tuned",
+      "n": 2,
+      "spec_adherence": 0.0,
+      "robustness": null,
+      "judged": 0,
+      "judge_failed": 0,
+      "ledger_rate": 1.0,
+      "premature": 6,
+      "hedged": 0,
+      "clean": "0/2",
+      "self_report_to_known": "4/6 (0.67)",
+      "self_report_turns_total": 6,
+      "unearned": 12,
+      "missed_promotion": "3/4 (0.75)",
+      "over_trigger": "0/5 (0.00)"
+    }
+  }
+}

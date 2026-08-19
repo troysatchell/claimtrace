@@ -22,7 +22,11 @@ Data. `generate_dataset.py` writes one multi-turn conversation per line. This sc
 Rows longer than --max-seq-length are dropped, not truncated: mlx_lm truncates the tail,
 which is exactly the assistant turn we want the loss on.
 
-Config. bf16, no quantization (1.7B fits in unified memory). Effective batch 4 as
+Config. QLoRA: the frozen base is the 4-bit affine-quantized copy made by
+`mlx_lm.convert -q --q-bits 4 --q-group-size 64` (ckpt/base-q4; see quantize_base()) and LoRA
+adapters (rank 16, last 16 blocks, all linear layers) train on top in bf16 -- the brief asks for
+QLoRA and mlx_lm applies LoRA to QuantizedLinear directly. `--base Qwen/Qwen3-1.7B` gives plain
+bf16 LoRA instead (the first n270 run used that; kept as a comparison). Effective batch 4 as
 `--batch-size 1 --grad-accumulation-steps 4`: batch 4 of 2-4k-token rows OOMs on 24 GB
 because the 152k-vocab logits dominate. mlx_lm counts --iters in micro-batches, so 2000
 micro-iters = 500 optimizer steps x effective batch 4, i.e. the handoff's
@@ -36,6 +40,17 @@ Outputs. ckpt/<run-id>/ (adapters + split data; gitignored) and results/train/<r
 import argparse, collections, hashlib, json, os, pathlib, random, re, shutil, subprocess, sys, time
 
 BASE = "Qwen/Qwen3-1.7B"
+QBASE = "ckpt/base-q4"   # 4-bit quantized copy of BASE, made on demand by quantize_base()
+
+
+def quantize_base(base=BASE, out=QBASE):
+    """mlx_lm.convert -q: 4-bit affine, group 64. Idempotent; the frozen base for QLoRA."""
+    outp = pathlib.Path(out)
+    if (outp / "config.json").exists():
+        return str(outp)
+    subprocess.run([sys.executable, "-m", "mlx_lm", "convert", "--hf-path", base, "--mlx-path", str(outp),
+                    "-q", "--q-bits", "4", "--q-group-size", "64"], check=True)
+    return str(outp)
 DEFAULTS = dict(iters=2000, batch_size=1, grad_accumulation_steps=4, num_layers=16,
                 learning_rate=5e-5, rank=16, scale=20.0, dropout=0.05,
                 save_every=200, steps_per_eval=200, steps_per_report=20,
@@ -87,10 +102,20 @@ def split(rows, valid_frac, seed):
     rng.shuffle(train)
     rng.shuffle(valid)
     shapes_all = {s for r in rows for s in r["meta"]["shapes"]}
-    shapes_valid = {s for r in valid for s in r["meta"]["shapes"]}
-    missing = shapes_all - shapes_valid
-    if missing:
-        raise SystemExit(f"valid split lacks shapes {sorted(missing)}; change --seed or --valid-frac")
+    covers = lambda vs: shapes_all <= {s for r in vs for s in r["meta"]["shapes"]}
+    if not covers(valid):
+        # Tiny sets (smoke runs) can't stratify by topic; fall back to a plain seeded split.
+        pool = sorted(rows, key=lambda r: r["_idx"])
+        rng.shuffle(pool)
+        k = max(1, round(len(pool) * valid_frac))
+        for start in range(0, len(pool), max(1, k)):
+            cand = pool[start:start + k]
+            if covers(cand):
+                valid = cand
+                train = [r for r in pool if r not in cand]
+                break
+        else:
+            raise SystemExit(f"no valid split covers shapes {sorted(shapes_all)}; change --seed or --valid-frac")
     return train, valid
 
 
@@ -283,7 +308,10 @@ def main():
     ap.add_argument("--n", type=int, default=None, help="training conversations (nested subset)")
     ap.add_argument("--run-id", default=None)
     ap.add_argument("--sweep", default=None, help="comma-separated Ns, e.g. 270,135,67,33")
-    ap.add_argument("--base", default=BASE)
+    ap.add_argument("--run-prefix", default="n", help="run ids are <prefix><N> (sweep) / default run id")
+    ap.add_argument("--base", default=None,
+                    help=f"frozen base for the adapters; default = 4-bit quantized {BASE} at {QBASE} (QLoRA). "
+                         f"Pass {BASE} for bf16 LoRA.")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--valid-frac", type=float, default=0.10)
     ap.add_argument("--valid-rows", type=int, default=64, help="prefix rows kept for validation loss")
@@ -291,17 +319,20 @@ def main():
     for k, v in DEFAULTS.items():
         ap.add_argument("--" + k.replace("_", "-"), type=type(v), default=v)
     args = ap.parse_args()
+    if args.base is None:
+        args.base = quantize_base()
 
     if args.sweep:
         ns = [int(x) for x in args.sweep.split(",")]
         summaries = []
         for n in ns:
             a = argparse.Namespace(**vars(args)); a.n = n; a.sweep = None
-            summaries.append(train_once(a, f"n{n}"))
-        (pathlib.Path("results") / "train" / "sweep.json").write_text(json.dumps(
-            {"ns": ns, "runs": [s["run_id"] for s in summaries if s], "commit": git_commit()}, indent=2))
+            summaries.append(train_once(a, f"{args.run_prefix}{n}"))
+        (pathlib.Path("results") / "train" / f"sweep-{args.run_prefix}.json").write_text(json.dumps(
+            {"ns": ns, "runs": [s["run_id"] for s in summaries if s], "base": args.base,
+             "commit": git_commit()}, indent=2))
         return
-    run_id = args.run_id or (f"n{args.n}" if args.n else "full")
+    run_id = args.run_id or (f"{args.run_prefix}{args.n}" if args.n else "full")
     train_once(args, run_id)
 
 

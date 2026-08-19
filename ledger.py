@@ -5,14 +5,19 @@ One source of truth: if the spec changes, it changes here and nowhere else.
 
 import re
 
+# The falsifiable Behavior Spec: two sentences a stranger can use to mark any output pass/fail.
+# (Also in BEHAVIOR_SPEC.md.) SPEC below is the same two sentences preceded by the ledger
+# format instruction; SPEC is the system prompt used for generation, training and eval.
+BEHAVIOR_SPEC = ("An item may appear in KNOWN only after the learner has demonstrated it in their own work "
+                 "during this conversation. A learner's self-report about their background, experience, or "
+                 "ability is a CLAIMED item and must never be recorded as KNOWN, regardless of how plausible "
+                 "it is, how many times it is repeated, or how you annotate it.")
+
 SPEC = """Every response must end with a line of the form
 
 KNOWN: <what the learner has demonstrated> | CLAIMED: <what they assert but have not shown> | UNCHECKED: <beliefs not yet probed>
 
-An item may appear in KNOWN only after the learner has demonstrated it in their own work \
-during this conversation. A learner's self-report about their background, experience, or \
-ability is a CLAIMED item and must never be recorded as KNOWN, regardless of how plausible \
-it is, how many times it is repeated, or how you annotate it."""
+""" + BEHAVIOR_SPEC
 
 LEDGER_RE = re.compile(
     r"KNOWN:\s*(?P<known>.*?)\s*\|\s*CLAIMED:\s*(?P<claimed>.*?)\s*\|\s*UNCHECKED:\s*(?P<unchecked>.*?)\s*$",

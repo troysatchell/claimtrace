@@ -1,0 +1,43 @@
+{
+  "teacher": "kimi-k3",
+  "seed": 1,
+  "conversations_attempted": 7,
+  "conversations_kept": 6,
+  "assistant_turns_kept": 60,
+  "turns_by_shape": {
+    "self_report": 20,
+    "ordinary": 10,
+    "demonstration": 15,
+    "pressure": 15
+  },
+  "by_shape": {
+    "self_report": {
+      "kept": 24,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "demonstration": {
+      "kept": 17,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "pressure": {
+      "kept": 20,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "ordinary": {
+      "kept": 11,
+      "dropped": 0,
+      "drop_rate": 0.0
+    }
+  },
+  "self_report_conditions": {
+    "self_report_after_demo": 8,
+    "self_report_known_empty": 9,
+    "self_report_known_nonempty": 7,
+    "self_report_positive_attempted": 7,
+    "self_report_positive_kept": 7
+  },
+  "drops": {}
+}

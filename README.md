@@ -19,7 +19,11 @@ plausible it is, how often it is repeated, or how the tutor annotates it.
 This repo is the full arc for the "Train Your Own Small Learning Model" brief: prove a
 prompting ceiling on frontier models, generate and filter a distilled dataset, QLoRA-tune a
 small open model, and evaluate base-vs-tuned with a deterministic behavioral check plus an
-LLM judge. Everything here is re-runnable from the command line.
+LLM judge. Everything here is re-runnable from the command line, on an Apple Silicon Mac
+(`mlx_lm`) or a CUDA box (`transformers`), with the same commands.
+
+Behavior Spec (two sentences): `BEHAVIOR_SPEC.md` · thesis and evidence: `BRAINLIFT.md` ·
+MVP numbers and the format-vs-provenance analysis: `results/mvp/NOTES.md`.
 
 ## The finding so far (prompt-ceiling ablation, n=30)
 
@@ -57,84 +61,110 @@ of every conversation, with the raw KNOWN field and violations, is in
 ## Pipeline
 
 ```
-metacog_precheck.py      prompt-ceiling ablation (2 models × 3 strategies × N scenarios), deterministic checks
-build_scenarios.py       generates metacog_scenarios.jsonl — 30 scenarios in 5 shapes, labeled (demo / new / pressure)
-ledger.py                the spec + parser + checks; single source of truth imported by the pipeline
-generate_dataset.py      distill from a frontier teacher, mechanical filter (delete, never repair), drop report
-train_qlora.py           QLoRA on Qwen3-1.7B-Instruct via Unsloth; --n truncates with a fixed seed for the data-efficiency curve
-eval.py                  one command: base-vs-tuned table + per-example judge JSONL
-judge.py                 LLM-as-judge over full transcripts (per-turn verdicts + reasoning), same rubric for ablation and base-vs-tuned
+ledger.py                the spec (BEHAVIOR_SPEC / SPEC) + parser + deterministic checks; single source of truth
+build_scenarios.py       generates metacog_scenarios.jsonl — 41 scenarios in 7 shapes, per-turn flags
+metacog_precheck.py      prompt-ceiling ablation (2 models × 3 strategies × 30 scenarios)
+generate_dataset.py      distill multi-turn conversations from a frontier teacher; mechanical filter; drop report
+train.py                 QLoRA on Qwen3-1.7B via mlx_lm.lora (data split, config, checkpoints, log); --sweep for the N curve
+eval.py                  ONE command: base-vs-tuned table + per-example JSONL (+ judge); MLX or torch backend
+sweep.py                 data-efficiency table + curve.png over the sweep runs
+compare.py               live base-vs-tuned on one conversation (demo's grader-supplied prompt)
+publish.py               fuse + push model and dataset to Hugging Face Hub; prints revision hashes
+smoke.sh                 generate → train → eval on a 6-conversation batch (log in results/smoke-loop/)
+run_pipeline_qlora.sh    train q270 → eval → sweep q135/q67/q33 → curve
+judge.py                 standalone LLM-as-judge over any transcripts file
+llm.py                   teacher/judge API routing (claude-* → Anthropic, kimi-* → Moonshot)
 ```
 
-### Run it
+### Run it (Apple Silicon; the same commands work on a GPU box)
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt            # mlx-lm on darwin/arm64; see comments for CUDA
 export ANTHROPIC_API_KEY=... MOONSHOT_API_KEY=...
 
 # 1. Prompt-ceiling ablation (any cell reproducible in isolation)
-python3 metacog_precheck.py --out results/run                       # everything
-python3 metacog_precheck.py --models sonnet --strategies zero_shot --max-scenarios 1 --out results/one   # one point
+python3 metacog_precheck.py --models sonnet --strategies zero_shot --max-scenarios 1 --out results/one
 
-# 2. Dataset
-python3 generate_dataset.py --n 300 --out data/                     # writes dataset.jsonl + drop_report.json
+# 2. Dataset (300 conversations; teacher pinned to claude-sonnet-4-6, --teacher overrides)
+python3 generate_dataset.py --n 300 --out data --workers 12
 
-# 3. Train (GPU box — Unsloth needs CUDA), four checkpoints for the curve
-for N in 300 150 75 40; do python3 train_qlora.py --data data/dataset.jsonl --n $N --out ckpt/n$N; done
+# 3. Train (QLoRA: 4-bit base made on first use at ckpt/base-q4, LoRA r=16 on the last 16 blocks)
+python3 train.py --n 270 --run-id q270                     # log: results/train/q270/log.txt
+python3 train.py --sweep 135,67,33 --run-prefix q          # identical config, only N varies
 
-# 4. Eval, base vs tuned, one command
-python3 eval.py --model ckpt/n300 --eval-set metacog_scenarios.jsonl --base unsloth/Qwen3-1.7B-Instruct
+# 4. Eval, base vs tuned, one command (table.md + judge_transcripts.jsonl + run.json)
+python3 eval.py --model ckpt/q270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp-qlora
+python3 eval.py --rejudge results/mvp-qlora --judge-model claude-sonnet-4-6   # judge saved transcripts only
 
-# 5. Judge over any transcripts file (pressure turns are where the deterministic checks are blind)
-python3 judge.py --transcripts results/run/transcripts.jsonl --out results/run/
+# 5. Data-efficiency curve
+python3 sweep.py --runs q270,q135,q67,q33 --base-results results/mvp-qlora --out results/sweep-qlora
+
+# 6. Publish (needs `hf auth login`), then eval against the published revision
+python3 publish.py --run q270 --user <hf-user>
+python3 eval.py --model <hf-user>/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl
+
+# Smoke test of the whole loop on 6 conversations (~5 min); live demo runner
+./smoke.sh --skip-generate
+python3 compare.py --tuned ckpt/q270/adapters "I've used git for years." "How do I see what commit I'm on?"
 ```
 
-## Scenarios and labels
+## Eval set schema (for a staff held-out set)
 
-`metacog_scenarios.jsonl` — 30 scenarios, 12–15 turns each, five shapes:
+`--eval-set` takes any JSONL where each line is a scenario:
 
-| shape | opening move | n |
-|---|---|---|
-| A | "I want to learn X but I don't understand it at all" (biography at t2) | 6 |
-| B | "I've always been bad at X" | 6 |
-| C | overclaimer: "I already know X, skip it" | 6 |
-| D | catastrophizer: "I'd have to understand everything first" | 6 |
-| E | "I can't do this, I don't know X" | 6 |
+```json
+{"id": "m1", "shape": "A", "topic": "recursion",
+ "turns": [{"say": "<learner message>", "demo": false, "new": true, "pressure": false,
+            "self_report": true, "ordinary": false}, ...]}
+```
 
-Each turn carries three flags — `demo` (learner demonstrates knowledge in their own words),
-`new` (opens a topic/problem; tutor must elicit before explaining), `pressure` (insists,
-repeats, cites a deadline, is frustrated, demands an answer or verdict; no new
-demonstration). Rules and history in `metacog_scenarios.LABELING.md`. The scenarios are
-generated by `build_scenarios.py`; earlier label versions are kept as `.v1/.v2/.v3.jsonl`.
+Only `say` is required. Flags drive the checks: `demo` — the learner demonstrated the item (KNOWN may
+grow only here; missing it is `missed_promotion`); `pressure` — judged turns; `self_report` — the
+learner describes their own background/ability (reported as self-report→KNOWN); `ordinary` — a plain
+question (over-trigger control). Rules and history: `metacog_scenarios.LABELING.md`. The 41 scenarios
+in `metacog_scenarios.jsonl` are never trained on; the training topics/sentences differ from them
+(dataset_spec.md, "No eval leakage").
 
-## Deterministic checks (`ledger.py` / `metacog_precheck.py`)
+## Results so far
 
-- `ledger_missing` — no `KNOWN | CLAIMED | UNCHECKED` line anywhere in the reply
-- `premature_promotion` — non-empty KNOWN before the scenario's first `demo` turn
-- `unearned_promotion` — KNOWN grew on a non-demo turn (`ledger.py`, dataset filter)
-- `hedged_known` — a KNOWN item carrying a hedge token (`claimed`, `self-described`, `not yet
-  demonstrated`, …): the signature frontier failure
-- `explained_without_eliciting` — on a `new` turn, no question or imperative ask
+| artifact | where |
+|---|---|
+| Prompt-ceiling ablation (n=30, 2 families × 3 strategies) | `results/full-30-combined/ANALYSIS.md`, `table.md`, `transcripts.jsonl` |
+| Dataset v2 (300 conversations, 3,301 turns) + drop report + generation log | `data/` |
+| MVP base-vs-tuned, bf16 LoRA n270 (41 scenarios) + analysis | `results/mvp/table.md`, `results/mvp/NOTES.md`, `results/mvp/judge_transcripts.jsonl` |
+| MVP base-vs-tuned, QLoRA q270 (configuration of record) | `results/mvp-qlora/` (in progress) |
+| Training logs + checkpoint sha256s | `results/train/<run>/log.txt`, `summary.json`, `lora_config.yaml` |
+| Data-efficiency sweep (N = 270/135/67/33) | `results/sweep-qlora/table.md`, `curve.png` (in progress) |
+| Smoke loop log | `results/smoke-loop/log.txt` |
+| Brainlift | `BRAINLIFT.md` |
 
-The precheck's history matters: its first version measured its own harness (truncation,
-ledger placement, a comma-split set-diff that flagged rewording). Those bugs and the fixes
-are recorded in `results/full/` → `results/full-v2/` → `results/full-30-combined/`.
+Headline (bf16 LoRA n270, `results/mvp/NOTES.md`): clean conversations 0/41 → 20/41; self-report→KNOWN
+0.24 → 0.01 (0/12 on the turns where the frontier's best prompt scored 10/12); hedged 1 → 0;
+demonstrations credited 0.05 → 0.87; over-trigger control flat at 0.00 → 0.01. The base model holds the
+ledger *format* on 100% of turns, so the delta is provenance, not formatting.
 
-## Status
+## Submission block (pinned versions)
 
-- Ablation: done at n=30 for Sonnet 5 and Kimi K3 (above). Earlier 5-scenario runs used
-  Opus 5 and are kept under `results/full*` for reference.
-- Dataset: `generate_dataset.py` smoke-tested at n=30 (`data/smoke/`); self-report drop rate
-  0%, demonstration rows dropped 9/11 (`known_did_not_grow`) — see `data/smoke/drop_report.json`.
-- Training / eval: not yet run — needs a CUDA box. Base-vs-tuned table pending.
-- Judge: built and smoke-tested (`results/full-v2/judge-smoke/`); not yet run at scale.
+- Eval code commit: see `results/<out>/run.json → eval_code_commit` (the tree that produced each table).
+- Training commit + adapter sha256: `results/train/<run>/summary.json`.
+- HF model repo + revision, dataset repo + revision: written to `results/publish.json` by `publish.py`
+  — **not yet published** (this machine is not logged in to Hugging Face; run `hf auth login` then
+  `python3 publish.py --run q270 --user <hf-user>`).
+- LLM-judge column: empty in the current tables — the Anthropic key in `.env` is invalid and the
+  Moonshot account ran out of balance after generation. `python3 eval.py --rejudge <dir> --judge-model <id>`
+  fills it from the saved transcripts (greedy decoding; no regeneration).
 
 ## Provenance notes
 
-- Ablation models pinned: `claude-sonnet-5`, `kimi-k3` (Moonshot). Both are thinking
-  models by default; thinking is disabled in `metacog_precheck.py` so the comparison is plain
-  prompting on both families. `MAX_TOKENS=2500`.
-- Teacher for distillation: `claude-sonnet-4-6`. Judge: `claude-opus-5` by default
-  (a different model from the one under test); `--judge-model` overrides.
-- The requirements audit of the brief lives in `audit/` (55 extracted requirements,
-  traceability matrix, gaps).
+- Ablation models pinned: `claude-sonnet-5`, `kimi-k3` (Moonshot), thinking disabled, MAX_TOKENS=2500.
+- Teacher for distillation: pinned default `claude-sonnet-4-6`; **the shipped dataset was generated
+  with `kimi-k3`** (`--teacher`, recorded in `data/drop_report.json`) because the Anthropic key was
+  rejected. Judge: `eval.py` default `claude-sonnet-4-6`, `--judge-model` overrides and is recorded in `run.json`.
+- Base model: `Qwen/Qwen3-1.7B` (thinking disabled via chat template). QLoRA = LoRA r=16/scale 20/dropout
+  0.05 on the last 16 blocks over a 4-bit affine-quantized (group 64) copy of the base; bf16 LoRA on the
+  unquantized base is `train.py --base Qwen/Qwen3-1.7B` (run `n270`).
+- `mlx_lm --mask-prompt` computes loss on the last assistant turn only, so `train.py` expands each
+  conversation into per-turn prefix rows; learner turns (the self-report strings) are never trained on.
+- Decoding is greedy everywhere (`eval.py`, `compare.py`), so results are reproducible for a given
+  model revision and eval-code commit.
+- The requirements audit of the brief lives in `audit/` (inventory, traceability matrix, gaps).

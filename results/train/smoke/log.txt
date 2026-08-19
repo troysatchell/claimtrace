@@ -1,0 +1,22 @@
+[2026-08-18 20:22:02] run_id=smoke commit=b505da9edde5d8dc3723a793a67733b5f5f012c1 base=Qwen/Qwen3-1.7B n=all seed=0
+[2026-08-18 20:22:02] args {"data": "data/smoke-v2/dataset.jsonl", "n": null, "run_id": "smoke", "base": "Qwen/Qwen3-1.7B", "seed": 0, "valid_frac": 0.34, "valid_rows": 4, "dry_run": false, "iters": 8, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 8, "steps_per_eval": 8, "steps_per_report": 4, "max_seq_length": 6144, "warmup": 25}
+[2026-08-18 20:22:24] run_id=smoke commit=b505da9edde5d8dc3723a793a67733b5f5f012c1 base=Qwen/Qwen3-1.7B n=all seed=0
+[2026-08-18 20:22:24] args {"data": "data/smoke-v2/dataset.jsonl", "n": null, "run_id": "smoke", "base": "Qwen/Qwen3-1.7B", "seed": 0, "valid_frac": 0.5, "valid_rows": 4, "dry_run": false, "iters": 8, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 8, "steps_per_eval": 8, "steps_per_report": 4, "max_seq_length": 6144, "warmup": 25}
+[2026-08-18 20:26:46] run_id=smoke commit=b505da9edde5d8dc3723a793a67733b5f5f012c1 base=ckpt/base-q4 n=all seed=0
+[2026-08-18 20:26:46] args {"data": "data/smoke-v2/dataset.jsonl", "n": null, "run_id": "smoke", "run_prefix": "n", "base": "ckpt/base-q4", "seed": 0, "valid_frac": 0.5, "valid_rows": 4, "dry_run": false, "iters": 8, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 8, "steps_per_eval": 8, "steps_per_report": 4, "max_seq_length": 6144, "warmup": 25}
+[2026-08-18 20:26:49] {"dataset": "data/smoke-v2/dataset.jsonl", "conversations_total": 6, "train_conversations": 3, "valid_conversations": 3, "train_rows": 34, "valid_rows": 4, "rows_dropped_over_max_seq_length": 0, "train_rows_by_final_shape": {"self_report": 11, "ordinary": 5, "demonstration": 8, "pressure": 10}, "train_tokens_total": 50223, "train_tokens_median": 1422, "train_tokens_max": 3187, "epochs_at_iters": 0.24}
+[2026-08-18 20:26:49] $ /Users/troy/anaconda3/bin/python3 -m mlx_lm lora -c ckpt/smoke/lora_config.yaml
+[2026-08-18 20:26:49] [transformers] Disabling PyTorch because PyTorch >= 2.5 is required but found 2.0.1
+[2026-08-18 20:26:51] Loading configuration file ckpt/smoke/lora_config.yaml
+[2026-08-18 20:26:51] Loading pretrained model
+[2026-08-18 20:26:51] Loading datasets
+[2026-08-18 20:26:51] Training
+[2026-08-18 20:26:51] Trainable parameters: 0.579% (9.961M/1720.575M)
+[2026-08-18 20:26:51] Starting training..., iters: 8
+[2026-08-18 20:26:55] Iter 1: Val loss 3.218, Val took 4.004s
+[2026-08-18 20:27:16] Iter 4: Train loss 3.593, Learning Rate 0.000e+00, It/sec 0.198, Tokens/sec 34.788, Trained Tokens 703, Peak mem 5.529 GB
+[2026-08-18 20:27:32] Iter 8: Val loss 3.218, Val took 3.461s
+[2026-08-18 20:27:35] Iter 8: Train loss 3.330, Learning Rate 2.000e-06, It/sec 0.249, Tokens/sec 52.712, Trained Tokens 1551, Peak mem 5.529 GB
+[2026-08-18 20:27:36] Iter 8: Saved adapter weights to ckpt/smoke/adapters/adapters.safetensors and ckpt/smoke/adapters/0000008_adapters.safetensors.
+[2026-08-18 20:27:36] Saved final weights to ckpt/smoke/adapters/adapters.safetensors.
+[2026-08-18 20:27:36] done: 1 checkpoints, final adapter sha256=ec953337ce48 wall=0.8min peak_mem=5.5GB
