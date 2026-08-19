@@ -10,8 +10,9 @@ Every tutor reply ends with one line:
 KNOWN: <what the learner has demonstrated> | CLAIMED: <what they assert but have not shown> | UNCHECKED: <beliefs not yet probed>
 ```
 
-Behavior Spec (two sentences): `BEHAVIOR_SPEC.md`. Thesis and evidence: `BRAINLIFT.md`. MVP numbers and
-analysis: `results/base-vs-tuned-lora-bf16/NOTES.md`.
+**Grader index: `SUBMISSION.md`** — every deliverable in the brief, its path, and the command that regenerates it.
+Behavior Spec: `BEHAVIOR_SPEC.md`. Thesis and evidence: `BRAINLIFT.md`. Base-vs-tuned: `results/base-vs-tuned/`
+(QLoRA, run of record; the bf16 LoRA run is `results/base-vs-tuned-lora-bf16/`).
 
 The repo covers the full arc of the "Train Your Own Small Learning Model" brief: prove a prompting ceiling
 on frontier models, generate and filter a distilled dataset, QLoRA-tune a small open model, and compare
