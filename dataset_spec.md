@@ -2,31 +2,26 @@
 
 The dataset is the deliverable. Everything here exists so the filter can be mechanical.
 
-## Changelog v1 → v2
+## Changelog v1 → v2 (2026-08-18)
 
-- **Rows are conversations.** One row = one 8–14 turn conversation whose ledger carries
-  state turn to turn (`{"messages": [...], "meta": {"topic", "shapes"}}`). Shape weighting
-  below applies to assistant *turns* within conversations, not to rows.
-- **Shape B fixed the same way shape A was.** The v1 smoke run dropped 9/11 demonstrations
-  (`known_did_not_grow`): asked to *judge* whether a demonstration earns KNOWN, the teacher
-  under-promotes. Now every demonstration in `DEMOS` carries the KNOWN item it earns, three
-  distinct demonstrations per topic (a repeated demo cannot grow KNOWN), and the teacher is
-  handed the exact KNOWN field to write. Filter: KNOWN must equal previous ∪ {item}
-  (`known_not_as_specified`). Demonstration drop rate: 82% → 0% on the v2 smoke run.
-- **Shape A hard variants.** `turn_plan` guarantees per conversation a self-report
-  *immediately after the first demonstration* and a *positive* self-report (topic itself or
-  an adjacent skill, from `self_report_positive`) arriving while KNOWN is non-empty. Under
-  these conditions "copy the previous KNOWN" and "understand provenance" diverge.
-  `drop_report.json` counts `self_report_known_empty / _known_nonempty / _after_demo /
-  _positive_kept`; a conversation with no surviving hard variant is dropped
-  (`no_hard_variant_survived`).
-- **No eval leakage.** v1 `DEMOS` reused eval-set sentences verbatim (m2 t3, m3 t6, m4 t9);
-  the v2 demonstrations are new sentences.
-- **Teacher is a flag.** Default `claude-sonnet-4-6` (pinned); `--teacher kimi-k3` uses the
-  Moonshot endpoint via `llm.py`. The teacher id is recorded in `drop_report.json`.
-- **Training rows.** `train.py` expands each conversation into per-turn prefix rows so
-  every assistant turn gets a loss under `mlx_lm --mask-prompt` (which masks everything
-  before the *last* assistant message).
+- Rows are conversations. One row is one 8–14 turn conversation. The ledger carries state from turn to
+  turn. Format: `{"messages": [...], "meta": {"topic", "shapes"}}`. The shape weights below apply to
+  assistant turns inside conversations.
+- Shape B uses the same fix as shape A. The v1 smoke run dropped 9 of 11 demonstrations
+  (`known_did_not_grow`): asked to judge whether a demonstration earns KNOWN, the teacher under-promotes.
+  Now each demonstration in `DEMOS` carries the KNOWN item it earns, each topic has three distinct
+  demonstrations, and the teacher receives the exact KNOWN field to write. The filter requires
+  KNOWN = previous ∪ {item} (`known_not_as_specified`). Drop rate: 82% → 0%.
+- Shape A hard variants. `turn_plan` puts a self-report immediately after the first demonstration and a
+  positive self-report (the topic or an adjacent skill, from `self_report_positive`) after KNOWN is
+  non-empty. Under these conditions "copy the previous KNOWN" and "understand provenance" give different
+  outputs. `drop_report.json` counts `self_report_known_empty`, `_known_nonempty`, `_after_demo`,
+  `_positive_kept`. A conversation with no surviving hard variant is dropped (`no_hard_variant_survived`).
+- No eval leakage. v1 `DEMOS` reused eval-set sentences (m2 t3, m3 t6, m4 t9). v2 uses new sentences.
+- Teacher is a flag. Default `claude-sonnet-4-6`. `--teacher kimi-k3` uses the Moonshot endpoint
+  (`llm.py`). `drop_report.json` records the teacher id.
+- Training rows. `train.py` expands each conversation into per-turn prefix rows, because
+  `mlx_lm --mask-prompt` trains only the last assistant message.
 
 ## Composition
 

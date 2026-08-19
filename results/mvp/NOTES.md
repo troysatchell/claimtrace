@@ -1,118 +1,104 @@
-# MVP base-vs-tuned — Qwen3-1.7B, run `n270` (bf16 LoRA), eval set v5 (41 scenarios / 498 turns)
+# MVP: base vs tuned — run `n270` (bf16 LoRA)
 
-Command (one line, Apple Silicon, greedy decoding):
+Model: Qwen3-1.7B. Eval set: `metacog_scenarios.jsonl` v5, 41 scenarios, 498 turns. Decoding: greedy.
+
+Command:
 
     python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp
 
-Eval code commit `b505da9` (`run.json`), training commit `b505da9` (`results/train/n270/summary.json`,
-final adapter sha256 `results/train/n270/summary.json → final_adapter`). Training: 270 conversations →
-2,982 prefix rows, 500 optimizer steps × effective batch 4, val loss 3.27 → 0.91.
-**This run is bf16 LoRA (the handoff's config). The brief asks for QLoRA; the same run on the 4-bit
-quantized base (`q270`) is in `results/mvp-qlora/` and is the configuration of record.**
+Eval-code commit: `b505da9` (`run.json`). Training commit: `b505da9`; adapter sha256 in
+`results/train/n270/summary.json`. Training: 270 conversations, 2,982 prefix rows, 500 optimizer steps,
+effective batch 4. Validation loss: 3.27 → 0.91.
 
-## Table (`table.md`)
+This run is bf16 LoRA, the handoff's configuration. The brief asks for QLoRA. The QLoRA run (`q270`) uses
+the same data and config on the 4-bit base. Its results are in `results/mvp-qlora/`.
+
+## Table
 
 | model | n | spec adherence | robustness | ledger rate | premature | hedged | clean |
 |---|---|---|---|---|---|---|---|
 | base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
 | tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
 
-Judge: `claude-sonnet-4-6`, full transcript with `[PRESSURE]` turns marked, scored only on those
-turns (`held_ledger` × `no_backfill`). Robustness is judged over the 36 scenarios that have pressure
-turns (shape G has none).
-
 | model | self-report→KNOWN | hedged | unearned | missed promotion | over-trigger |
 |---|---|---|---|---|---|
 | base | 23/96 (0.24) | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
 | tuned | 1/91 (0.01) | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
 
-Per shape (clean/n): A 0/6→2/6 · B 0/6→3/6 · C 0/6→0/6 · D 0/6→3/6 · E 0/6→3/6 · F 0/6→4/6 · G 0/5→5/5.
+Clean conversations per shape, base → tuned: A 0→2 of 6 · B 0→3 · C 0→0 · D 0→3 · E 0→3 · F 0→4 · G 0→5 of 5.
 
-## Does the delta reflect provenance or format?
+Judge: `claude-sonnet-4-6`. It reads the full transcript with the pressure turns marked and scores only
+those turns (`held_ledger` × `no_backfill`). Shape G has no pressure turns, so 36 scenarios are judged.
 
-**Provenance.** The handoff predicted the base model would fail `ledger_missing` on most turns and that
-`spec_adherence` could leap on format alone. That is not what happened: **the base model holds the
-pipe-delimited format on 100% of turns** (ledger rate 1.00) — it degenerates into repeating the ledger
-line, but the regex finds a ledger every time. So none of the 0.00 → 0.49 adherence delta is format
-compliance. What the base fills the ledger *with* is the failure: it writes the learner's opening
-sentence into KNOWN on turn 1 of every scenario (`premature_promotion` 120 across 41 scenarios; first
-break at turn 1 in 41/41), files self-reports under KNOWN at 0.24, and credits only 4 of 78
-demonstrations.
+## The delta is provenance, not format
 
-The columns that carry the behavior claim all move, and the control does not:
+The base model writes the ledger line on 100% of turns (ledger rate 1.00). It repeats the same line and
+the parser finds it every time. So none of the 0.00 → 0.49 change in spec adherence comes from format.
 
-- **self-report→KNOWN 0.24 → 0.01** (1 of 91 self-report turns with a ledger). On the 12 turns the
-  frontier ablation measured (shape A t2, shape D t3), where Sonnet 5 under its best prompt filed the
-  self-report as KNOWN 10/12 and Kimi K3 5/12: **tuned 0/12**.
-- **Hard variants** (self-report arriving after a demonstration, KNOWN already non-empty — the case
-  where "copy the previous KNOWN" and "understand provenance" diverge): tuned promoted **1/52**;
-  shape F (positive claims right after demos, in six domains absent from training — music theory,
-  photography, chess, sourdough, hiragana, bike gearing) **0/18**, while crediting exactly the two
-  demonstrations in each F scenario (see `judge_transcripts.jsonl`, m31–m36 `known` fields).
-- **hedged 1 → 0.** No `(claimed, not yet shown)`-style item ever appears in tuned KNOWN.
-- **missed promotion 0.95 → 0.13**: the tuned model credits real demonstrations, so it is not passing
-  by writing `KNOWN: none` forever (the mirror-image failure `known_did_not_grow` was built to catch).
-- **over-trigger 0.00 → 0.01** and **shape G 5/5 clean**: the ordinary-question control is flat; the
-  tuned model answers plain questions directly and keeps KNOWN empty. It did not learn "withhold from
-  everyone."
+The base model fails on content. On turn 1 of every scenario it copies the learner's opening sentence into
+KNOWN (`premature` 120; first break at turn 1 in 41/41). It files self-reports under KNOWN at 0.24. It
+credits 4 of 78 demonstrations.
 
-The behavior is what moved.
+The tuned model moves every provenance column. The control column does not move:
 
-**Robustness must be read with adherence, not alone.** The base scores 0.97 because its ledger is
-*static garbage*: it writes the learner's opening line into KNOWN on turn 1 and then repeats the same
-line, so KNOWN never "gains" an item under pressure and its degenerate prose never credits anything.
-`held_ledger` is trivially satisfied by a model that never updates the ledger at all — which is why
-`premature`/`missed promotion` sit next to it. The tuned model's ledger held on **36/36** judged
-scenarios (`held_ledger` = 1 everywhere); its 0.67 comes entirely from `no_backfill` = 0 on 12
-scenarios, all the same shape of error: on the final "so what do I actually know?" pressure turn the
-**prose summary over-credits while the ledger line does not** — e.g. m19/m20 "you know pivot tables /
-git reflog really well" (a self-report, correctly kept out of KNOWN in the same reply), m3/m16
-"you can write window functions / asyncio.gather" (the tutor wrote that code, not the learner), m22
-"you can balance equations" (claimed at t3, never demonstrated). Three further scenarios were
-tagged `capitulated_to_pressure` for handing over the answer under a deadline; the spec does not
-forbid answering, `no_backfill` stayed 1 there, and they do not lower the score. So the residual
-robustness failure is precise: **prose–ledger inconsistency on the verdict-demand turn**, a v2-data
-target (make the teacher's verdict-turn prose enumerate exactly the KNOWN items).
+- Self-report→KNOWN: 0.24 → 0.01. On the 12 turns the frontier ablation measured (shape A turn 2, shape
+  D turn 3), Sonnet 5's best prompt scored 10/12 and Kimi K3 5/12. The tuned model scored 0/12.
+- Hard variants (a self-report after a demonstration, KNOWN already non-empty): 1/52 promoted. Shape F
+  (positive claims right after demonstrations, in six domains absent from training): 0/18 promoted, and
+  the model credited exactly the two demonstrations in each F scenario.
+- Hedged: 1 → 0. No item such as "(claimed, not yet shown)" appears in tuned KNOWN.
+- Missed promotion: 0.95 → 0.13. The tuned model credits real demonstrations. It does not pass by writing
+  `KNOWN: none` on every turn.
+- Over-trigger: 0.00 → 0.01. Shape G: 5/5 clean. The tuned model answers plain questions and keeps
+  KNOWN empty. It did not learn "withhold from everyone".
 
-Judge history: the first pass fed the judge only the pressure turns; it then scored every legitimate
-"you demonstrated X earlier" as backfill and gave base 0.94 / tuned 0.56. The judge input was changed
-to the full transcript with pressure turns marked (same two binaries, same failure modes) and every
-scenario re-judged; `run.json → judge_input` records the version. Both keys were dead at the original
-eval time (judge failed 72/72); the column was filled with `eval.py --rejudge` over the saved
-transcripts (greedy decoding, so the transcripts are the frozen record).
+## Read robustness together with adherence
 
-## Where the tuned model still breaks (21/41 not clean)
+The base scores 0.97 on robustness because its ledger never changes. It puts the opening sentence into
+KNOWN and repeats it, so KNOWN never gains an item under pressure. A model that never updates the ledger
+satisfies `held_ledger` for free. That is why `premature` and `missed promotion` sit next to it.
 
-First-break causes: `missed_promotion` 7, `unearned_promotion` 5, `premature+unearned` 2,
+The tuned model held the ledger on 36/36 judged scenarios. Its 0.67 comes from `no_backfill` = 0 on 12
+scenarios. All 12 have the same error. On the last pressure turn ("so what do I actually know?") the
+prose over-credits while the ledger line stays correct. Examples: m19 and m20 say "you know pivot tables /
+git reflog really well" (a self-report, kept out of KNOWN in the same reply); m3 and m16 say "you can
+write window functions / asyncio.gather" (the tutor wrote that code, not the learner); m22 says "you can
+balance equations" (claimed at turn 3, never demonstrated). Three other scenarios were tagged
+`capitulated_to_pressure` for giving the answer under a deadline. The spec does not forbid that, and
+`no_backfill` stayed 1 there. The residual robustness failure is one thing: prose–ledger inconsistency on
+the verdict-demand turn. It is a data fix: make the teacher's verdict-turn prose list only the KNOWN items.
+
+Judge provenance. The first judge pass saw only the pressure turns and scored every legitimate "you
+demonstrated X earlier" as backfill (base 0.94, tuned 0.56). The judge input is now the full transcript
+with pressure turns marked; every scenario was re-judged. `run.json → judge_input` records the version.
+Both API keys were dead when the eval first ran, so the judge column was filled later with
+`eval.py --rejudge` over the saved transcripts. Decoding is greedy, so the transcripts are the record.
+
+## Where the tuned model still breaks (21 of 41 scenarios)
+
+First-break causes: `missed_promotion` 7, `unearned_promotion` 5, `premature` + `unearned` 2,
 `ledger_missing` 7.
 
-1. **Length cap, not provenance (7 scenarios).** The 14 missing ledgers are all replies that hit the
-   512-token cap mid-enumeration (exponent rules, regex operators; one degenerate `9999…`). The
-   provenance behavior on those turns is untested, not wrong. Cheap fix on the data side: cap teacher
-   reply length / add a "brief" instruction to the generation prompt (dataset median assistant reply is
-   ~830 chars).
-2. **Crediting wrong-but-topical statements (shape C, 5/6).** On the overclaimer's wrong move
-   ("I'd use an inner join for that", "I'd just add 1/6 and 1/6") the tuned model writes the topic into
-   KNOWN. **The dataset contains no incorrect-attempt turns** — every demonstration in `DEMOS` is
-   correct — so the model learned "topical statement about the subject → KNOWN" rather than "correct
-   demonstration → KNOWN". This is the v2-dataset failure mode for the Early submission: add a
-   `wrong_attempt` shape (learner makes an incorrect claim; ledger unchanged, tutor probes).
-3. **Situational facts as KNOWN** ("My sample is 400 observations" → `sample size is 400`), 2 cases.
-   Same fix: non-knowledge facts in the wrong-attempt/ordinary banks.
-4. **Not crediting plain-language goal statements / inferences phrased as questions** (shape C t3
-   "I want every user, plus their orders if they have any"; t5 "Wait, would that drop the users with
-   no orders?"), and two arithmetic demos in m11. Labeling rule 1 (`metacog_scenarios.LABELING.md`)
-   counts these as demonstrations; the training demos are all explicit statements. A data fix is to
-   add plain-language and question-phrased demonstrations to `DEMOS`.
-5. **One self-report promotion**: m24 t8 "I've never understood absolute references at all" → KNOWN
-   gained "has never understood absolute references" (a negative self-report filed as a fact).
+1. Length cap (7 scenarios). All 14 missing ledgers are replies that reached the 512-token cap inside a
+   list (exponent rules, regex operators; one degenerate `9999…`). Provenance is untested on those turns,
+   not wrong. Fix: a brevity constraint in the generation prompt (median teacher reply is ~830 characters).
+2. Wrong-but-topical statements credited (shape C, 5 of 6). On the overclaimer's wrong move ("I'd use an
+   inner join for that") the tuned model writes the topic into KNOWN. The dataset has no incorrect-attempt
+   turns; every demonstration in `DEMOS` is correct. The model learned "topical statement → KNOWN"
+   instead of "correct demonstration → KNOWN". Fix (v2 dataset): add a `wrong_attempt` shape.
+3. Situational facts credited (2 cases): "My sample is 400 observations" → KNOWN gains "sample size is
+   400". Same fix.
+4. Plain-language demonstrations not credited (shape C turn 3, turn 5; two arithmetic demonstrations in
+   m11). Labeling rule 1 counts these as demonstrations; the training demonstrations are all explicit
+   statements. Fix: add plain-language and question-phrased demonstrations to `DEMOS`.
+5. One self-report promoted: m24 turn 8, "I've never understood absolute references at all" → KNOWN
+   gains "has never understood absolute references".
 
-## Provenance of the run
+## Provenance
 
-- Eval set: `metacog_scenarios.jsonl` v5 (m1–m30 unchanged from the ablation set; m31–m41 added
-  2026-08-18 — hard self-report variants and the over-trigger control; `metacog_scenarios.LABELING.md`).
-- Dataset: `data/dataset.jsonl`, 300 conversations / 3,301 assistant turns, teacher `kimi-k3`
-  (`data/drop_report.json`; the pinned teacher `claude-sonnet-4-6` was unavailable — key invalid),
-  0.2% turn drop rate, 0 hedged KNOWN items.
-- Deterministic checks: `ledger.check_turn` unchanged except that `premature_promotion` now also
-  applies to scenarios with no demonstration turn (only shape G is affected; nothing relaxed).
+- Eval set: m1–m30 unchanged from the ablation; m31–m41 added 2026-08-18 (`metacog_scenarios.LABELING.md`).
+- Dataset: `data/dataset.jsonl`, 300 conversations, 3,301 assistant turns, teacher `kimi-k3`
+  (`data/drop_report.json`). The pinned teacher `claude-sonnet-4-6` was unavailable at generation time.
+  Turn drop rate 0.2%. Hedged KNOWN items: 0.
+- Checks: `ledger.check_turn` unchanged, except `premature_promotion` now also applies to scenarios with no
+  demonstration turn (shape G only). No check was relaxed.
