@@ -1,11 +1,11 @@
 # Requirements Audit — Trained_SLM (claimtrace)
-**Commit:** 35b0b6cbd2f3 (dirty: results/pipeline-qlora.log, results/train/q270/log.txt) · **Date:** 2026-08-18T20:40:53-0500 · **Docs:** SLM (p.1–4) · **Mode:** compare `mvp` vs `matrix.baseline.json` (2026-08-17)
+**Commit:** 5db661c952cc (dirty: results/pipeline-qlora.log, results/train/q270/log.txt) · **Date:** 2026-08-18T22:00:22-0500 · **Docs:** SLM (p.1–4) · **Mode:** compare `mvp` vs `matrix.baseline.json` (2026-08-17)
 
 ## Summary
-- VERIFIED: 20
+- VERIFIED: 23
 - IMPLEMENTED-UNVERIFIED: 9
 - PARTIAL: 11
-- MISSING: 7
+- MISSING: 4
 - N/A: 7
 - ASSUMED: 1
 
@@ -14,8 +14,9 @@ training run is not finished** (SLM-R41 PARTIAL — the completed n270 run is bf
 record `q270` started 20:25 CDT and its base-vs-tuned eval lands afterwards). The base-vs-tuned numbers
 exist and carry the behavior claim (SLM-R6/R42: 0/41 → 20/41 clean; self-report→KNOWN 0.24 → 0.01;
 base holds the ledger format on 100% of turns so the delta is provenance, not formatting), with full
-per-example judge output. The hard blocker for the Verification Requirements is external: no
-Hugging Face login on this machine, so no public checkpoint / revision hash (SLM-R23, R27, R47, R48). The ablation's LLM-judge column (SLM-R16/R17) is now computed with the eval.py rubric (`results/prompt-ceiling-ablation/judged_table.md`). Everything else that was MISSING at baseline
+per-example judge output. The model and dataset are now public on the Hugging Face Hub with recorded revisions
+(SLM-R23, R27, R47 VERIFIED; `results/publish.json`, run n270 — q270 to follow). The hosted inference demo
+(SLM-R48) is built (`space/`) but not yet deployed: HF gates Gradio Spaces behind PRO, so hosting is an account decision. The ablation's LLM-judge column (SLM-R16/R17) is now computed with the eval.py rubric (`results/prompt-ceiling-ablation/judged_table.md`). Everything else that was MISSING at baseline
 (harness, dataset, training, eval, JSONL, smoke loop, sweep tooling, Brainlift draft) now exists; 34 of
 55 verdicts changed.
 
@@ -48,18 +49,18 @@ Hugging Face login on this machine, so no public checkpoint / revision hash (SLM
 | SLM-R15 | Minimum 30 scenarios per model × strategy combination | BLOCKED | metacog_precheck.py:287, results/prompt-ceiling-ablation/table.md:3 | VERIFIED |
 | SLM-R16 | scored against your Behavior Spec using the same LLM-as-judge rubric y… | BLOCKED | ablation_judge.py:1, results/prompt-ceiling-ablation/judged_table.md:1, eval.py:37 | VERIFIED |
 | SLM-R17 | A results table (mean Spec-adherence and Robustness per model × strate… | BLOCKED | results/prompt-ceiling-ablation/judged_table.md:3, results/prompt-ceiling-ablation/REPORT.md:67 | VERIFIED |
-| SLM-R18 | plus a short paragraph naming the specific failure mode that survives … | BLOCKED | results/prompt-ceiling-ablation/REPORT.md:28, README.md:43 | IMPLEMENTED-UNVERIFIED |
+| SLM-R18 | plus a short paragraph naming the specific failure mode that survives … | BLOCKED | results/prompt-ceiling-ablation/REPORT.md:28, README.md:45 | IMPLEMENTED-UNVERIFIED |
 | SLM-R19 | Train at least 4 checkpoints at different dataset sizes (e.g. a log-sp… | BLOCKED | train.py:310, BRAINLIFT.md:57, results/train/n270/summary.json:1, results/train/n135/summary.json:1 | PARTIAL |
 | SLM-R20 | Evaluate every checkpoint on the same eval set (your own plus the staf… | BLOCKED | sweep.py:37, results/base-vs-tuned-lora-bf16/run.json:1 | PARTIAL |
 | SLM-R21 | Report a performance-vs-N curve for at least Spec adherence and Robust… | BLOCKED | sweep.py:65, sweep.py:93 | PARTIAL |
 | SLM-R22 | Identify and justify the smallest N that holds the behavior reliably —… | BLOCKED | BRAINLIFT.md:57 | PARTIAL |
-| SLM-R23 | Pushed to Hugging Face Hub (public repo) with the exact commit hash re… | BLOCKED | publish.py:68, publish.py:73, README.md:146 | MISSING |
+| SLM-R23 | Pushed to Hugging Face Hub (public repo) with the exact commit hash re… | BLOCKED | results/publish.json:3, README.md:160, publish.py:73 | VERIFIED |
 | SLM-R24 | `eval.py --model <hf-repo-id> --eval-set <path>` regenerates your full… | BLOCKED | eval.py:463, eval.py:464, eval.py:68 | VERIFIED |
 | SLM-R25 | Full per-example LLM-as-judge output (score + reasoning) submitted as … | BLOCKED | eval.py:513, results/base-vs-tuned-lora-bf16/NOTES.md:20 | VERIFIED |
-| SLM-R26 | At grading time, your eval harness will also be run against a scenario… | BLOCKED | eval.py:464, README.md:111 | IMPLEMENTED-UNVERIFIED |
-| SLM-R27 | Exact HF model commit hash and exact eval-code commit hash included in… | BLOCKED | results/base-vs-tuned-lora-bf16/run.json:2, results/train/n270/summary.json:3, README.md:146 | PARTIAL |
+| SLM-R26 | At grading time, your eval harness will also be run against a scenario… | BLOCKED | eval.py:464, README.md:121 | IMPLEMENTED-UNVERIFIED |
+| SLM-R27 | Exact HF model commit hash and exact eval-code commit hash included in… | BLOCKED | results/base-vs-tuned-lora-bf16/run.json:2, results/train/n270/summary.json:3, results/publish.json:3, README.md:160 | VERIFIED |
 | SLM-R28 | Part of your demo video must show a grader-supplied prompt run live ag… | BLOCKED | compare.py:20 | N/A |
-| SLM-R29 | Prompt-Ceiling Ablation script and Data-Efficiency training logs inclu… | BLOCKED | metacog_precheck.py:287, README.md:86 | IMPLEMENTED-UNVERIFIED |
+| SLM-R29 | Prompt-Ceiling Ablation script and Data-Efficiency training logs inclu… | BLOCKED | metacog_precheck.py:287, README.md:95 | IMPLEMENTED-UNVERIFIED |
 | SLM-R30 | Prompt-Ceiling Ablation script and Data-Efficiency training logs inclu… | BLOCKED | results/train/n270/log.txt:1, results/train/n270/lora_config.yaml:1, results/train/n270/summary.json:623 | VERIFIED |
 | SLM-R31 | MVP — due Tuesday at midnight | BLOCKED | — | N/A |
 | SLM-R32 | Early Submission — due Thursday at midnight | BLOCKED | — | N/A |
@@ -77,8 +78,8 @@ Hugging Face login on this machine, so no public checkpoint / revision hash (SLM
 | SLM-R44 | Updated base-vs-tuned eval numbers showing the delta from MVP, submitt… | BLOCKED | — | MISSING |
 | SLM-R45 | At least 2 points on your Data-Efficiency curve (see Required Ablation… | BLOCKED | results/train/n135/summary.json:1, results/base-vs-tuned-lora-bf16/run.json:1 | PARTIAL |
 | SLM-R46 | Draft versions of your final artifacts: dataset shape, model checkpoin… | BLOCKED | dataset_spec.md:46, results/train/n270/summary.json:623, BRAINLIFT.md:1 | IMPLEMENTED-UNVERIFIED |
-| SLM-R47 | The dataset, published — this is your real artifact. | BLOCKED | publish.py:78 | MISSING |
-| SLM-R48 | The model on Hugging Face Hub, public, plus a running inference demo. | BLOCKED | compare.py:20 | MISSING |
+| SLM-R47 | The dataset, published — this is your real artifact. | BLOCKED | results/publish.json:5, publish.py:78 | VERIFIED |
+| SLM-R48 | The model on Hugging Face Hub, public, plus a running inference demo. | BLOCKED | results/publish.json:2, space/app.py:1, compare.py:20 | PARTIAL |
 | SLM-R49 | Eval harness and results table — base vs. tuned, on your own eval set … | BLOCKED | results/base-vs-tuned-lora-bf16/table.md:3 | PARTIAL |
 | SLM-R50 | Full Data-Efficiency curve (performance vs. dataset size) with a justi… | BLOCKED | sweep.py:93, BRAINLIFT.md:57 | PARTIAL |
 | SLM-R51 | Brainlift — your behavior thesis, and whether data → behavior held, wi… | BLOCKED | BRAINLIFT.md:3, BRAINLIFT.md:19, BRAINLIFT.md:76 | PARTIAL |
@@ -92,14 +93,11 @@ Hugging Face login on this machine, so no public checkpoint / revision hash (SLM
 - **SLM-R20 — PARTIAL**: Only n270 evaluated so far; n135 trained not evaluated. Staff held-out set not yet available (schema documented, README.md line 111). *Suggested:* Ships when the sweep pipeline finishes; add the staff set path when provided.
 - **SLM-R21 — PARTIAL**: Plotting code present; no curve produced yet. *Suggested:* Ships with the sweep (results/data-efficiency-curve/curve.png).
 - **SLM-R22 — PARTIAL**: Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report→KNOWN'); N not yet named. *Suggested:* Fill in from results/data-efficiency-curve/table.md.
-- **SLM-R23 — MISSING**: publish.py is ready; this machine is not logged in to Hugging Face (`hf auth whoami` → Not logged in), so nothing is pushed. *Suggested:* `hf auth login` then `python3 publish.py --run q270 --user <hf-user>`; paste results/publish.json hashes into README.
-- **SLM-R27 — PARTIAL**: Eval-code commit and training commit are recorded; the HF model revision hash does not exist yet (SLM-R23). *Suggested:* Ships with SLM-R23.
 - **SLM-R41 — PARTIAL**: A full-size run is complete with log + checkpoint sha256, but it is bf16 LoRA; the full-size QLoRA run (q270) was training at sweep time (results/train/q270/log.txt). No HF revision yet (SLM-R23). *Suggested:* q270 finishes ≈22:05 CDT; then publish (SLM-R23) for the HF revision.
 - **SLM-R43 — PARTIAL**: Diagnosis written; v2 dataset not generated yet (Early submission item). *Suggested:* Add a wrong_attempt shape (+ plain-language demos, brevity constraint) to generate_dataset.py, regenerate as data/v3, retrain with the identical config, diff configs.
 - **SLM-R44 — MISSING**: Early-submission item; follows SLM-R43. *Suggested:* Re-run eval.py on the v2-trained adapter; report delta vs results/base-vs-tuned.
 - **SLM-R45 — PARTIAL**: Two Ns trained, one evaluated; sweep evals queued. *Suggested:* Ships with the sweep pipeline.
-- **SLM-R47 — MISSING**: Not published; needs HF login. *Suggested:* Ships with publish.py (SLM-R23).
-- **SLM-R48 — MISSING**: No public model, no hosted inference demo. *Suggested:* Publish (SLM-R23) then a minimal Space/Gradio wrapper around compare.py's backend, or a recorded local demo.
+- **SLM-R48 — PARTIAL**: Model is public on the Hub. The inference-demo app exists (space/) but is not hosted yet: HF gates Gradio Spaces on cpu-basic behind PRO (create returned 402); container hosting (Railway/Render) needs an account decision. *Suggested:* Host space/ (HF PRO Space, or Railway via space/Dockerfile) and link the URL from README + SUBMISSION.md.
 - **SLM-R49 — PARTIAL**: Own set done; staff held-out set not yet available. *Suggested:* Run eval.py with the staff set path when provided; schema documented (README.md line 111).
 - **SLM-R50 — PARTIAL**: Pending the sweep. *Suggested:* Ships with the sweep pipeline + BRAINLIFT update.
 - **SLM-R51 — PARTIAL**: Draft with thesis and MVP evidence; min-N and QLoRA/robustness updates pending. *Suggested:* Update after the sweep and q270 eval.
@@ -128,16 +126,17 @@ None (ticket dimension BLOCKED).
 | SLM-R15 | PARTIAL | VERIFIED | metacog_precheck.py:287, results/prompt-ceiling-ablation/table.md:3 |
 | SLM-R16 | MISSING | VERIFIED | ablation_judge.py:1, results/prompt-ceiling-ablation/judged_table.md:1, eval.py:37 |
 | SLM-R17 | PARTIAL | VERIFIED | results/prompt-ceiling-ablation/judged_table.md:3, results/prompt-ceiling-ablation/REPORT.md:67 |
-| SLM-R18 | MISSING | IMPLEMENTED-UNVERIFIED | results/prompt-ceiling-ablation/REPORT.md:28, README.md:43 |
+| SLM-R18 | MISSING | IMPLEMENTED-UNVERIFIED | results/prompt-ceiling-ablation/REPORT.md:28, README.md:45 |
 | SLM-R19 | MISSING | PARTIAL | train.py:310, BRAINLIFT.md:57, results/train/n270/summary.json:1 |
 | SLM-R20 | MISSING | PARTIAL | sweep.py:37, results/base-vs-tuned-lora-bf16/run.json:1 |
 | SLM-R21 | MISSING | PARTIAL | sweep.py:65, sweep.py:93 |
 | SLM-R22 | MISSING | PARTIAL | BRAINLIFT.md:57 |
+| SLM-R23 | MISSING | VERIFIED | results/publish.json:3, README.md:160, publish.py:73 |
 | SLM-R24 | MISSING | VERIFIED | eval.py:463, eval.py:464, eval.py:68 |
 | SLM-R25 | MISSING | VERIFIED | eval.py:513, results/base-vs-tuned-lora-bf16/NOTES.md:20 |
-| SLM-R26 | MISSING | IMPLEMENTED-UNVERIFIED | eval.py:464, README.md:111 |
-| SLM-R27 | MISSING | PARTIAL | results/base-vs-tuned-lora-bf16/run.json:2, results/train/n270/summary.json:3, README.md:146 |
-| SLM-R29 | PARTIAL | IMPLEMENTED-UNVERIFIED | metacog_precheck.py:287, README.md:86 |
+| SLM-R26 | MISSING | IMPLEMENTED-UNVERIFIED | eval.py:464, README.md:121 |
+| SLM-R27 | MISSING | VERIFIED | results/base-vs-tuned-lora-bf16/run.json:2, results/train/n270/summary.json:3, results/publish.json:3 |
+| SLM-R29 | PARTIAL | IMPLEMENTED-UNVERIFIED | metacog_precheck.py:287, README.md:95 |
 | SLM-R30 | MISSING | VERIFIED | results/train/n270/log.txt:1, results/train/n270/lora_config.yaml:1, results/train/n270/summary.json:623 |
 | SLM-R34 | PARTIAL | VERIFIED | BEHAVIOR_SPEC.md:3, ledger.py:11 |
 | SLM-R35 | MISSING | IMPLEMENTED-UNVERIFIED | results/prompt-ceiling-ablation/REPORT.md:1, results/prompt-ceiling-ablation/REPORT.md:67 |
@@ -151,6 +150,8 @@ None (ticket dimension BLOCKED).
 | SLM-R43 | MISSING | PARTIAL | results/base-vs-tuned-lora-bf16/NOTES.md:84, BRAINLIFT.md:67 |
 | SLM-R45 | MISSING | PARTIAL | results/train/n135/summary.json:1, results/base-vs-tuned-lora-bf16/run.json:1 |
 | SLM-R46 | MISSING | IMPLEMENTED-UNVERIFIED | dataset_spec.md:46, results/train/n270/summary.json:623, BRAINLIFT.md:1 |
+| SLM-R47 | MISSING | VERIFIED | results/publish.json:5, publish.py:78 |
+| SLM-R48 | MISSING | PARTIAL | results/publish.json:2, space/app.py:1, compare.py:20 |
 | SLM-R49 | MISSING | PARTIAL | results/base-vs-tuned-lora-bf16/table.md:3 |
 | SLM-R50 | MISSING | PARTIAL | sweep.py:93, BRAINLIFT.md:57 |
 | SLM-R51 | MISSING | PARTIAL | BRAINLIFT.md:3, BRAINLIFT.md:19, BRAINLIFT.md:76 |
@@ -171,6 +172,7 @@ None (ticket dimension BLOCKED).
 | `wc -l data/dataset.jsonl` | 300 | SLM-R4, SLM-R40 |
 | `hf auth whoami` | Error: Not logged in | SLM-R23, SLM-R27, SLM-R47, SLM-R48 |
 | `python3 ablation_judge.py --transcripts results/prompt-ceiling-ablation/transcripts.jsonl --scenarios metacog_` | exit 0 — 180 judged; results/prompt-ceiling-ablation/judged_table.md, judge_transcripts.jsonl | SLM-R16, SLM-R17, SLM-R35 |
+| `hf auth whoami; python3 publish.py --run n270 --user troysaved` | User=troysaved; exit 0 — model troysaved/claimtrace-qwen3-1.7b @ b6f68ec2, dataset troysaved/claimtrace-ledger-dataset @ | SLM-R23, SLM-R27, SLM-R47, SLM-R48 |
 
 Captured excerpts for VERIFIED rows:
 
@@ -232,6 +234,11 @@ judging 180 conversations with claude-sonnet-4-6 (0 cached)
 | sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | ... |
 | kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | ... |
 ```
+**SLM-R23** — `python3 publish.py --run n270 --user troysaved; HfApi().repo_info(...) for both repos`
+```
+troysaved/claimtrace-qwen3-1.7b private=False sha=b6f68ec2 (model.safetensors 3441 MB, adapters/, tokenizer, config)
+troysaved/claimtrace-ledger-dataset private=False sha=af3b6508 (dataset.jsonl, drop_report.json, README)
+```
 **SLM-R24** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-`
 ```
 | base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
@@ -242,6 +249,12 @@ judging 180 conversations with claude-sonnet-4-6 (0 cached)
 **SLM-R25** — `python3 -c "import json;rows=[json.loads(l) for l in open('results/base-vs-tuned-lora-bf16/judge_transcripts.jsonl')];pr`
 ```
 82 72
+```
+**SLM-R27** — `cat results/publish.json`
+```
+"model_revision": "b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb"
+"train_commit": "b505da9edde5d8dc3723a793a67733b5f5f012c1"
+"adapter_sha256": "a9b58ae1…"
 ```
 **SLM-R30** — `python3 train.py --n 270 --run-id n270 (via run_pipeline.sh, 14:30-16:02 CDT)`
 ```
@@ -293,4 +306,8 @@ done: 10 checkpoints, final adapter sha256=... wall=92.4min peak_mem=10.7GB
 | tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
 | base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
 | tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
+```
+**SLM-R47** — `HfApi().repo_info('troysaved/claimtrace-ledger-dataset', repo_type='dataset')`
+```
+private=False sha=af3b6508; files: dataset.jsonl (3 MB), drop_report.json, README.md (= dataset_spec.md)
 ```

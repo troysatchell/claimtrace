@@ -79,8 +79,9 @@ eval.py                  one command: base-vs-tuned table + per-example JSONL + 
 sweep.py                 data-efficiency table and curve.png
 compare.py               live base-vs-tuned on one conversation (demo)
 publish.py               fuse and push model + dataset to Hugging Face Hub; prints revision hashes
+space/                   hosted demo: Gradio base-vs-tuned app (same protocol as compare.py) + Dockerfile/railway.json
 smoke.sh                 generate → train → eval on 6 conversations; log in results/smoke-loop/
-run_pipeline_qlora.sh    train q270 → eval → sweep q135/q67/q33 → curve
+run_pipeline_qlora.sh    train q270 → eval → sweep q135/q67/q33 → curve (run_pipeline_qlora_rest.sh: same from the eval step)
 judge.py                 standalone per-turn judge over a transcripts file
 llm.py                   teacher/judge API routing (claude-* → Anthropic, kimi-* → Moonshot)
 ```
@@ -110,7 +111,7 @@ python3 sweep.py --runs q270,q135,q67,q33 --base-results results/base-vs-tuned -
 
 # 6. Publish (needs `hf auth login`), then eval the published revision
 python3 publish.py --run q270 --user troysaved       # done for n270: results/publish.json
-python3 eval.py --model <hf-user>/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl
+python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl
 
 # Smoke test of the whole loop (~5 min); live demo
 ./smoke.sh --skip-generate

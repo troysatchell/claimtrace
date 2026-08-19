@@ -2,13 +2,13 @@
   "mode": "compare",
   "label": "mvp",
   "baselineRef": "matrix.baseline.json",
-  "commit": "35b0b6cbd2f3be328966115f1f95886b1f20fdcc",
+  "commit": "5db661c952cc1cdc6443941be0d875534ee68113",
   "dirty": true,
   "dirty_paths": [
     "results/pipeline-qlora.log",
     "results/train/q270/log.txt"
   ],
-  "date": "2026-08-18T20:40:53-0500",
+  "date": "2026-08-18T22:00:22-0500",
   "config_hash": "c0d2c2507f6f3db6300901caa5ca073493c30b2cfce6c764a0d52abe5376a6ec",
   "ticket_mapping": {
     "status": "BLOCKED",
@@ -514,7 +514,7 @@
         },
         {
           "file": "README.md",
-          "line": 43,
+          "line": 45,
           "note": "same paragraph in the README"
         }
       ],
@@ -627,32 +627,35 @@
     },
     {
       "id": "SLM-R23",
-      "verdict": "MISSING",
+      "verdict": "VERIFIED",
       "tickets": [
         "BLOCKED"
       ],
       "evidence": [
         {
-          "file": "publish.py",
-          "line": 68,
-          "note": "upload_folder of the fused model"
+          "file": "results/publish.json",
+          "line": 3,
+          "note": "model_revision b6f68ec27c1b\u2026 (public repo troysaved/claimtrace-qwen3-1.7b)"
+        },
+        {
+          "file": "README.md",
+          "line": 160,
+          "note": "submission block: model repo + revision"
         },
         {
           "file": "publish.py",
           "line": 73,
           "note": "records the model revision hash"
-        },
-        {
-          "file": "README.md",
-          "line": 146,
-          "note": "submission block: 'not yet published'"
         }
       ],
-      "verification": null,
+      "verification": {
+        "command": "python3 publish.py --run n270 --user troysaved; HfApi().repo_info(...) for both repos",
+        "result_excerpt": "troysaved/claimtrace-qwen3-1.7b private=False sha=b6f68ec2 (model.safetensors 3441 MB, adapters/, tokenizer, config)\ntroysaved/claimtrace-ledger-dataset private=False sha=af3b6508 (dataset.jsonl, drop_report.json, README)"
+      },
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "`hf auth login` then `python3 publish.py --run q270 --user <hf-user>`; paste results/publish.json hashes into README.",
-      "notes": "publish.py is ready; this machine is not logged in to Hugging Face (`hf auth whoami` \u2192 Not logged in), so nothing is pushed."
+      "suggested_scope": "Re-run `python3 publish.py --run q270 --user troysaved` after q270; update README/SUBMISSION hashes.",
+      "notes": "Published 2026-08-18 21:55 CDT (run n270, bf16 LoRA). The QLoRA q270 run is re-published to the same repo when its eval lands; each push has its own revision."
     },
     {
       "id": "SLM-R24",
@@ -727,7 +730,7 @@
         },
         {
           "file": "README.md",
-          "line": 111,
+          "line": 121,
           "note": "Eval set schema (for a staff held-out set)"
         }
       ],
@@ -739,7 +742,7 @@
     },
     {
       "id": "SLM-R27",
-      "verdict": "PARTIAL",
+      "verdict": "VERIFIED",
       "tickets": [
         "BLOCKED"
       ],
@@ -755,16 +758,24 @@
           "note": "training commit"
         },
         {
+          "file": "results/publish.json",
+          "line": 3,
+          "note": "HF model revision"
+        },
+        {
           "file": "README.md",
-          "line": 146,
-          "note": "submission block"
+          "line": 160,
+          "note": "submission block lists all three"
         }
       ],
-      "verification": null,
+      "verification": {
+        "command": "cat results/publish.json",
+        "result_excerpt": "\"model_revision\": \"b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb\"\n\"train_commit\": \"b505da9edde5d8dc3723a793a67733b5f5f012c1\"\n\"adapter_sha256\": \"a9b58ae1\u2026\""
+      },
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Ships with SLM-R23.",
-      "notes": "Eval-code commit and training commit are recorded; the HF model revision hash does not exist yet (SLM-R23)."
+      "suggested_scope": "\u2014",
+      "notes": "Eval-code commit, training commit, adapter sha256 and HF model revision are all recorded and cross-referenced in the README submission block."
     },
     {
       "id": "SLM-R28",
@@ -799,7 +810,7 @@
         },
         {
           "file": "README.md",
-          "line": 86,
+          "line": 95,
           "note": "one-cell rerun command"
         }
       ],
@@ -1229,30 +1240,48 @@
     },
     {
       "id": "SLM-R47",
-      "verdict": "MISSING",
+      "verdict": "VERIFIED",
       "tickets": [
         "BLOCKED"
       ],
       "evidence": [
+        {
+          "file": "results/publish.json",
+          "line": 5,
+          "note": "dataset_revision af3b6508\u2026 (public dataset repo)"
+        },
         {
           "file": "publish.py",
           "line": 78,
           "note": "dataset upload"
         }
       ],
-      "verification": null,
+      "verification": {
+        "command": "HfApi().repo_info('troysaved/claimtrace-ledger-dataset', repo_type='dataset')",
+        "result_excerpt": "private=False sha=af3b6508; files: dataset.jsonl (3 MB), drop_report.json, README.md (= dataset_spec.md)"
+      },
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Ships with publish.py (SLM-R23).",
-      "notes": "Not published; needs HF login."
+      "suggested_scope": "\u2014",
+      "notes": "Dataset public at troysaved/claimtrace-ledger-dataset @ af3b6508."
     },
     {
       "id": "SLM-R48",
-      "verdict": "MISSING",
+      "verdict": "PARTIAL",
       "tickets": [
         "BLOCKED"
       ],
       "evidence": [
+        {
+          "file": "results/publish.json",
+          "line": 2,
+          "note": "public model repo"
+        },
+        {
+          "file": "space/app.py",
+          "line": 1,
+          "note": "Gradio base-vs-tuned demo (mirrors compare.py; Dockerfile + railway.json alongside)"
+        },
         {
           "file": "compare.py",
           "line": 20,
@@ -1262,8 +1291,8 @@
       "verification": null,
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Publish (SLM-R23) then a minimal Space/Gradio wrapper around compare.py's backend, or a recorded local demo.",
-      "notes": "No public model, no hosted inference demo."
+      "suggested_scope": "Host space/ (HF PRO Space, or Railway via space/Dockerfile) and link the URL from README + SUBMISSION.md.",
+      "notes": "Model is public on the Hub. The inference-demo app exists (space/) but is not hosted yet: HF gates Gradio Spaces on cpu-basic behind PRO (create returned 402); container hosting (Railway/Render) needs an account decision."
     },
     {
       "id": "SLM-R49",
@@ -1524,6 +1553,17 @@
         "SLM-R35"
       ],
       "note": "run after the initial sweep, same session"
+    },
+    {
+      "command": "hf auth whoami; python3 publish.py --run n270 --user troysaved",
+      "result": "User=troysaved; exit 0 \u2014 model troysaved/claimtrace-qwen3-1.7b @ b6f68ec2, dataset troysaved/claimtrace-ledger-dataset @ af3b6508 (results/publish.json)",
+      "bears_on": [
+        "SLM-R23",
+        "SLM-R27",
+        "SLM-R47",
+        "SLM-R48"
+      ],
+      "note": "run 21:55 CDT after HF login"
     }
   ]
 }

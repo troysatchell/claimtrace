@@ -1,4 +1,4 @@
-# Requirements gaps — Trained_SLM (2026-08-18T20:40:53-0500, commit 35b0b6cbd2f3)
+# Requirements gaps — Trained_SLM (2026-08-18T22:00:22-0500, commit 5db661c952cc)
 
 ## Unticketed requirements (ticket dimension BLOCKED — every gap is unticketed)
 
@@ -30,20 +30,6 @@
 - **What is missing:** Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report→KNOWN'); N not yet named.
 - **Suggested scope:** Fill in from results/data-efficiency-curve/table.md.
 
-### SLM-R23 — MISSING
-- **Quote:** "Pushed to Hugging Face Hub (public repo) with the exact commit hash referenced in your submission. Graders pull and run it themselves."
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.3
-- **Meaning in code:** A public HF Hub model repo id and its exact commit hash appear in the submission (README/eval config); the model loads from that revision.
-- **What is missing:** publish.py is ready; this machine is not logged in to Hugging Face (`hf auth whoami` → Not logged in), so nothing is pushed.
-- **Suggested scope:** `hf auth login` then `python3 publish.py --run q270 --user <hf-user>`; paste results/publish.json hashes into README.
-
-### SLM-R27 — PARTIAL
-- **Quote:** "Exact HF model commit hash and exact eval-code commit hash included in your submission. Numbers must be reproducible against a specific, frozen state."
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.3
-- **Meaning in code:** Submission doc records both the HF model revision hash and the eval-code git commit hash.
-- **What is missing:** Eval-code commit and training commit are recorded; the HF model revision hash does not exist yet (SLM-R23).
-- **Suggested scope:** Ships with SLM-R23.
-
 ### SLM-R41 — PARTIAL
 - **Quote:** "first real QLoRA training run completed."
 - **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.3
@@ -72,19 +58,12 @@
 - **What is missing:** Two Ns trained, one evaluated; sweep evals queued.
 - **Suggested scope:** Ships with the sweep pipeline.
 
-### SLM-R47 — MISSING
-- **Quote:** "The dataset, published — this is your real artifact."
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.4
-- **Meaning in code:** The final dataset is published (HF Hub dataset repo or equivalent public location) and linked from the README.
-- **What is missing:** Not published; needs HF login.
-- **Suggested scope:** Ships with publish.py (SLM-R23).
-
-### SLM-R48 — MISSING
+### SLM-R48 — PARTIAL
 - **Quote:** "The model on Hugging Face Hub, public, plus a running inference demo."
 - **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.4
 - **Meaning in code:** Public HF model (SLM-R23) AND a running inference demo (HF Space / hosted endpoint / demo script) linked from the README.
-- **What is missing:** No public model, no hosted inference demo.
-- **Suggested scope:** Publish (SLM-R23) then a minimal Space/Gradio wrapper around compare.py's backend, or a recorded local demo.
+- **What is missing:** Model is public on the Hub. The inference-demo app exists (space/) but is not hosted yet: HF gates Gradio Spaces on cpu-basic behind PRO (create returned 402); container hosting (Railway/Render) needs an account decision.
+- **Suggested scope:** Host space/ (HF PRO Space, or Railway via space/Dockerfile) and link the URL from README + SUBMISSION.md.
 
 ### SLM-R49 — PARTIAL
 - **Quote:** "Eval harness and results table — base vs. tuned, on your own eval set and on the staff held-out set."
