@@ -1,0 +1,1493 @@
+{
+  "mode": "compare",
+  "label": "mvp",
+  "baselineRef": "matrix.baseline.json",
+  "commit": "35b0b6cbd2f3be328966115f1f95886b1f20fdcc",
+  "dirty": true,
+  "dirty_paths": [
+    "results/pipeline-qlora.log",
+    "results/train/q270/log.txt"
+  ],
+  "date": "2026-08-18T20:40:53-0500",
+  "config_hash": "c0d2c2507f6f3db6300901caa5ca073493c30b2cfce6c764a0d52abe5376a6ec",
+  "ticket_mapping": {
+    "status": "BLOCKED",
+    "provider": "linear",
+    "team": "Troysatchell",
+    "reason": "tickets.project is null: the Troysatchell team spans 8 unrelated projects and none is this repo (config comment); no scope to map against.",
+    "unblock": "Create a Linear project for claimtrace and set tickets.project in audit/requirements.config.yaml."
+  },
+  "requirements": [
+    {
+      "id": "SLM-R1",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 28,
+          "note": "'The residual: early self-report \u2192 KNOWN' \u2014 best prompt still files the biography under KNOWN (Sonnet 10/12, Kimi 5/12)"
+        },
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 57,
+          "note": "'Establishes (n=30, 5 shapes, 2 families): a specific, nameable failure ... survives'"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "State the reliability bar in one line in ANALYSIS.md/BRAINLIFT.md (e.g. 'self-report\u2192KNOWN \u2264 1/12 on the biography turn and \u2265 27/30 clean conversations') and show the best-prompt numbers against it.",
+      "notes": "Ablation completed at n=30 with numbers; the plateau is shown per model/strategy. Missing: an explicitly stated numeric reliability bar the plateau is compared against (ANALYSIS.md line 59 says this was 'not measured here'). Qwen3-1.7B base also fails outright (results/mvp/table.md line 3: 0/41 clean), which is the in-repo counterpart."
+    },
+    {
+      "id": "SLM-R2",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "ledger.py",
+          "line": 11,
+          "note": "BEHAVIOR_SPEC: the two-sentence falsifiable spec"
+        },
+        {
+          "file": "BEHAVIOR_SPEC.md",
+          "line": 3,
+          "note": "same text, standalone, with pass/fail reading rule"
+        },
+        {
+          "file": "ledger.py",
+          "line": 16,
+          "note": "SPEC = format line + BEHAVIOR_SPEC (system prompt for generation/training/eval)"
+        },
+        {
+          "file": "eval.py",
+          "line": 37,
+          "note": "JUDGE_PROMPT cites {spec}"
+        }
+      ],
+      "verification": {
+        "command": "python3 -c \"import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)\"",
+        "result_excerpt": "2"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Same text used by the harness's judge (eval.py JUDGE_PROMPT formats SPEC) and the generation prompt (generate_dataset.py GEN formats SPEC)."
+    },
+    {
+      "id": "SLM-R3",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "BEHAVIOR_SPEC.md",
+          "line": 3,
+          "note": "tutor/learner spec"
+        },
+        {
+          "file": "build_scenarios.py",
+          "line": 3,
+          "note": "'30 long tutoring scenarios in five shapes' (+F/G)"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Learning/teaching behavior (tutor's ledger of what a learner has demonstrated)."
+    },
+    {
+      "id": "SLM-R4",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "generate_dataset.py",
+          "line": 246,
+          "note": "keep(): mechanical filter, delete-never-repair"
+        },
+        {
+          "file": "generate_dataset.py",
+          "line": 315,
+          "note": "build_conversation(): teacher distillation, ledger threaded forward"
+        },
+        {
+          "file": "data/drop_report.json",
+          "line": 5,
+          "note": "conversations_kept 300 / assistant_turns_kept 3301"
+        },
+        {
+          "file": "data/generate.log",
+          "line": 1,
+          "note": "generation log"
+        }
+      ],
+      "verification": {
+        "command": "wc -l data/dataset.jsonl; python3 -c \"import json;print(json.load(open('data/drop_report.json'))['drops'])\"",
+        "result_excerpt": "300 data/dataset.jsonl\n{'self_report:no_ledger': 1, 'ordinary:diagnostic_question_on_ordinary': 5, 'pressure:ledger_moved_under_pressure': 1, 'pressure:no_ledger': 1, 'demonstration:no_ledger': 1}"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Teacher for the shipped dataset is kimi-k3 (drop_report.json line 2), not the pinned claude-sonnet-4-6 \u2014 the Anthropic key was rejected at generation time; --teacher records the id."
+    },
+    {
+      "id": "SLM-R5",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "train.py",
+          "line": 46,
+          "note": "quantize_base(): mlx_lm.convert -q 4-bit affine group 64 \u2192 ckpt/base-q4 (frozen base)"
+        },
+        {
+          "file": "train.py",
+          "line": 191,
+          "note": "fine_tune_type lora, adamw"
+        },
+        {
+          "file": "train.py",
+          "line": 199,
+          "note": "lora_parameters rank/scale/dropout; mask_prompt"
+        },
+        {
+          "file": "results/smoke-loop/log.txt",
+          "line": 4,
+          "note": "run_id=smoke ... base=ckpt/base-q4 (QLoRA path executed)"
+        }
+      ],
+      "verification": {
+        "command": "./smoke.sh --skip-generate",
+        "result_excerpt": "== smoke loop Tue Aug 18 20:26:46 CDT 2026 commit b505da9...\n== generate: SKIPPED (reusing data/smoke-v2: 6 conversations, teacher kimi-k3)\n[2026-08-18 20:27:36] done: 1 checkpoints, final adapter sha256=ec953337ce48 wall=0.8min peak_mem=5.5GB\n== eval: python3 eval.py --model ckpt/smoke/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/smoke-loop/eval --limit 2 --max-new-tokens 160 --no-judge\n== smoke loop done Tue Aug 18 20:31:19 CDT 2026"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "QLoRA = LoRA adapters over the 4-bit quantized base (mlx_lm applies LoRA to QuantizedLinear). Framework is mlx_lm on Apple Silicon rather than Unsloth/TRL (the brief's suggestions are non-binding). The completed full-size run in results/ (n270) is bf16 LoRA on the unquantized base; the QLoRA run of record (q270) is training at sweep time \u2014 see SLM-R41."
+    },
+    {
+      "id": "SLM-R6",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/mvp/table.md",
+          "line": 3,
+          "note": "base: spec adherence 0.00, 0/41 clean"
+        },
+        {
+          "file": "results/mvp/table.md",
+          "line": 4,
+          "note": "tuned: 0.49, 20/41 clean"
+        },
+        {
+          "file": "results/mvp/NOTES.md",
+          "line": 31,
+          "note": "format-vs-provenance analysis"
+        }
+      ],
+      "verification": {
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R7",
+      "verdict": "ASSUMED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "BEHAVIOR_SPEC.md",
+          "line": 3,
+          "note": "one behavior"
+        },
+        {
+          "file": "generate_dataset.py",
+          "line": 38,
+          "note": "TOPICS: 12 subjects, one tutoring context"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": "'Context' means the 1:1 tutoring interaction, so multi-subject tutoring is one context (dataset_spec.md line 88 varies subject on purpose so the model learns the behavior, not the domain).",
+      "suggested_scope": null,
+      "notes": "Pending ruling from the 2026-08-17 baseline (interpretations.md). Compare mode reuses interpretations untouched; still needs the yes/no from the user."
+    },
+    {
+      "id": "SLM-R8",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/train/n270/log.txt",
+          "line": 1,
+          "note": "first training log line 2026-08-18 14:30:18, commit b505da9"
+        }
+      ],
+      "verification": {
+        "command": "git log --format='%h %ad %s' --date=iso -- eval.py ledger.py train.py | head -3",
+        "result_excerpt": "46d0b65 2026-08-18 13:48:08 -0500 train.py (mlx_lm.lora wrapper), sweep.py, llm.py ...\n3210fd3 2026-08-18 13:35:54 -0500 harness: MLX eval path, provenance columns, eval set v5 ...\n07eaf97 2026-08-17 20:38:17 -0500 eval update"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Harness commits 07eaf97 (2026-08-17), 3210fd3 and 46d0b65 (2026-08-18 13:35/13:48) precede the first training log (14:30:18). The repo IS a git repository (baseline said otherwise)."
+    },
+    {
+      "id": "SLM-R9",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "dataset_spec.md",
+          "line": 5,
+          "note": "Changelog v1 \u2192 v2: data changes recorded as the lever"
+        },
+        {
+          "file": "BRAINLIFT.md",
+          "line": 67,
+          "note": "MVP failure modes \u2192 planned v2 data change, config unchanged"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Process/conduct rule; its checkable form is SLM-R43. Data-change log exists; the sweep holds training config identical (train.py --sweep)."
+    },
+    {
+      "id": "SLM-R10",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "eval.py",
+          "line": 346,
+          "note": "summarize(): spec_adherence, robustness, ledger_rate, premature, hedged, clean"
+        },
+        {
+          "file": "eval.py",
+          "line": 369,
+          "note": "provenance(): self-report\u2192KNOWN, missed promotion, over-trigger"
+        }
+      ],
+      "verification": {
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "No capability benchmark anywhere in the harness."
+    },
+    {
+      "id": "SLM-R11",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 5,
+          "note": "results table, 6 cells \u00d7 30 scenarios"
+        },
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 28,
+          "note": "residual paragraph with numbers"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Same as SLM-R1: one stated bar next to the table.",
+      "notes": "Completed run with numbers, committed 2026-08-17 (before train.py existed). Missing: the stated reliability bar (same gap as SLM-R1)."
+    },
+    {
+      "id": "SLM-R12",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Architecture Defense presentation event; not code-traceable."
+    },
+    {
+      "id": "SLM-R13",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 36,
+          "note": "claude-sonnet-5 (Anthropic)"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 37,
+          "note": "kimi-k3 (Moonshot)"
+        }
+      ],
+      "verification": {
+        "command": "verify.probe_anthropic; verify.probe_kimi",
+        "result_excerpt": "200\n['kimi-k3', 'kimi-k2.7-code-highspeed', 'kimi-k2.6', 'kimi-k2.7-code']"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R14",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 85,
+          "note": "zero_shot"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 86,
+          "note": "few_shot (FEW_SHOT examples)"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 87,
+          "note": "structured"
+        },
+        {
+          "file": "results/full-30-combined/table.md",
+          "line": 3,
+          "note": "6 model\u00d7strategy rows"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Ran at n=30 on 2026-08-17 (results/full-30-run.log, results/full-30-sonnet-run.log). verify.precheck NOT re-run in this sweep (API spend); see commands_run."
+    },
+    {
+      "id": "SLM-R15",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 287,
+          "note": "--max-scenarios (default all)"
+        },
+        {
+          "file": "results/full-30-combined/table.md",
+          "line": 3,
+          "note": "n=30 per cell"
+        }
+      ],
+      "verification": {
+        "command": "verify.scenario_count",
+        "result_excerpt": "scenarios 41 turns 498"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Ablation cells ran over the 30 v3 scenarios; the eval set is now 41 (m31\u2013m41 added 2026-08-18 for base-vs-tuned)."
+    },
+    {
+      "id": "SLM-R16",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "eval.py",
+          "line": 37,
+          "note": "JUDGE_PROMPT (held_ledger, no_backfill) used for base-vs-tuned"
+        },
+        {
+          "file": "judge.py",
+          "line": 36,
+          "note": "RUBRIC per-turn judge for transcripts files"
+        },
+        {
+          "file": "metacog_precheck.py",
+          "line": 214,
+          "note": "score_turn: deterministic scoring used for the ablation"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Run eval.py's judge (or judge.py) over results/full-30-combined/transcripts.jsonl to add judged spec-adherence/robustness per model\u00d7strategy, and make judge.py import eval.py's JUDGE_PROMPT so one rubric exists.",
+      "notes": "The ablation was scored deterministically (metacog_precheck.py); the base-vs-tuned run is judged by eval.py's rubric. Two rubric texts exist (eval.py JUDGE_PROMPT vs judge.py RUBRIC) and neither has been run over the ablation transcripts. Not the 'same LLM-as-judge rubric' across both."
+    },
+    {
+      "id": "SLM-R17",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/full-30-combined/table.md",
+          "line": 1,
+          "note": "columns: ledger rate, premature, no-elicit, clean runs, median first break"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add spec_adherence and robustness columns computed by the judge (see SLM-R16) to the ablation table.",
+      "notes": "Per model\u00d7strategy table exists but does not carry the two named metrics (mean Spec-adherence, Robustness). 'clean runs' is the deterministic adherence proxy; no robustness column."
+    },
+    {
+      "id": "SLM-R18",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 28,
+          "note": "'The residual: early self-report \u2192 KNOWN' \u2014 names the surviving failure mode with examples"
+        },
+        {
+          "file": "README.md",
+          "line": 43,
+          "note": "same paragraph in the README"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R19",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "train.py",
+          "line": 310,
+          "note": "--sweep: identical config, only N varies (nested subsets)"
+        },
+        {
+          "file": "BRAINLIFT.md",
+          "line": 57,
+          "note": "spacing justification (log-2: 270/135/67/33)"
+        },
+        {
+          "file": "results/train/n270/summary.json",
+          "line": 1,
+          "note": "N=270 run"
+        },
+        {
+          "file": "results/train/n135/summary.json",
+          "line": 1,
+          "note": "N=135 run"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Let run_pipeline_qlora_rest.sh finish (\u22486 h); the four QLoRA runs land in results/train/q*/.",
+      "notes": "2 of \u22654 checkpoints trained (bf16 LoRA n270, n135); QLoRA q270 training and q135/q67/q33 queued (run_pipeline_qlora_rest.sh) at sweep time."
+    },
+    {
+      "id": "SLM-R20",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "sweep.py",
+          "line": 37,
+          "note": "eval.py per run on the same --eval-set"
+        },
+        {
+          "file": "results/mvp/run.json",
+          "line": 1,
+          "note": "n270 evaluated on metacog_scenarios.jsonl"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships when the sweep pipeline finishes; add the staff set path when provided.",
+      "notes": "Only n270 evaluated so far; n135 trained not evaluated. Staff held-out set not yet available (schema documented, README.md line 111)."
+    },
+    {
+      "id": "SLM-R21",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "sweep.py",
+          "line": 65,
+          "note": "table columns spec adherence / robustness vs N"
+        },
+        {
+          "file": "sweep.py",
+          "line": 93,
+          "note": "curve.png plotting"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with the sweep (results/sweep-qlora/curve.png).",
+      "notes": "Plotting code present; no curve produced yet."
+    },
+    {
+      "id": "SLM-R22",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "BRAINLIFT.md",
+          "line": 57,
+          "note": "minimum viable N section: criterion stated, value pending"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Fill in from results/sweep-qlora/table.md.",
+      "notes": "Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report\u2192KNOWN'); N not yet named."
+    },
+    {
+      "id": "SLM-R23",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "publish.py",
+          "line": 68,
+          "note": "upload_folder of the fused model"
+        },
+        {
+          "file": "publish.py",
+          "line": 73,
+          "note": "records the model revision hash"
+        },
+        {
+          "file": "README.md",
+          "line": 146,
+          "note": "submission block: 'not yet published'"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "`hf auth login` then `python3 publish.py --run q270 --user <hf-user>`; paste results/publish.json hashes into README.",
+      "notes": "publish.py is ready; this machine is not logged in to Hugging Face (`hf auth whoami` \u2192 Not logged in), so nothing is pushed."
+    },
+    {
+      "id": "SLM-R24",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "eval.py",
+          "line": 463,
+          "note": "--model"
+        },
+        {
+          "file": "eval.py",
+          "line": 464,
+          "note": "--eval-set"
+        },
+        {
+          "file": "eval.py",
+          "line": 68,
+          "note": "runtime backend detection (MLX / torch)"
+        }
+      ],
+      "verification": {
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "One command writes table.md, judge_transcripts.jsonl and run.json."
+    },
+    {
+      "id": "SLM-R25",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "eval.py",
+          "line": 513,
+          "note": "judge_transcripts.jsonl per-example rows with judge {held_ledger,no_backfill,failure_mode,reasoning}"
+        },
+        {
+          "file": "results/mvp/NOTES.md",
+          "line": 20,
+          "note": "36 judged per row"
+        }
+      ],
+      "verification": {
+        "command": "python3 -c \"import json;rows=[json.loads(l) for l in open('results/mvp/judge_transcripts.jsonl')];print(len(rows), sum(1 for r in rows if r.get('judge') and r['judge'].get('reasoning')))\"",
+        "result_excerpt": "82 72"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R26",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "eval.py",
+          "line": 464,
+          "note": "--eval-set path"
+        },
+        {
+          "file": "README.md",
+          "line": 111,
+          "note": "Eval set schema (for a staff held-out set)"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "No hard-coded scenarios; only `say` required per turn."
+    },
+    {
+      "id": "SLM-R27",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/mvp/run.json",
+          "line": 2,
+          "note": "eval_code_commit"
+        },
+        {
+          "file": "results/train/n270/summary.json",
+          "line": 3,
+          "note": "training commit"
+        },
+        {
+          "file": "README.md",
+          "line": 146,
+          "note": "submission block"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with SLM-R23.",
+      "notes": "Eval-code commit and training commit are recorded; the HF model revision hash does not exist yet (SLM-R23)."
+    },
+    {
+      "id": "SLM-R28",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "compare.py",
+          "line": 20,
+          "note": "live single-conversation base-vs-tuned runner for the demo"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Video content; compare.py makes the live grader prompt demonstrable."
+    },
+    {
+      "id": "SLM-R29",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "metacog_precheck.py",
+          "line": 287,
+          "note": "--max-scenarios"
+        },
+        {
+          "file": "README.md",
+          "line": 86,
+          "note": "one-cell rerun command"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "verify.precheck NOT run this sweep (API spend); the n=30 run logs are results/full-30-run.log and results/full-30-sonnet-run.log."
+    },
+    {
+      "id": "SLM-R30",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/train/n270/log.txt",
+          "line": 1,
+          "note": "training log (config, data stats, per-20-iter loss, checkpoints)"
+        },
+        {
+          "file": "results/train/n270/lora_config.yaml",
+          "line": 1,
+          "note": "exact mlx_lm.lora config"
+        },
+        {
+          "file": "results/train/n270/summary.json",
+          "line": 623,
+          "note": "final adapter sha256"
+        }
+      ],
+      "verification": {
+        "command": "python3 train.py --n 270 --run-id n270 (via run_pipeline.sh, 14:30-16:02 CDT)",
+        "result_excerpt": "Iter 2000: Val loss 0.910, Val took 57.260s\nIter 2000: Train loss 0.894, Learning Rate 5.323e-06, It/sec 0.526, Tokens/sec 102.702, Trained Tokens 449015, Peak mem 10.669 GB\nSaved final weights to ckpt/n270/adapters/adapters.safetensors.\ndone: 10 checkpoints, final adapter sha256=... wall=92.4min peak_mem=10.7GB"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R31",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Calendar deadline."
+    },
+    {
+      "id": "SLM-R32",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Calendar deadline."
+    },
+    {
+      "id": "SLM-R33",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Calendar deadline."
+    },
+    {
+      "id": "SLM-R34",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "BEHAVIOR_SPEC.md",
+          "line": 3,
+          "note": "finalized two-sentence spec"
+        },
+        {
+          "file": "ledger.py",
+          "line": 11,
+          "note": "BEHAVIOR_SPEC"
+        }
+      ],
+      "verification": {
+        "command": "python3 -c \"import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)\"",
+        "result_excerpt": "2"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R35",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/full-30-combined/ANALYSIS.md",
+          "line": 1,
+          "note": "ablation report: method, table, per-shape, residual paragraph, files"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Table lacks the two named metrics (SLM-R17)."
+    },
+    {
+      "id": "SLM-R36",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "eval.py",
+          "line": 209,
+          "note": "judge(): LLM-as-judge call"
+        },
+        {
+          "file": "eval.py",
+          "line": 37,
+          "note": "rubric prompt"
+        }
+      ],
+      "verification": {
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R37",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "ledger.py",
+          "line": 57,
+          "note": "check_turn(): premature/unearned/hedged/missed/ledger_missing"
+        },
+        {
+          "file": "ledger.py",
+          "line": 77,
+          "note": "hedged_known \u2014 the spec's signature failure"
+        },
+        {
+          "file": "eval.py",
+          "line": 268,
+          "note": "record_turn() applies check_turn per turn"
+        }
+      ],
+      "verification": {
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R38",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "eval.py",
+          "line": 465,
+          "note": "--base"
+        },
+        {
+          "file": "eval.py",
+          "line": 381,
+          "note": "render(): base and tuned rows + provenance + per-shape tables"
+        }
+      ],
+      "verification": {
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R39",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "smoke.sh",
+          "line": 19,
+          "note": "generate step"
+        },
+        {
+          "file": "smoke.sh",
+          "line": 22,
+          "note": "train step"
+        },
+        {
+          "file": "results/smoke-loop/log.txt",
+          "line": 1,
+          "note": "committed run log"
+        }
+      ],
+      "verification": {
+        "command": "./smoke.sh --skip-generate",
+        "result_excerpt": "== smoke loop Tue Aug 18 20:26:46 CDT 2026 commit b505da9...\n== generate: SKIPPED (reusing data/smoke-v2: 6 conversations, teacher kimi-k3)\n[2026-08-18 20:27:36] done: 1 checkpoints, final adapter sha256=ec953337ce48 wall=0.8min peak_mem=5.5GB\n== eval: python3 eval.py --model ckpt/smoke/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/smoke-loop/eval --limit 2 --max-new-tokens 160 --no-judge\n== smoke loop done Tue Aug 18 20:31:19 CDT 2026"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "The committed log reused the 6-conversation batch data/smoke-v2 (generated 2026-08-18 with kimi-k3, drop_report.json alongside) because both API keys were dead at that moment; `./smoke.sh` without the flag regenerates it. Train and eval steps ran live."
+    },
+    {
+      "id": "SLM-R40",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "data/drop_report.json",
+          "line": 5,
+          "note": "attempted 390 / kept 300; drops per shape"
+        },
+        {
+          "file": "data/dataset.jsonl",
+          "line": 1,
+          "note": "dataset"
+        }
+      ],
+      "verification": {
+        "command": "wc -l data/dataset.jsonl",
+        "result_excerpt": "300 data/dataset.jsonl"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R41",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/train/n270/log.txt",
+          "line": 1,
+          "note": "completed 2000-iter run (bf16 LoRA)"
+        },
+        {
+          "file": "results/train/n270/summary.json",
+          "line": 623,
+          "note": "final adapter sha256"
+        },
+        {
+          "file": "results/smoke-loop/log.txt",
+          "line": 4,
+          "note": "QLoRA path (base=ckpt/base-q4) completed on the smoke batch"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "q270 finishes \u224822:05 CDT; then publish (SLM-R23) for the HF revision.",
+      "notes": "A full-size run is complete with log + checkpoint sha256, but it is bf16 LoRA; the full-size QLoRA run (q270) was training at sweep time (results/train/q270/log.txt). No HF revision yet (SLM-R23)."
+    },
+    {
+      "id": "SLM-R42",
+      "verdict": "VERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/mvp/table.md",
+          "line": 3,
+          "note": "base row"
+        },
+        {
+          "file": "results/mvp/table.md",
+          "line": 4,
+          "note": "tuned row"
+        },
+        {
+          "file": "results/mvp/NOTES.md",
+          "line": 13,
+          "note": "table + provenance breakdown"
+        }
+      ],
+      "verification": {
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+      },
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R43",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/mvp/NOTES.md",
+          "line": 84,
+          "note": "failure modes diagnosed from the MVP eval"
+        },
+        {
+          "file": "BRAINLIFT.md",
+          "line": 67,
+          "note": "planned v2 data change: wrong_attempt shape, config unchanged"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Add a wrong_attempt shape (+ plain-language demos, brevity constraint) to generate_dataset.py, regenerate as data/v3, retrain with the identical config, diff configs.",
+      "notes": "Diagnosis written; v2 dataset not generated yet (Early submission item)."
+    },
+    {
+      "id": "SLM-R44",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Re-run eval.py on the v2-trained adapter; report delta vs results/mvp-qlora.",
+      "notes": "Early-submission item; follows SLM-R43."
+    },
+    {
+      "id": "SLM-R45",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/train/n135/summary.json",
+          "line": 1,
+          "note": "second N trained"
+        },
+        {
+          "file": "results/mvp/run.json",
+          "line": 1,
+          "note": "first N evaluated"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with the sweep pipeline.",
+      "notes": "Two Ns trained, one evaluated; sweep evals queued."
+    },
+    {
+      "id": "SLM-R46",
+      "verdict": "IMPLEMENTED-UNVERIFIED",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "dataset_spec.md",
+          "line": 46,
+          "note": "dataset shape / row format"
+        },
+        {
+          "file": "results/train/n270/summary.json",
+          "line": 623,
+          "note": "checkpoint reference (sha256; HF revision pending)"
+        },
+        {
+          "file": "BRAINLIFT.md",
+          "line": 1,
+          "note": "in-progress Brainlift"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": null
+    },
+    {
+      "id": "SLM-R47",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "publish.py",
+          "line": 78,
+          "note": "dataset upload"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with publish.py (SLM-R23).",
+      "notes": "Not published; needs HF login."
+    },
+    {
+      "id": "SLM-R48",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "compare.py",
+          "line": 20,
+          "note": "local demo runner"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Publish (SLM-R23) then a minimal Space/Gradio wrapper around compare.py's backend, or a recorded local demo.",
+      "notes": "No public model, no hosted inference demo."
+    },
+    {
+      "id": "SLM-R49",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "results/mvp/table.md",
+          "line": 3,
+          "note": "own eval set"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Run eval.py with the staff set path when provided; schema documented (README.md line 111).",
+      "notes": "Own set done; staff held-out set not yet available."
+    },
+    {
+      "id": "SLM-R50",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "sweep.py",
+          "line": 93,
+          "note": "curve"
+        },
+        {
+          "file": "BRAINLIFT.md",
+          "line": 57,
+          "note": "min N criterion"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Ships with the sweep pipeline + BRAINLIFT update.",
+      "notes": "Pending the sweep."
+    },
+    {
+      "id": "SLM-R51",
+      "verdict": "PARTIAL",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [
+        {
+          "file": "BRAINLIFT.md",
+          "line": 3,
+          "note": "thesis"
+        },
+        {
+          "file": "BRAINLIFT.md",
+          "line": 19,
+          "note": "evidence"
+        },
+        {
+          "file": "BRAINLIFT.md",
+          "line": 76,
+          "note": "conclusion"
+        }
+      ],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Update after the sweep and q270 eval.",
+      "notes": "Draft with thesis and MVP evidence; min-N and QLoRA/robustness updates pending."
+    },
+    {
+      "id": "SLM-R52",
+      "verdict": "N/A",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": null,
+      "notes": "Demo video; link from README when produced."
+    },
+    {
+      "id": "SLM-R53",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Optional; not before Final-submission core items.",
+      "notes": "Stretch (optional): DPO not attempted."
+    },
+    {
+      "id": "SLM-R54",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Optional; not before Final-submission core items.",
+      "notes": "Stretch (optional): adversarial eval set not attempted."
+    },
+    {
+      "id": "SLM-R55",
+      "verdict": "MISSING",
+      "tickets": [
+        "BLOCKED"
+      ],
+      "evidence": [],
+      "verification": null,
+      "interpretation": null,
+      "assumption": null,
+      "suggested_scope": "Optional; not before Final-submission core items.",
+      "notes": "Stretch (optional): composed behavior not attempted."
+    }
+  ],
+  "orphan_tickets": [],
+  "needs_ruling": [
+    {
+      "id": "SLM-R7",
+      "cluster": "scope",
+      "question": "Is multi-subject tutoring acceptable as 'one context' (context = the 1:1 tutoring interaction, not a single subject)?",
+      "traced_under": "yes"
+    }
+  ],
+  "commands_run": [
+    {
+      "command": "verify.scenario_count",
+      "result": "scenarios 41 turns 498",
+      "bears_on": [
+        "SLM-R15",
+        "SLM-R26"
+      ],
+      "note": null
+    },
+    {
+      "command": "verify.precheck_compile",
+      "result": "compile-ok",
+      "bears_on": [
+        "SLM-R29"
+      ],
+      "note": null
+    },
+    {
+      "command": "verify.probe_anthropic",
+      "result": "200",
+      "bears_on": [
+        "SLM-R13"
+      ],
+      "note": "GET /v1/models/claude-sonnet-5 with the .env key"
+    },
+    {
+      "command": "verify.probe_kimi",
+      "result": "['kimi-k3', 'kimi-k2.7-code-highspeed', 'kimi-k2.6', 'kimi-k2.7-code']",
+      "bears_on": [
+        "SLM-R13"
+      ],
+      "note": null
+    },
+    {
+      "command": "verify.precheck",
+      "result": "NOT RUN",
+      "bears_on": [
+        "SLM-R1",
+        "SLM-R11",
+        "SLM-R14",
+        "SLM-R29"
+      ],
+      "note": "API spend; the n=30 run logs of 2026-08-17 are results/full-30-run.log and results/full-30-sonnet-run.log"
+    },
+    {
+      "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+      "result": "exit 0 \u2014 results/mvp/table.md, judge_transcripts.jsonl (82 rows, 72 judged), run.json",
+      "bears_on": [
+        "SLM-R6",
+        "SLM-R10",
+        "SLM-R24",
+        "SLM-R25",
+        "SLM-R36",
+        "SLM-R37",
+        "SLM-R38",
+        "SLM-R42"
+      ],
+      "note": "generation ran 16:05\u201317:16 CDT with judge keys dead; judge column filled by --rejudge with claude-sonnet-4-6 after the key was fixed (judge input = full transcript, pressure turns marked)"
+    },
+    {
+      "command": "python3 train.py --n 270 --run-id n270 (via run_pipeline.sh, 14:30-16:02 CDT)",
+      "result": "exit 0 \u2014 10 checkpoints, val loss 3.27\u21920.91, results/train/n270/log.txt",
+      "bears_on": [
+        "SLM-R30",
+        "SLM-R41",
+        "SLM-R8"
+      ],
+      "note": "bf16 LoRA (handoff config); QLoRA q270 started 20:25 CDT"
+    },
+    {
+      "command": "./smoke.sh --skip-generate",
+      "result": "exit 0 \u2014 results/smoke-loop/log.txt",
+      "bears_on": [
+        "SLM-R39",
+        "SLM-R5"
+      ],
+      "note": "generate step reused data/smoke-v2 (both keys were dead when it ran)"
+    },
+    {
+      "command": "git log --format='%h %ad %s' --date=iso -- eval.py ledger.py train.py | head -3",
+      "result": "46d0b65 13:48 / 3210fd3 13:35 (2026-08-18) / 07eaf97 (2026-08-17) \u2014 all before the 14:30:18 training log",
+      "bears_on": [
+        "SLM-R8"
+      ],
+      "note": null
+    },
+    {
+      "command": "python3 -c \"import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)\"",
+      "result": "2",
+      "bears_on": [
+        "SLM-R2",
+        "SLM-R34"
+      ],
+      "note": null
+    },
+    {
+      "command": "wc -l data/dataset.jsonl",
+      "result": "300",
+      "bears_on": [
+        "SLM-R4",
+        "SLM-R40"
+      ],
+      "note": null
+    },
+    {
+      "command": "hf auth whoami",
+      "result": "Error: Not logged in",
+      "bears_on": [
+        "SLM-R23",
+        "SLM-R27",
+        "SLM-R47",
+        "SLM-R48"
+      ],
+      "note": "HF push blocked until login"
+    }
+  ]
+}

@@ -42,6 +42,8 @@ verify:
   # Read-only key + pinned-model-id probes (GET /models; no generation, no cost).
   probe_anthropic: "set -a && . ./.env && set +a && curl -s -o /dev/null -w '%{http_code}\\n' https://api.anthropic.com/v1/models/claude-sonnet-5 -H \"x-api-key: $ANTHROPIC_API_KEY\" -H 'anthropic-version: 2023-06-01'"
   probe_kimi: "set -a && . ./.env && set +a && curl -s https://api.moonshot.ai/v1/models -H \"Authorization: Bearer $MOONSHOT_API_KEY\" | python3 -c \"import sys,json;d=json.load(sys.stdin);print([m['id'] for m in d.get('data',[])] or d)\""
-  # Required by the brief (Verification Requirements). Does not exist yet — recorded NOT RUN until it does.
-  eval: "python3 eval.py --model <hf-repo-id> --eval-set <path>"
+  # Required by the brief (Verification Requirements). Base-vs-tuned, one command; ~70 min on an M4 Pro.
+  eval: "set -a && . ./.env && set +a && python3 eval.py --model ckpt/q270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out audit/requirements/runs/eval"
+  smoke: "./smoke.sh --skip-generate"
+  train_point: "python3 train.py --n 33 --run-id audit-n33"
 verify_urls: {}

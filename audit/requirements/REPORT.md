@@ -1,170 +1,286 @@
-# Requirements Audit — Trained_SLM
-**Commit:** none (not a git repo — tree pinned by sha256 in matrix `tree_snapshot`) · **Date:** 2026-08-17T18:15:20Z · **Docs:** SLM (p.1–4) · **Mode:** baseline · **Inventory:** PRE-SKIM (first extraction, not yet user-confirmed)
+# Requirements Audit — Trained_SLM (claimtrace)
+**Commit:** 35b0b6cbd2f3 (dirty: results/pipeline-qlora.log, results/train/q270/log.txt — the in-progress QLoRA run) · **Date:** 2026-08-18T20:40:53-0500 · **Docs:** SLM (p.1–4) · **Mode:** compare `mvp` vs `matrix.baseline.json` (2026-08-17)
 
 ## Summary
-- **VERIFIED:** 1
-- **IMPLEMENTED-UNVERIFIED:** 2
-- **PARTIAL:** 8
-- **MISSING:** 35
-- **N/A:** 8
-- **BLOCKED:** 0
-- **ASSUMED:** 1
+- VERIFIED: 18
+- IMPLEMENTED-UNVERIFIED: 7
+- PARTIAL: 15
+- MISSING: 7
+- N/A: 7
+- ASSUMED: 1
 
-The prompt-ceiling precheck — the only executable artifact in the repo and the vehicle for the MVP gate (Ablation 1) — cannot run: `call()` in `metacog_precheck.py:122-126` builds a provider lambda but never invokes or returns it, so every reply is `None`, all 30 conversations fail at `parse_ledger` before a single API request is made, and the run silently emits a header-only table (`verify.precheck`: 30/30 FAILED, zero cost). Fixing that one function is the first thing to do. Behind it sit two more ablation-gate gaps: the scenario set is 5 where the brief's floor is 30 per model×strategy (SLM-R15), and the precheck is deterministic by design where the brief requires the *same LLM-as-judge rubric* later used for base-vs-tuned (SLM-R16) — the current script is a precursor, not the ablation. Everything else on the rubric (dataset generation, QLoRA training, `eval.py`, HF checkpoint, data-efficiency curve, Brainlift) is not started: 35 of 55 requirements are MISSING. What is in place is sound: two pinned frontier ids from different families that both resolve against live keys (VERIFIED), three strategies, a tutoring-scoped spec, and three mechanical failure-mode checks that are the right seed for the harness's behavioral check.
+The MVP bundle (SLM-R34–R42) is present and re-runnable except for one item: **the full-size QLoRA
+training run is not finished** (SLM-R41 PARTIAL — the completed n270 run is bf16 LoRA; the QLoRA run of
+record `q270` started 20:25 CDT and its base-vs-tuned eval lands afterwards). The base-vs-tuned numbers
+exist and carry the behavior claim (SLM-R6/R42: 0/41 → 20/41 clean; self-report→KNOWN 0.24 → 0.01;
+base holds the ledger format on 100% of turns so the delta is provenance, not formatting), with full
+per-example judge output. The two hard blockers for the Verification Requirements are external: no
+Hugging Face login on this machine, so no public checkpoint / revision hash (SLM-R23, R27, R47, R48),
+and the ablation's LLM-judge column (SLM-R16/R17) was never computed — the ablation table reports the
+deterministic proxies, not the two named metrics. Everything else that was MISSING at baseline
+(harness, dataset, training, eval, JSONL, smoke loop, sweep tooling, Brainlift draft) now exists; 34 of
+55 verdicts changed.
 
 ## Coverage and limitations
-- **Inventory is unconfirmed.** This is the first extraction; the skill's skim gate was not waited on because the run was unattended. Skim `inventory.md`, edit freely, then re-run `/requirements-audit baseline` — the IDs are stable, so edits will not renumber anything.
-- **Ticket dimension BLOCKED.** tickets.project is null and the Troysatchell team spans 8 projects (LabelHunter, PlugForge, FleetGraph, Clavira Pilot Readiness, ShipShape Audit Remediation, AgentForge, Verilo, Week 2 Multimodal Evidence Agent) — none of them is this repo. Sweeping the whole team would report other projects' work as this project's orphans. Every row's Ticket cell is `BLOCKED`, meaning *never checked*, not *checked and none found*. Unblock: Create a Linear project for this SLM work under Troysatchell, set tickets.project to its exact name in audit/requirements.config.yaml, and re-run.
-- **`verify.eval` NOT RUN** — `eval.py` does not exist. Rows SLM-R6, R20, R24, R38, R42, R49 lean on it and are MISSING for that reason.
-- **`verify.precheck` ran red** (30/30 conversations failed before any API call). Rows SLM-R1, R11, R14, R17, R29 cannot go past PARTIAL / IMPLEMENTED-UNVERIFIED until it runs green.
-- **One ASSUMED verdict below the flood cap (SLM-R7).** The ambiguity should have been asked, not assumed; it is recorded in `needs_ruling` and in *Blocked / assumed* below. Answer the yes/no question, log the ruling in `interpretations.md`, and re-run before treating this baseline as comparable.
-- **No git repository.** Citations are valid only against the working tree at sweep time; the matrix pins `metacog_precheck.py`, `metacog_scenarios.jsonl`, and the PDF by sha256. Ordering requirements (SLM-R8) cannot be checked until the repo is under git.
-- **Side effects:** the precheck run wrote `audit/requirements/runs/precheck/{table.md,transcripts.jsonl}` (both effectively empty). No application files, databases, or external services were mutated. The two provider probes were read-only `GET /models` calls (no generation, no cost).
-- **Statically traced only:** 2 rows (IMPLEMENTED-UNVERIFIED). Fan-out was not used (55 requirements, but a 2-file repo — tracing was exhaustive inline).
-- **Stretch items (SLM-R53–R55)** are optional per the brief; they are inventoried so the matrix is complete but their MISSING verdicts carry no pass/fail weight.
+- `verify.precheck` (the ablation) was NOT re-run in this sweep (API spend); SLM-R1, R11, R14, R29 lean on the 2026-08-17 run logs `results/full-30-run.log`, `results/full-30-sonnet-run.log`.
+- Ticket dimension BLOCKED: `tickets.project` is null (the Linear team spans unrelated projects). Every row's ticket cell reads `BLOCKED` — never checked, not "checked, none".
+- The judge column in `results/mvp` was filled by `eval.py --rejudge` after generation, with `claude-sonnet-4-6`, because both API keys were dead when the eval ran (Anthropic key invalid at the time, Moonshot account out of balance). Generation is greedy, so the transcripts are the frozen record; the judge input was changed from pressure-only excerpts to the full transcript with `[PRESSURE]` markers (recorded in `run.json → judge_input`).
+- The smoke loop's *generate* step reused the committed 6-conversation batch (`data/smoke-v2`) for the same key reason; train and eval steps ran live.
+- The dataset was generated with `kimi-k3` (`--teacher`), not the pinned `claude-sonnet-4-6`; recorded in `data/drop_report.json`.
+- 7 rows are statically traced only (IMPLEMENTED-UNVERIFIED); 1 row (SLM-R7) remains ASSUMED pending the yes/no ruling in `interpretations.md`.
+- No database or external state was written; the sweep ran read-only commands plus the training/eval/smoke jobs whose outputs are committed artifacts.
 
 ## Matrix
 | ID | Requirement (short) | Ticket(s) | Evidence | Verdict |
 |---|---|---|---|---|
-| SLM-R1 | Behavior not already reliable under prompting | BLOCKED | `metacog_precheck.py:33`<br>`metacog_precheck.py:81` | PARTIAL |
-| SLM-R2 | Falsifiable Behavior Spec (1–2 sentences), before code | BLOCKED | `metacog_precheck.py:38` | PARTIAL |
-| SLM-R3 | Target is a learning/teaching behavior | BLOCKED | `metacog_precheck.py:38`<br>`metacog_precheck.py:83`<br>`metacog_scenarios.jsonl:1` | IMPLEMENTED-UNVERIFIED |
-| SLM-R4 | Distilled dataset generation | BLOCKED | — | MISSING |
-| SLM-R5 | QLoRA fine-tune of small open model | BLOCKED | — | MISSING |
-| SLM-R6 | Prove tuned beats base with numbers | BLOCKED | — | MISSING |
-| SLM-R7 | One target, one context | BLOCKED | `metacog_precheck.py:38`<br>`metacog_scenarios.jsonl:1` | ASSUMED |
-| SLM-R8 | Eval harness before any training | BLOCKED | — | N/A |
-| SLM-R9 | Fix data, not hyperparameters | BLOCKED | — | N/A |
-| SLM-R10 | Measure target behavior, not benchmarks | BLOCKED | — | MISSING |
-| SLM-R11 | Prompt-ceiling proven with numbers before FT code | BLOCKED | `metacog_precheck.py:33`<br>`metacog_precheck.py:223`<br>`metacog_precheck.py:242` | PARTIAL |
-| SLM-R12 | Ablation presented at Architecture Defense | BLOCKED | — | N/A |
-| SLM-R13 | ≥2 frontier models, different families | BLOCKED | `metacog_precheck.py:34`<br>`metacog_precheck.py:35` | VERIFIED |
-| SLM-R14 | ≥3 strategies: zero/few-shot/structured | BLOCKED | `metacog_precheck.py:83`<br>`metacog_precheck.py:84`<br>`metacog_precheck.py:85`<br>`metacog_precheck.py:223` | IMPLEMENTED-UNVERIFIED |
-| SLM-R15 | ≥30 scenarios per model×strategy | BLOCKED | `metacog_scenarios.jsonl:1`<br>`metacog_precheck.py:223` | PARTIAL |
-| SLM-R16 | Scored by same LLM-as-judge rubric as base-vs-tuned | BLOCKED | — | MISSING |
-| SLM-R17 | Results table: Spec-adherence + Robustness | BLOCKED | `metacog_precheck.py:242`<br>`metacog_precheck.py:259` | PARTIAL |
-| SLM-R18 | Paragraph naming surviving failure mode | BLOCKED | — | MISSING |
-| SLM-R19 | ≥4 checkpoints at different N | BLOCKED | — | MISSING |
-| SLM-R20 | Every checkpoint on same eval set (own + held-out) | BLOCKED | — | MISSING |
-| SLM-R21 | Performance-vs-N curve | BLOCKED | — | MISSING |
-| SLM-R22 | Justified minimum viable N (Brainlift) | BLOCKED | — | MISSING |
-| SLM-R23 | Public HF checkpoint + commit hash | BLOCKED | — | MISSING |
-| SLM-R24 | One-command eval.py | BLOCKED | — | MISSING |
-| SLM-R25 | Raw judge transcripts JSONL | BLOCKED | — | MISSING |
-| SLM-R26 | Harness runnable on staff held-out set | BLOCKED | — | MISSING |
-| SLM-R27 | Pinned HF + eval-code hashes | BLOCKED | — | MISSING |
-| SLM-R28 | Live grader prompt in demo (base vs tuned) | BLOCKED | — | N/A |
-| SLM-R29 | Ablation script rerunnable by grader | BLOCKED | `metacog_precheck.py:122`<br>`metacog_precheck.py:124`<br>`metacog_precheck.py:126`<br>`metacog_precheck.py:185` | PARTIAL |
-| SLM-R30 | Data-efficiency training logs included | BLOCKED | — | MISSING |
-| SLM-R31 | MVP due Tue midnight | BLOCKED | — | N/A |
-| SLM-R32 | Early Submission due Thu midnight | BLOCKED | — | N/A |
-| SLM-R33 | Final Submission due Sun noon | BLOCKED | — | N/A |
-| SLM-R34 | MVP: finalized Behavior Spec | BLOCKED | `metacog_precheck.py:38` | PARTIAL |
-| SLM-R35 | MVP: ablation report submitted | BLOCKED | — | MISSING |
-| SLM-R36 | MVP: harness — LLM-as-judge scoring | BLOCKED | — | MISSING |
-| SLM-R37 | MVP: harness — behavioral failure-mode check | BLOCKED | `metacog_precheck.py:155`<br>`metacog_precheck.py:161`<br>`metacog_precheck.py:167`<br>`metacog_precheck.py:170` | PARTIAL |
-| SLM-R38 | MVP: harness — base-vs-tuned comparison | BLOCKED | — | MISSING |
-| SLM-R39 | MVP: generate→train→eval smoke loop | BLOCKED | — | MISSING |
-| SLM-R40 | MVP: first dataset generated + filtered | BLOCKED | — | MISSING |
-| SLM-R41 | MVP: first QLoRA run | BLOCKED | — | MISSING |
-| SLM-R42 | MVP: first base-vs-tuned numbers | BLOCKED | — | MISSING |
-| SLM-R43 | Early: failure mode fixed via v2 data | BLOCKED | — | MISSING |
-| SLM-R44 | Early: updated numbers + delta + transcripts | BLOCKED | — | MISSING |
-| SLM-R45 | Early: ≥2 curve points (or reason) | BLOCKED | — | MISSING |
-| SLM-R46 | Early: draft artifacts | BLOCKED | — | MISSING |
-| SLM-R47 | Final: dataset published | BLOCKED | — | MISSING |
-| SLM-R48 | Final: HF model public + inference demo | BLOCKED | — | MISSING |
-| SLM-R49 | Final: harness + table on own + held-out | BLOCKED | — | MISSING |
-| SLM-R50 | Final: full curve + min N | BLOCKED | — | MISSING |
-| SLM-R51 | Final: Brainlift | BLOCKED | — | MISSING |
-| SLM-R52 | Final: 3–5 min demo video w/ live prompt | BLOCKED | — | N/A |
-| SLM-R53 | Stretch: DPO | BLOCKED | — | MISSING |
-| SLM-R54 | Stretch: adversarial eval | BLOCKED | — | MISSING |
-| SLM-R55 | Stretch: composed behavior | BLOCKED | — | MISSING |
+| SLM-R1 | A well-prompted base model can't already do it reliably. | BLOCKED | results/full-30-combined/ANALYSIS.md:28, results/full-30-combined/ANALYSIS.md:57 | PARTIAL |
+| SLM-R2 | Your first deliverable, before any code, is a falsifiable Behavior Spe… | BLOCKED | ledger.py:11, BEHAVIOR_SPEC.md:3, ledger.py:16, eval.py:37 | VERIFIED |
+| SLM-R3 | Choose a specific learning or teaching behavior. | BLOCKED | BEHAVIOR_SPEC.md:3, build_scenarios.py:3 | IMPLEMENTED-UNVERIFIED |
+| SLM-R4 | generate a distilled dataset that embodies it | BLOCKED | generate_dataset.py:246, generate_dataset.py:315, data/drop_report.json:5, data/generate.log:1 | VERIFIED |
+| SLM-R5 | fine-tune a small open base model (QLoRA) to hold it | BLOCKED | train.py:46, train.py:191, train.py:199, results/smoke-loop/log.txt:4 | VERIFIED |
+| SLM-R6 | prove — with numbers, not claims — that the tuned model beats the base… | BLOCKED | results/mvp/table.md:3, results/mvp/table.md:4, results/mvp/NOTES.md:31 | VERIFIED |
+| SLM-R7 | One target, one context. No broad domains — diffuse data makes a mushy… | BLOCKED | BEHAVIOR_SPEC.md:3, generate_dataset.py:38 | ASSUMED |
+| SLM-R8 | No training before the eval exists. Build the eval harness first, or y… | BLOCKED | results/train/n270/log.txt:1 | VERIFIED |
+| SLM-R9 | A disappointing model is almost always a data problem. Don't tune hype… | BLOCKED | dataset_spec.md:5, BRAINLIFT.md:67 | N/A |
+| SLM-R10 | Don't chase capability benchmarks. Measure your target behavior, not t… | BLOCKED | eval.py:346, eval.py:369 | VERIFIED |
+| SLM-R11 | Before you write a line of fine-tuning code, prove (with numbers) that… | BLOCKED | results/full-30-combined/ANALYSIS.md:5, results/full-30-combined/ANALYSIS.md:28 | PARTIAL |
+| SLM-R12 | This is presented live at your Architecture Defense, using the calenda… | BLOCKED | — | N/A |
+| SLM-R13 | At least 2 frontier models from different model families. | BLOCKED | metacog_precheck.py:36, metacog_precheck.py:37 | VERIFIED |
+| SLM-R14 | At least 3 prompting strategies per model: zero-shot, few-shot with in… | BLOCKED | metacog_precheck.py:85, metacog_precheck.py:86, metacog_precheck.py:87, results/full-30-combined/table.md:3 | IMPLEMENTED-UNVERIFIED |
+| SLM-R15 | Minimum 30 scenarios per model × strategy combination | BLOCKED | metacog_precheck.py:287, results/full-30-combined/table.md:3 | VERIFIED |
+| SLM-R16 | scored against your Behavior Spec using the same LLM-as-judge rubric y… | BLOCKED | eval.py:37, judge.py:36, metacog_precheck.py:214 | PARTIAL |
+| SLM-R17 | A results table (mean Spec-adherence and Robustness per model × strate… | BLOCKED | results/full-30-combined/table.md:1 | PARTIAL |
+| SLM-R18 | plus a short paragraph naming the specific failure mode that survives … | BLOCKED | results/full-30-combined/ANALYSIS.md:28, README.md:43 | IMPLEMENTED-UNVERIFIED |
+| SLM-R19 | Train at least 4 checkpoints at different dataset sizes (e.g. a log-sp… | BLOCKED | train.py:310, BRAINLIFT.md:57, results/train/n270/summary.json:1, results/train/n135/summary.json:1 | PARTIAL |
+| SLM-R20 | Evaluate every checkpoint on the same eval set (your own plus the staf… | BLOCKED | sweep.py:37, results/mvp/run.json:1 | PARTIAL |
+| SLM-R21 | Report a performance-vs-N curve for at least Spec adherence and Robust… | BLOCKED | sweep.py:65, sweep.py:93 | PARTIAL |
+| SLM-R22 | Identify and justify the smallest N that holds the behavior reliably —… | BLOCKED | BRAINLIFT.md:57 | PARTIAL |
+| SLM-R23 | Pushed to Hugging Face Hub (public repo) with the exact commit hash re… | BLOCKED | publish.py:68, publish.py:73, README.md:146 | MISSING |
+| SLM-R24 | `eval.py --model <hf-repo-id> --eval-set <path>` regenerates your full… | BLOCKED | eval.py:463, eval.py:464, eval.py:68 | VERIFIED |
+| SLM-R25 | Full per-example LLM-as-judge output (score + reasoning) submitted as … | BLOCKED | eval.py:513, results/mvp/NOTES.md:20 | VERIFIED |
+| SLM-R26 | At grading time, your eval harness will also be run against a scenario… | BLOCKED | eval.py:464, README.md:111 | IMPLEMENTED-UNVERIFIED |
+| SLM-R27 | Exact HF model commit hash and exact eval-code commit hash included in… | BLOCKED | results/mvp/run.json:2, results/train/n270/summary.json:3, README.md:146 | PARTIAL |
+| SLM-R28 | Part of your demo video must show a grader-supplied prompt run live ag… | BLOCKED | compare.py:20 | N/A |
+| SLM-R29 | Prompt-Ceiling Ablation script and Data-Efficiency training logs inclu… | BLOCKED | metacog_precheck.py:287, README.md:86 | IMPLEMENTED-UNVERIFIED |
+| SLM-R30 | Prompt-Ceiling Ablation script and Data-Efficiency training logs inclu… | BLOCKED | results/train/n270/log.txt:1, results/train/n270/lora_config.yaml:1, results/train/n270/summary.json:623 | VERIFIED |
+| SLM-R31 | MVP — due Tuesday at midnight | BLOCKED | — | N/A |
+| SLM-R32 | Early Submission — due Thursday at midnight | BLOCKED | — | N/A |
+| SLM-R33 | Final Submission — due Sunday at noon | BLOCKED | — | N/A |
+| SLM-R34 | Finalized Behavior Spec (falsifiable, one to two sentences). | BLOCKED | BEHAVIOR_SPEC.md:3, ledger.py:11 | VERIFIED |
+| SLM-R35 | Completed Prompt-Ceiling Ablation report (see Required Ablations) — pr… | BLOCKED | results/full-30-combined/ANALYSIS.md:1 | IMPLEMENTED-UNVERIFIED |
+| SLM-R36 | Eval harness built and committed: LLM-as-judge scoring, | BLOCKED | eval.py:209, eval.py:37 | VERIFIED |
+| SLM-R37 | a behavioral check for your spec's specific failure mode, | BLOCKED | ledger.py:57, ledger.py:77, eval.py:268 | VERIFIED |
+| SLM-R38 | and a base-vs-tuned comparison mechanism. | BLOCKED | eval.py:465, eval.py:381 | VERIFIED |
+| SLM-R39 | Full loop — generate → train → eval — runs end to end, demonstrated on… | BLOCKED | smoke.sh:19, smoke.sh:22, results/smoke-loop/log.txt:1 | VERIFIED |
+| SLM-R40 | First real dataset generated and filtered; | BLOCKED | data/drop_report.json:5, data/dataset.jsonl:1 | VERIFIED |
+| SLM-R41 | first real QLoRA training run completed. | BLOCKED | results/train/n270/log.txt:1, results/train/n270/summary.json:623, results/smoke-loop/log.txt:4 | PARTIAL |
+| SLM-R42 | First base-vs-tuned eval numbers submitted, using the format in Verifi… | BLOCKED | results/mvp/table.md:3, results/mvp/table.md:4, results/mvp/NOTES.md:13 | VERIFIED |
+| SLM-R43 | At least one specific failure mode diagnosed from your MVP eval, and r… | BLOCKED | results/mvp/NOTES.md:84, BRAINLIFT.md:67 | PARTIAL |
+| SLM-R44 | Updated base-vs-tuned eval numbers showing the delta from MVP, submitt… | BLOCKED | — | MISSING |
+| SLM-R45 | At least 2 points on your Data-Efficiency curve (see Required Ablation… | BLOCKED | results/train/n135/summary.json:1, results/mvp/run.json:1 | PARTIAL |
+| SLM-R46 | Draft versions of your final artifacts: dataset shape, model checkpoin… | BLOCKED | dataset_spec.md:46, results/train/n270/summary.json:623, BRAINLIFT.md:1 | IMPLEMENTED-UNVERIFIED |
+| SLM-R47 | The dataset, published — this is your real artifact. | BLOCKED | publish.py:78 | MISSING |
+| SLM-R48 | The model on Hugging Face Hub, public, plus a running inference demo. | BLOCKED | compare.py:20 | MISSING |
+| SLM-R49 | Eval harness and results table — base vs. tuned, on your own eval set … | BLOCKED | results/mvp/table.md:3 | PARTIAL |
+| SLM-R50 | Full Data-Efficiency curve (performance vs. dataset size) with a justi… | BLOCKED | sweep.py:93, BRAINLIFT.md:57 | PARTIAL |
+| SLM-R51 | Brainlift — your behavior thesis, and whether data → behavior held, wi… | BLOCKED | BRAINLIFT.md:3, BRAINLIFT.md:19, BRAINLIFT.md:76 | PARTIAL |
+| SLM-R52 | A 3–5 minute demo video showing the tuned model doing the thing the ba… | BLOCKED | — | N/A |
+| SLM-R53 | DPO / preference tuning — build preference pairs (on-spec vs. off-spec… | BLOCKED | — | MISSING |
+| SLM-R54 | Adversarial / robustness eval — a hard eval set built specifically to … | BLOCKED | — | MISSING |
+| SLM-R55 | Composed behavior — instill a second, potentially competing constraint… | BLOCKED | — | MISSING |
 
 ## Gaps
-MISSING + PARTIAL rows; the missing part is named. Full handoff detail with suggested scope is in `gaps.md`.
-
-| ID | Verdict | What is missing |
-|---|---|---|
-| SLM-R1 | PARTIAL | No completed run and no stated reliability bar exist, so the 'hard test' is unproven. metacog_precheck.py is, by its own docstring (line 6: 'deterministic checks -- no LLM judge'), a cheap precursor to the ablation, and it is currently non-runnable: call() (lines 122-126) builds `fn` but never invokes or returns it, so every reply is None and all 30 conversations fail at parse_ledger before any API request is made (verify.precheck exit: 30/30 FAILED, empty table). |
-| SLM-R2 | PARTIAL | SPEC (lines 38-44) is falsifiable but is a multi-sentence system prompt, not a one-or-two-sentence standalone spec; no spec document exists. |
-| SLM-R4 | MISSING | No implementing code in code_roots. |
-| SLM-R5 | MISSING | No implementing code in code_roots. |
-| SLM-R6 | MISSING | No implementing code in code_roots. |
-| SLM-R10 | MISSING | No implementing code in code_roots. No eval harness exists to trace metrics for. The precheck's deterministic metrics (score_turn, lines 155-170) are behavior-targeted, which is the intended direction. |
-| SLM-R11 | PARTIAL | Script exists but produced no numbers. metacog_precheck.py is, by its own docstring (line 6: 'deterministic checks -- no LLM judge'), a cheap precursor to the ablation, and it is currently non-runnable: call() (lines 122-126) builds `fn` but never invokes or returns it, so every reply is None and all 30 conversations fail at parse_ledger before any API request is made (verify.precheck exit: 30/30 FAILED, empty table). |
-| SLM-R15 | PARTIAL | verify.scenario_count → 5 scenarios; the brief's floor is 30 per model×strategy. |
-| SLM-R16 | MISSING | No implementing code in code_roots. metacog_precheck.py is deterministic by design (line 6: 'no LLM judge'); there is no LLM-as-judge and no shared rubric module. |
-| SLM-R17 | PARTIAL | Per-model×strategy table exists but reports ledger-specific mechanical metrics, not the two named metrics; the captured run produced a header-only table (0 rows). |
-| SLM-R18 | MISSING | No implementing code in code_roots. |
-| SLM-R19 | MISSING | No implementing code in code_roots. |
-| SLM-R20 | MISSING | No implementing code in code_roots. |
-| SLM-R21 | MISSING | No implementing code in code_roots. |
-| SLM-R22 | MISSING | No implementing code in code_roots. |
-| SLM-R23 | MISSING | No implementing code in code_roots. |
-| SLM-R24 | MISSING | No implementing code in code_roots. verify.eval NOT RUN — eval.py does not exist. |
-| SLM-R25 | MISSING | No implementing code in code_roots. |
-| SLM-R26 | MISSING | No implementing code in code_roots. |
-| SLM-R27 | MISSING | No implementing code in code_roots. |
-| SLM-R29 | PARTIAL | Script is present but a grader cannot rerun even one point: metacog_precheck.py is, by its own docstring (line 6: 'deterministic checks -- no LLM judge'), a cheap precursor to the ablation, and it is currently non-runnable: call() (lines 122-126) builds `fn` but never invokes or returns it, so every reply is None and all 30 conversations fail at parse_ledger before any API request is made (verify.precheck exit: 30/30 FAILED, empty table). |
-| SLM-R30 | MISSING | No implementing code in code_roots. |
-| SLM-R34 | PARTIAL | Same artifact as SLM-R2; not finalized as a standalone one-to-two-sentence spec. |
-| SLM-R35 | MISSING | No implementing code in code_roots. |
-| SLM-R36 | MISSING | No implementing code in code_roots. |
-| SLM-R37 | PARTIAL | Behavioral checks for the spec's failure modes exist, but only inside the ablation precheck; no eval harness applies them to base/tuned model outputs. |
-| SLM-R38 | MISSING | No implementing code in code_roots. |
-| SLM-R39 | MISSING | No implementing code in code_roots. |
-| SLM-R40 | MISSING | No implementing code in code_roots. |
-| SLM-R41 | MISSING | No implementing code in code_roots. |
-| SLM-R42 | MISSING | No implementing code in code_roots. |
-| SLM-R43 | MISSING | No implementing code in code_roots. |
-| SLM-R44 | MISSING | No implementing code in code_roots. |
-| SLM-R45 | MISSING | No implementing code in code_roots. |
-| SLM-R46 | MISSING | No implementing code in code_roots. |
-| SLM-R47 | MISSING | No implementing code in code_roots. |
-| SLM-R48 | MISSING | No implementing code in code_roots. |
-| SLM-R49 | MISSING | No implementing code in code_roots. |
-| SLM-R50 | MISSING | No implementing code in code_roots. |
-| SLM-R51 | MISSING | No implementing code in code_roots. |
-| SLM-R53 | MISSING | No implementing code in code_roots. |
-| SLM-R54 | MISSING | No implementing code in code_roots. |
-| SLM-R55 | MISSING | No implementing code in code_roots. |
+- **SLM-R1 — PARTIAL**: Ablation completed at n=30 with numbers; the plateau is shown per model/strategy. Missing: an explicitly stated numeric reliability bar the plateau is compared against (ANALYSIS.md line 59 says this was 'not measured here'). Qwen3-1.7B base also fails outright (results/mvp/table.md line 3: 0/41 clean), which is the in-repo counterpart. *Suggested:* State the reliability bar in one line in ANALYSIS.md/BRAINLIFT.md (e.g. 'self-report→KNOWN ≤ 1/12 on the biography turn and ≥ 27/30 clean conversations') and show the best-prompt numbers against it.
+- **SLM-R11 — PARTIAL**: Completed run with numbers, committed 2026-08-17 (before train.py existed). Missing: the stated reliability bar (same gap as SLM-R1). *Suggested:* Same as SLM-R1: one stated bar next to the table.
+- **SLM-R16 — PARTIAL**: The ablation was scored deterministically (metacog_precheck.py); the base-vs-tuned run is judged by eval.py's rubric. Two rubric texts exist (eval.py JUDGE_PROMPT vs judge.py RUBRIC) and neither has been run over the ablation transcripts. Not the 'same LLM-as-judge rubric' across both. *Suggested:* Run eval.py's judge (or judge.py) over results/full-30-combined/transcripts.jsonl to add judged spec-adherence/robustness per model×strategy, and make judge.py import eval.py's JUDGE_PROMPT so one rubric exists.
+- **SLM-R17 — PARTIAL**: Per model×strategy table exists but does not carry the two named metrics (mean Spec-adherence, Robustness). 'clean runs' is the deterministic adherence proxy; no robustness column. *Suggested:* Add spec_adherence and robustness columns computed by the judge (see SLM-R16) to the ablation table.
+- **SLM-R19 — PARTIAL**: 2 of ≥4 checkpoints trained (bf16 LoRA n270, n135); QLoRA q270 training and q135/q67/q33 queued (run_pipeline_qlora_rest.sh) at sweep time. *Suggested:* Let run_pipeline_qlora_rest.sh finish (≈6 h); the four QLoRA runs land in results/train/q*/.
+- **SLM-R20 — PARTIAL**: Only n270 evaluated so far; n135 trained not evaluated. Staff held-out set not yet available (schema documented, README.md line 111). *Suggested:* Ships when the sweep pipeline finishes; add the staff set path when provided.
+- **SLM-R21 — PARTIAL**: Plotting code present; no curve produced yet. *Suggested:* Ships with the sweep (results/sweep-qlora/curve.png).
+- **SLM-R22 — PARTIAL**: Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report→KNOWN'); N not yet named. *Suggested:* Fill in from results/sweep-qlora/table.md.
+- **SLM-R23 — MISSING**: publish.py is ready; this machine is not logged in to Hugging Face (`hf auth whoami` → Not logged in), so nothing is pushed. *Suggested:* `hf auth login` then `python3 publish.py --run q270 --user <hf-user>`; paste results/publish.json hashes into README.
+- **SLM-R27 — PARTIAL**: Eval-code commit and training commit are recorded; the HF model revision hash does not exist yet (SLM-R23). *Suggested:* Ships with SLM-R23.
+- **SLM-R41 — PARTIAL**: A full-size run is complete with log + checkpoint sha256, but it is bf16 LoRA; the full-size QLoRA run (q270) was training at sweep time (results/train/q270/log.txt). No HF revision yet (SLM-R23). *Suggested:* q270 finishes ≈22:05 CDT; then publish (SLM-R23) for the HF revision.
+- **SLM-R43 — PARTIAL**: Diagnosis written; v2 dataset not generated yet (Early submission item). *Suggested:* Add a wrong_attempt shape (+ plain-language demos, brevity constraint) to generate_dataset.py, regenerate as data/v3, retrain with the identical config, diff configs.
+- **SLM-R44 — MISSING**: Early-submission item; follows SLM-R43. *Suggested:* Re-run eval.py on the v2-trained adapter; report delta vs results/mvp-qlora.
+- **SLM-R45 — PARTIAL**: Two Ns trained, one evaluated; sweep evals queued. *Suggested:* Ships with the sweep pipeline.
+- **SLM-R47 — MISSING**: Not published; needs HF login. *Suggested:* Ships with publish.py (SLM-R23).
+- **SLM-R48 — MISSING**: No public model, no hosted inference demo. *Suggested:* Publish (SLM-R23) then a minimal Space/Gradio wrapper around compare.py's backend, or a recorded local demo.
+- **SLM-R49 — PARTIAL**: Own set done; staff held-out set not yet available. *Suggested:* Run eval.py with the staff set path when provided; schema documented (README.md line 111).
+- **SLM-R50 — PARTIAL**: Pending the sweep. *Suggested:* Ships with the sweep pipeline + BRAINLIFT update.
+- **SLM-R51 — PARTIAL**: Draft with thesis and MVP evidence; min-N and QLoRA/robustness updates pending. *Suggested:* Update after the sweep and q270 eval.
+- **SLM-R53 — MISSING**: Stretch (optional): DPO not attempted. *Suggested:* Optional; not before Final-submission core items.
+- **SLM-R54 — MISSING**: Stretch (optional): adversarial eval set not attempted. *Suggested:* Optional; not before Final-submission core items.
+- **SLM-R55 — MISSING**: Stretch (optional): composed behavior not attempted. *Suggested:* Optional; not before Final-submission core items.
 
 ## Orphan tickets
-None checked — ticket dimension BLOCKED (see Coverage and limitations).
+None (ticket dimension BLOCKED).
 
 ## Blocked / assumed
-- **All rows — tickets `BLOCKED`.** Unblock: Create a Linear project for this SLM work under Troysatchell, set tickets.project to its exact name in audit/requirements.config.yaml, and re-run.
-- **SLM-R7 — ASSUMED.** Question: Does 'one context' mean the tutoring interaction context (so five different subject topics in metacog_scenarios.jsonl are fine), rather than a single subject? (yes/no: is multi-subject tutoring acceptable as one context?) Traced under: *Yes — one context = 1:1 tutoring; multi-subject is acceptable.* — flagged for a ruling; log it in `interpretations.md` as I-01 and re-run.
+- Ticket dimension: tickets.project is null: the Troysatchell team spans 8 unrelated projects and none is this repo (config comment); no scope to map against. Unblock: Create a Linear project for claimtrace and set tickets.project in audit/requirements.config.yaml.
+- SLM-R7 ASSUMED — 'Context' means the 1:1 tutoring interaction, so multi-subject tutoring is one context (dataset_spec.md line 88 varies subject on purpose so the model learns the behavior, not the domain). (question: Is multi-subject tutoring acceptable as 'one context' (context = the 1:1 tutoring interaction, not a single subject)?)
+
+## Delta (compare mode)
+| ID | baseline verdict | now | evidence change |
+|---|---|---|---|
+| SLM-R2 | PARTIAL | VERIFIED | ledger.py:11, BEHAVIOR_SPEC.md:3, ledger.py:16 |
+| SLM-R4 | MISSING | VERIFIED | generate_dataset.py:246, generate_dataset.py:315, data/drop_report.json:5 |
+| SLM-R5 | MISSING | VERIFIED | train.py:46, train.py:191, train.py:199 |
+| SLM-R6 | MISSING | VERIFIED | results/mvp/table.md:3, results/mvp/table.md:4, results/mvp/NOTES.md:31 |
+| SLM-R8 | N/A | VERIFIED | results/train/n270/log.txt:1 |
+| SLM-R10 | MISSING | VERIFIED | eval.py:346, eval.py:369 |
+| SLM-R15 | PARTIAL | VERIFIED | metacog_precheck.py:287, results/full-30-combined/table.md:3 |
+| SLM-R16 | MISSING | PARTIAL | eval.py:37, judge.py:36, metacog_precheck.py:214 |
+| SLM-R18 | MISSING | IMPLEMENTED-UNVERIFIED | results/full-30-combined/ANALYSIS.md:28, README.md:43 |
+| SLM-R19 | MISSING | PARTIAL | train.py:310, BRAINLIFT.md:57, results/train/n270/summary.json:1 |
+| SLM-R20 | MISSING | PARTIAL | sweep.py:37, results/mvp/run.json:1 |
+| SLM-R21 | MISSING | PARTIAL | sweep.py:65, sweep.py:93 |
+| SLM-R22 | MISSING | PARTIAL | BRAINLIFT.md:57 |
+| SLM-R24 | MISSING | VERIFIED | eval.py:463, eval.py:464, eval.py:68 |
+| SLM-R25 | MISSING | VERIFIED | eval.py:513, results/mvp/NOTES.md:20 |
+| SLM-R26 | MISSING | IMPLEMENTED-UNVERIFIED | eval.py:464, README.md:111 |
+| SLM-R27 | MISSING | PARTIAL | results/mvp/run.json:2, results/train/n270/summary.json:3, README.md:146 |
+| SLM-R29 | PARTIAL | IMPLEMENTED-UNVERIFIED | metacog_precheck.py:287, README.md:86 |
+| SLM-R30 | MISSING | VERIFIED | results/train/n270/log.txt:1, results/train/n270/lora_config.yaml:1, results/train/n270/summary.json:623 |
+| SLM-R34 | PARTIAL | VERIFIED | BEHAVIOR_SPEC.md:3, ledger.py:11 |
+| SLM-R35 | MISSING | IMPLEMENTED-UNVERIFIED | results/full-30-combined/ANALYSIS.md:1 |
+| SLM-R36 | MISSING | VERIFIED | eval.py:209, eval.py:37 |
+| SLM-R37 | PARTIAL | VERIFIED | ledger.py:57, ledger.py:77, eval.py:268 |
+| SLM-R38 | MISSING | VERIFIED | eval.py:465, eval.py:381 |
+| SLM-R39 | MISSING | VERIFIED | smoke.sh:19, smoke.sh:22, results/smoke-loop/log.txt:1 |
+| SLM-R40 | MISSING | VERIFIED | data/drop_report.json:5, data/dataset.jsonl:1 |
+| SLM-R41 | MISSING | PARTIAL | results/train/n270/log.txt:1, results/train/n270/summary.json:623, results/smoke-loop/log.txt:4 |
+| SLM-R42 | MISSING | VERIFIED | results/mvp/table.md:3, results/mvp/table.md:4, results/mvp/NOTES.md:13 |
+| SLM-R43 | MISSING | PARTIAL | results/mvp/NOTES.md:84, BRAINLIFT.md:67 |
+| SLM-R45 | MISSING | PARTIAL | results/train/n135/summary.json:1, results/mvp/run.json:1 |
+| SLM-R46 | MISSING | IMPLEMENTED-UNVERIFIED | dataset_spec.md:46, results/train/n270/summary.json:623, BRAINLIFT.md:1 |
+| SLM-R49 | MISSING | PARTIAL | results/mvp/table.md:3 |
+| SLM-R50 | MISSING | PARTIAL | sweep.py:93, BRAINLIFT.md:57 |
+| SLM-R51 | MISSING | PARTIAL | BRAINLIFT.md:3, BRAINLIFT.md:19, BRAINLIFT.md:76 |
 
 ## Verification performed
 | Command | Result | Bears on |
 |---|---|---|
-| `python3 -c "import json;rows=[json.loads(l) for l in open('metacog_scenarios.jsonl') if l.strip()];print('scenarios',len(rows),'turns',sum(len(r['turns']) for r in rows))"` | exit 0 — scenarios 5 turns 66 | SLM-R15, SLM-R3, SLM-R7 |
-| `python3 -m py_compile metacog_precheck.py && echo compile-ok` | exit 0 — compile-ok — Syntax only; runtime failure found by verify.precheck. | SLM-R29 |
-| `set -a && . ./.env && set +a && curl -s -w '\nHTTP %{http_code}\n' https://api.anthropic.com/v1/models/claude-opus-5 -H "x-api-key: $ANTHROPIC_API_KEY" -H 'anthropic-version: 2023-06-01'` | HTTP 200 — model object for claude-opus-5 returned — Read-only GET; no generation. | SLM-R13 |
-| `set -a && . ./.env && set +a && curl -s https://api.moonshot.ai/v1/models -H "Authorization: Bearer $MOONSHOT_API_KEY"` | HTTP 200 — model ids: kimi-k2.6, kimi-k2.7-code, kimi-k2.7-code-highspeed, kimi-k3 — Read-only GET; no generation. | SLM-R13 |
-| `set -a && . ./.env && set +a && python3 metacog_precheck.py --scenarios metacog_scenarios.jsonl --out audit/requirements/runs/precheck` | exit 0 (script swallows per-conversation exceptions) — 30/30 conversations FAILED with "'NoneType' object has no attribute 'strip'"; table.md header-only; transcripts.jsonl empty; zero API requests made — Output written to audit/requirements/runs/precheck/. No cost incurred: call() never invokes the provider. | SLM-R1, SLM-R11, SLM-R14, SLM-R17, SLM-R29 |
-| `python3 eval.py --model <hf-repo-id> --eval-set <path>` | NOT RUN — eval.py does not exist in the repo. | SLM-R6, SLM-R20, SLM-R24, SLM-R38, SLM-R42, SLM-R49 |
+| `verify.scenario_count` | scenarios 41 turns 498 | SLM-R15, SLM-R26 |
+| `verify.precheck_compile` | compile-ok | SLM-R29 |
+| `verify.probe_anthropic` | 200 | SLM-R13 |
+| `verify.probe_kimi` | ['kimi-k3', 'kimi-k2.7-code-highspeed', 'kimi-k2.6', 'kimi-k2.7-code'] | SLM-R13 |
+| `verify.precheck` | NOT RUN | SLM-R1, SLM-R11, SLM-R14, SLM-R29 |
+| `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out res` | exit 0 — results/mvp/table.md, judge_transcripts.jsonl (82 rows, 72 judged), run.json | SLM-R6, SLM-R10, SLM-R24, SLM-R25, SLM-R36, SLM-R37, SLM-R38, SLM-R42 |
+| `python3 train.py --n 270 --run-id n270 (via run_pipeline.sh, 14:30-16:02 CDT)` | exit 0 — 10 checkpoints, val loss 3.27→0.91, results/train/n270/log.txt | SLM-R30, SLM-R41, SLM-R8 |
+| `./smoke.sh --skip-generate` | exit 0 — results/smoke-loop/log.txt | SLM-R39, SLM-R5 |
+| `git log --format='%h %ad %s' --date=iso -- eval.py ledger.py train.py | head -3` | 46d0b65 13:48 / 3210fd3 13:35 (2026-08-18) / 07eaf97 (2026-08-17) — all before the 14:30:18 training log | SLM-R8 |
+| `python3 -c "import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)"` | 2 | SLM-R2, SLM-R34 |
+| `wc -l data/dataset.jsonl` | 300 | SLM-R4, SLM-R40 |
+| `hf auth whoami` | Error: Not logged in | SLM-R23, SLM-R27, SLM-R47, SLM-R48 |
 
-### Captured output — VERIFIED rows
-**SLM-R13** — `set -a && . ./.env && set +a && curl -s -w '\nHTTP %{http_code}\n' https://api.anthropic.com/v1/models/claude-opus-5 -H "x-api-key: $ANTHROPIC_API_KEY" -H 'anthropic-version: 2023-06-01'  &&  set -a && . ./.env && set +a && curl -s https://api.moonshot.ai/v1/models -H "Authorization: Bearer $MOONSHOT_API_KEY"`
-```
-{"type":"model","id":"claude-opus-5","display_name":"Claude Opus 5","created_at":"2026-07-24T00:00:00Z",...}
-HTTP 200
-['kimi-k2.6', 'kimi-k2.7-code', 'kimi-k2.7-code-highspeed', 'kimi-k3']
-HTTP 200
-```
+Captured excerpts for VERIFIED rows:
 
-### Captured output — verify.precheck (red)
+**SLM-R2** — `python3 -c "import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)"`
 ```
-exit 0 (script swallows per-conversation exceptions) — 30/30 conversations FAILED with "'NoneType' object has no attribute 'strip'"; table.md header-only; transcripts.jsonl empty; zero API requests made
-
-  FAILED kimi/structured/m4: 'NoneType' object has no attribute 'strip'
-  29/30
-  FAILED kimi/structured/m5: 'NoneType' object has no attribute 'strip'
-  30/30
-| model | strategy | ledger rate | unearned | no-elicit | clean runs | median first break |
-|---|---|---|---|---|---|---|
+2
+```
+**SLM-R4** — `wc -l data/dataset.jsonl; python3 -c "import json;print(json.load(open('data/drop_report.json'))['drops'])"`
+```
+300 data/dataset.jsonl
+{'self_report:no_ledger': 1, 'ordinary:diagnostic_question_on_ordinary': 5, 'pressure:ledger_moved_under_pressure': 1, 'pressure:no_ledger': 1, 'demonstration:no_ledger': 1}
+```
+**SLM-R5** — `./smoke.sh --skip-generate`
+```
+== smoke loop Tue Aug 18 20:26:46 CDT 2026 commit b505da9...
+== generate: SKIPPED (reusing data/smoke-v2: 6 conversations, teacher kimi-k3)
+[2026-08-18 20:27:36] done: 1 checkpoints, final adapter sha256=ec953337ce48 wall=0.8min peak_mem=5.5GB
+== eval: python3 eval.py --model ckpt/smoke/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/smoke-loop/eval --limit 2 --max-new-tokens 160 --no-judge
+== smoke loop done Tue Aug 18 20:31:19 CDT 2026
+```
+**SLM-R6** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (`
+```
+| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
+```
+**SLM-R8** — `git log --format='%h %ad %s' --date=iso -- eval.py ledger.py train.py | head -3`
+```
+46d0b65 2026-08-18 13:48:08 -0500 train.py (mlx_lm.lora wrapper), sweep.py, llm.py ...
+3210fd3 2026-08-18 13:35:54 -0500 harness: MLX eval path, provenance columns, eval set v5 ...
+07eaf97 2026-08-17 20:38:17 -0500 eval update
+```
+**SLM-R10** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (`
+```
+| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
+```
+**SLM-R13** — `verify.probe_anthropic; verify.probe_kimi`
+```
+200
+['kimi-k3', 'kimi-k2.7-code-highspeed', 'kimi-k2.6', 'kimi-k2.7-code']
+```
+**SLM-R15** — `verify.scenario_count`
+```
+scenarios 41 turns 498
+```
+**SLM-R24** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (`
+```
+| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
+```
+**SLM-R25** — `python3 -c "import json;rows=[json.loads(l) for l in open('results/mvp/judge_transcripts.jsonl')];print(len(rows), sum(1`
+```
+82 72
+```
+**SLM-R30** — `python3 train.py --n 270 --run-id n270 (via run_pipeline.sh, 14:30-16:02 CDT)`
+```
+Iter 2000: Val loss 0.910, Val took 57.260s
+Iter 2000: Train loss 0.894, Learning Rate 5.323e-06, It/sec 0.526, Tokens/sec 102.702, Trained Tokens 449015, Peak mem 10.669 GB
+Saved final weights to ckpt/n270/adapters/adapters.safetensors.
+done: 10 checkpoints, final adapter sha256=... wall=92.4min peak_mem=10.7GB
+```
+**SLM-R34** — `python3 -c "import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)"`
+```
+2
+```
+**SLM-R36** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (`
+```
+| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
+```
+**SLM-R37** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (`
+```
+| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
+```
+**SLM-R38** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (`
+```
+| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
+```
+**SLM-R39** — `./smoke.sh --skip-generate`
+```
+== smoke loop Tue Aug 18 20:26:46 CDT 2026 commit b505da9...
+== generate: SKIPPED (reusing data/smoke-v2: 6 conversations, teacher kimi-k3)
+[2026-08-18 20:27:36] done: 1 checkpoints, final adapter sha256=ec953337ce48 wall=0.8min peak_mem=5.5GB
+== eval: python3 eval.py --model ckpt/smoke/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/smoke-loop/eval --limit 2 --max-new-tokens 160 --no-judge
+== smoke loop done Tue Aug 18 20:31:19 CDT 2026
+```
+**SLM-R40** — `wc -l data/dataset.jsonl`
+```
+300 data/dataset.jsonl
+```
+**SLM-R42** — `python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (`
+```
+| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |
 ```
