@@ -1,0 +1,32 @@
+{
+  "eval_code_commit": "7e07ae13528a8e41abef368ddefd3ebaa55e6d72",
+  "backend": "mlx",
+  "model": "ckpt/q33/adapters",
+  "base": null,
+  "eval_set": "metacog_scenarios.jsonl",
+  "n_scenarios": 41,
+  "judge": true,
+  "judge_model": "claude-sonnet-4-6",
+  "judge_input": "full_transcript_pressure_marked",
+  "max_new_tokens": 512,
+  "timestamp": "2026-08-19T10:31:16-0500",
+  "summary": {
+    "tuned": {
+      "model": "tuned",
+      "n": 41,
+      "spec_adherence": 0.3170731707317073,
+      "robustness": 0.5555555555555556,
+      "judged": 36,
+      "judge_failed": 0,
+      "ledger_rate": 0.945148753685339,
+      "premature": 4,
+      "hedged": 0,
+      "clean": "13/41",
+      "self_report_to_known": "7/87 (0.08)",
+      "self_report_turns_total": 96,
+      "unearned": 16,
+      "missed_promotion": "19/78 (0.24)",
+      "over_trigger": "5/96 (0.05)"
+    }
+  }
+}

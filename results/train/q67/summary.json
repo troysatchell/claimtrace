@@ -1,0 +1,711 @@
+{
+  "run_id": "q67",
+  "commit": "7e07ae13528a8e41abef368ddefd3ebaa55e6d72",
+  "base": "ckpt/base-q4",
+  "backend": "mlx_lm.lora",
+  "config": {
+    "model": "ckpt/base-q4",
+    "train": true,
+    "data": "ckpt/q67/data",
+    "fine_tune_type": "lora",
+    "optimizer": "adamw",
+    "num_layers": 16,
+    "batch_size": 1,
+    "grad_accumulation_steps": 4,
+    "iters": 2000,
+    "learning_rate": 5e-05,
+    "lr_schedule": {
+      "name": "cosine_decay",
+      "warmup": 25,
+      "arguments": [
+        5e-05,
+        500,
+        5e-06
+      ]
+    },
+    "lora_parameters": {
+      "rank": 16,
+      "scale": 20.0,
+      "dropout": 0.05
+    },
+    "mask_prompt": true,
+    "max_seq_length": 6144,
+    "grad_checkpoint": true,
+    "seed": 0,
+    "steps_per_report": 20,
+    "steps_per_eval": 200,
+    "val_batches": -1,
+    "save_every": 200,
+    "adapter_path": "ckpt/q67/adapters"
+  },
+  "data": {
+    "dataset": "data/dataset.jsonl",
+    "conversations_total": 300,
+    "train_conversations": 67,
+    "valid_conversations": 30,
+    "train_rows": 723,
+    "valid_rows": 64,
+    "rows_dropped_over_max_seq_length": 0,
+    "train_rows_by_final_shape": {
+      "self_report": 264,
+      "pressure": 194,
+      "demonstration": 158,
+      "ordinary": 107
+    },
+    "train_tokens_total": 1094687,
+    "train_tokens_median": 1360,
+    "train_tokens_max": 4295,
+    "epochs_at_iters": 2.77
+  },
+  "optimizer_steps": 500,
+  "effective_batch": 4,
+  "wall_seconds": 13041,
+  "peak_mem_gb": 7.753,
+  "losses": [
+    {
+      "iter": 1,
+      "kind": "val",
+      "loss": 3.242
+    },
+    {
+      "iter": 20,
+      "kind": "train",
+      "loss": 3.158
+    },
+    {
+      "iter": 40,
+      "kind": "train",
+      "loss": 1.65
+    },
+    {
+      "iter": 60,
+      "kind": "train",
+      "loss": 1.404
+    },
+    {
+      "iter": 80,
+      "kind": "train",
+      "loss": 1.148
+    },
+    {
+      "iter": 100,
+      "kind": "train",
+      "loss": 1.208
+    },
+    {
+      "iter": 120,
+      "kind": "train",
+      "loss": 1.164
+    },
+    {
+      "iter": 140,
+      "kind": "train",
+      "loss": 1.193
+    },
+    {
+      "iter": 160,
+      "kind": "train",
+      "loss": 1.258
+    },
+    {
+      "iter": 180,
+      "kind": "train",
+      "loss": 1.169
+    },
+    {
+      "iter": 200,
+      "kind": "val",
+      "loss": 1.188
+    },
+    {
+      "iter": 200,
+      "kind": "train",
+      "loss": 1.119
+    },
+    {
+      "iter": 220,
+      "kind": "train",
+      "loss": 0.977
+    },
+    {
+      "iter": 240,
+      "kind": "train",
+      "loss": 0.961
+    },
+    {
+      "iter": 260,
+      "kind": "train",
+      "loss": 0.979
+    },
+    {
+      "iter": 280,
+      "kind": "train",
+      "loss": 1.09
+    },
+    {
+      "iter": 300,
+      "kind": "train",
+      "loss": 1.126
+    },
+    {
+      "iter": 320,
+      "kind": "train",
+      "loss": 1.041
+    },
+    {
+      "iter": 340,
+      "kind": "train",
+      "loss": 1.011
+    },
+    {
+      "iter": 360,
+      "kind": "train",
+      "loss": 1.092
+    },
+    {
+      "iter": 380,
+      "kind": "train",
+      "loss": 0.975
+    },
+    {
+      "iter": 400,
+      "kind": "val",
+      "loss": 1.112
+    },
+    {
+      "iter": 400,
+      "kind": "train",
+      "loss": 0.887
+    },
+    {
+      "iter": 420,
+      "kind": "train",
+      "loss": 0.928
+    },
+    {
+      "iter": 440,
+      "kind": "train",
+      "loss": 0.978
+    },
+    {
+      "iter": 460,
+      "kind": "train",
+      "loss": 1.046
+    },
+    {
+      "iter": 480,
+      "kind": "train",
+      "loss": 1.074
+    },
+    {
+      "iter": 500,
+      "kind": "train",
+      "loss": 0.899
+    },
+    {
+      "iter": 520,
+      "kind": "train",
+      "loss": 0.866
+    },
+    {
+      "iter": 540,
+      "kind": "train",
+      "loss": 1.049
+    },
+    {
+      "iter": 560,
+      "kind": "train",
+      "loss": 0.957
+    },
+    {
+      "iter": 580,
+      "kind": "train",
+      "loss": 0.917
+    },
+    {
+      "iter": 600,
+      "kind": "val",
+      "loss": 1.055
+    },
+    {
+      "iter": 600,
+      "kind": "train",
+      "loss": 0.988
+    },
+    {
+      "iter": 620,
+      "kind": "train",
+      "loss": 1.072
+    },
+    {
+      "iter": 640,
+      "kind": "train",
+      "loss": 1.003
+    },
+    {
+      "iter": 660,
+      "kind": "train",
+      "loss": 0.965
+    },
+    {
+      "iter": 680,
+      "kind": "train",
+      "loss": 1.015
+    },
+    {
+      "iter": 700,
+      "kind": "train",
+      "loss": 1.023
+    },
+    {
+      "iter": 720,
+      "kind": "train",
+      "loss": 0.851
+    },
+    {
+      "iter": 740,
+      "kind": "train",
+      "loss": 0.674
+    },
+    {
+      "iter": 760,
+      "kind": "train",
+      "loss": 0.692
+    },
+    {
+      "iter": 780,
+      "kind": "train",
+      "loss": 0.54
+    },
+    {
+      "iter": 800,
+      "kind": "val",
+      "loss": 1.098
+    },
+    {
+      "iter": 800,
+      "kind": "train",
+      "loss": 0.729
+    },
+    {
+      "iter": 820,
+      "kind": "train",
+      "loss": 0.62
+    },
+    {
+      "iter": 840,
+      "kind": "train",
+      "loss": 0.674
+    },
+    {
+      "iter": 860,
+      "kind": "train",
+      "loss": 0.584
+    },
+    {
+      "iter": 880,
+      "kind": "train",
+      "loss": 0.613
+    },
+    {
+      "iter": 900,
+      "kind": "train",
+      "loss": 0.637
+    },
+    {
+      "iter": 920,
+      "kind": "train",
+      "loss": 0.543
+    },
+    {
+      "iter": 940,
+      "kind": "train",
+      "loss": 0.673
+    },
+    {
+      "iter": 960,
+      "kind": "train",
+      "loss": 0.653
+    },
+    {
+      "iter": 980,
+      "kind": "train",
+      "loss": 0.663
+    },
+    {
+      "iter": 1000,
+      "kind": "val",
+      "loss": 1.052
+    },
+    {
+      "iter": 1000,
+      "kind": "train",
+      "loss": 0.662
+    },
+    {
+      "iter": 1020,
+      "kind": "train",
+      "loss": 0.702
+    },
+    {
+      "iter": 1040,
+      "kind": "train",
+      "loss": 0.601
+    },
+    {
+      "iter": 1060,
+      "kind": "train",
+      "loss": 0.664
+    },
+    {
+      "iter": 1080,
+      "kind": "train",
+      "loss": 0.721
+    },
+    {
+      "iter": 1100,
+      "kind": "train",
+      "loss": 0.587
+    },
+    {
+      "iter": 1120,
+      "kind": "train",
+      "loss": 0.514
+    },
+    {
+      "iter": 1140,
+      "kind": "train",
+      "loss": 0.676
+    },
+    {
+      "iter": 1160,
+      "kind": "train",
+      "loss": 0.626
+    },
+    {
+      "iter": 1180,
+      "kind": "train",
+      "loss": 0.593
+    },
+    {
+      "iter": 1200,
+      "kind": "val",
+      "loss": 1.047
+    },
+    {
+      "iter": 1200,
+      "kind": "train",
+      "loss": 0.693
+    },
+    {
+      "iter": 1220,
+      "kind": "train",
+      "loss": 0.716
+    },
+    {
+      "iter": 1240,
+      "kind": "train",
+      "loss": 0.584
+    },
+    {
+      "iter": 1260,
+      "kind": "train",
+      "loss": 0.618
+    },
+    {
+      "iter": 1280,
+      "kind": "train",
+      "loss": 0.61
+    },
+    {
+      "iter": 1300,
+      "kind": "train",
+      "loss": 0.628
+    },
+    {
+      "iter": 1320,
+      "kind": "train",
+      "loss": 0.533
+    },
+    {
+      "iter": 1340,
+      "kind": "train",
+      "loss": 0.673
+    },
+    {
+      "iter": 1360,
+      "kind": "train",
+      "loss": 0.595
+    },
+    {
+      "iter": 1380,
+      "kind": "train",
+      "loss": 0.608
+    },
+    {
+      "iter": 1400,
+      "kind": "val",
+      "loss": 1.027
+    },
+    {
+      "iter": 1400,
+      "kind": "train",
+      "loss": 0.573
+    },
+    {
+      "iter": 1420,
+      "kind": "train",
+      "loss": 0.644
+    },
+    {
+      "iter": 1440,
+      "kind": "train",
+      "loss": 0.638
+    },
+    {
+      "iter": 1460,
+      "kind": "train",
+      "loss": 0.5
+    },
+    {
+      "iter": 1480,
+      "kind": "train",
+      "loss": 0.451
+    },
+    {
+      "iter": 1500,
+      "kind": "train",
+      "loss": 0.355
+    },
+    {
+      "iter": 1520,
+      "kind": "train",
+      "loss": 0.451
+    },
+    {
+      "iter": 1540,
+      "kind": "train",
+      "loss": 0.393
+    },
+    {
+      "iter": 1560,
+      "kind": "train",
+      "loss": 0.341
+    },
+    {
+      "iter": 1580,
+      "kind": "train",
+      "loss": 0.371
+    },
+    {
+      "iter": 1600,
+      "kind": "val",
+      "loss": 1.173
+    },
+    {
+      "iter": 1600,
+      "kind": "train",
+      "loss": 0.345
+    },
+    {
+      "iter": 1620,
+      "kind": "train",
+      "loss": 0.365
+    },
+    {
+      "iter": 1640,
+      "kind": "train",
+      "loss": 0.398
+    },
+    {
+      "iter": 1660,
+      "kind": "train",
+      "loss": 0.342
+    },
+    {
+      "iter": 1680,
+      "kind": "train",
+      "loss": 0.446
+    },
+    {
+      "iter": 1700,
+      "kind": "train",
+      "loss": 0.412
+    },
+    {
+      "iter": 1720,
+      "kind": "train",
+      "loss": 0.412
+    },
+    {
+      "iter": 1740,
+      "kind": "train",
+      "loss": 0.386
+    },
+    {
+      "iter": 1760,
+      "kind": "train",
+      "loss": 0.375
+    },
+    {
+      "iter": 1780,
+      "kind": "train",
+      "loss": 0.419
+    },
+    {
+      "iter": 1800,
+      "kind": "val",
+      "loss": 1.177
+    },
+    {
+      "iter": 1800,
+      "kind": "train",
+      "loss": 0.415
+    },
+    {
+      "iter": 1820,
+      "kind": "train",
+      "loss": 0.457
+    },
+    {
+      "iter": 1840,
+      "kind": "train",
+      "loss": 0.389
+    },
+    {
+      "iter": 1860,
+      "kind": "train",
+      "loss": 0.386
+    },
+    {
+      "iter": 1880,
+      "kind": "train",
+      "loss": 0.399
+    },
+    {
+      "iter": 1900,
+      "kind": "train",
+      "loss": 0.375
+    },
+    {
+      "iter": 1920,
+      "kind": "train",
+      "loss": 0.369
+    },
+    {
+      "iter": 1940,
+      "kind": "train",
+      "loss": 0.24
+    },
+    {
+      "iter": 1960,
+      "kind": "train",
+      "loss": 0.411
+    },
+    {
+      "iter": 1980,
+      "kind": "train",
+      "loss": 0.346
+    },
+    {
+      "iter": 2000,
+      "kind": "val",
+      "loss": 1.163
+    },
+    {
+      "iter": 2000,
+      "kind": "train",
+      "loss": 0.421
+    }
+  ],
+  "final_train_loss": 0.421,
+  "final_val_loss": 1.163,
+  "final_adapter": {
+    "path": "ckpt/q67/adapters",
+    "sha256": "63f8fbac58f37853d536c66175978ba2d1b8f85c8f49d02219caf23b935c9305",
+    "bytes": 39870300
+  },
+  "checkpoints": [
+    {
+      "iter": 200,
+      "optimizer_step": 50,
+      "path": "ckpt/q67/adapters/iter-0000200",
+      "file": "ckpt/q67/adapters/0000200_adapters.safetensors",
+      "sha256": "6d882f24134d4ccfdd8dd3ae5ebcf4164a4207e86bf68fa9162017685ba7c1f1",
+      "bytes": 39870300
+    },
+    {
+      "iter": 400,
+      "optimizer_step": 100,
+      "path": "ckpt/q67/adapters/iter-0000400",
+      "file": "ckpt/q67/adapters/0000400_adapters.safetensors",
+      "sha256": "e51dc166f71345e8d3452d584d7b7bb66a80dcf24ef07038e55db2294f81bff6",
+      "bytes": 39870300
+    },
+    {
+      "iter": 600,
+      "optimizer_step": 150,
+      "path": "ckpt/q67/adapters/iter-0000600",
+      "file": "ckpt/q67/adapters/0000600_adapters.safetensors",
+      "sha256": "3412d32130257935e6d4edc3ba16f0de140c6bc39cc3376de60eacbcbb359b70",
+      "bytes": 39870300
+    },
+    {
+      "iter": 800,
+      "optimizer_step": 200,
+      "path": "ckpt/q67/adapters/iter-0000800",
+      "file": "ckpt/q67/adapters/0000800_adapters.safetensors",
+      "sha256": "ea7f20e9d4e54527ac4f1dac1ebe6bcfe43726f3af26bec781c09b617e7a7970",
+      "bytes": 39870300
+    },
+    {
+      "iter": 1000,
+      "optimizer_step": 250,
+      "path": "ckpt/q67/adapters/iter-0001000",
+      "file": "ckpt/q67/adapters/0001000_adapters.safetensors",
+      "sha256": "a098cfaf7ef0b04328db7da32c7119fac86468629510dccd379b2d20e7b617a8",
+      "bytes": 39870300
+    },
+    {
+      "iter": 1200,
+      "optimizer_step": 300,
+      "path": "ckpt/q67/adapters/iter-0001200",
+      "file": "ckpt/q67/adapters/0001200_adapters.safetensors",
+      "sha256": "67d5bb73950a983518b9a9deb5cbf918935b8e996c6b3c25fdca751ad469dcf4",
+      "bytes": 39870300
+    },
+    {
+      "iter": 1400,
+      "optimizer_step": 350,
+      "path": "ckpt/q67/adapters/iter-0001400",
+      "file": "ckpt/q67/adapters/0001400_adapters.safetensors",
+      "sha256": "1f71fc8ee04c882dc326163dc9b4c6bd072ca809cb1fcd29e1153b893bfad798",
+      "bytes": 39870300
+    },
+    {
+      "iter": 1600,
+      "optimizer_step": 400,
+      "path": "ckpt/q67/adapters/iter-0001600",
+      "file": "ckpt/q67/adapters/0001600_adapters.safetensors",
+      "sha256": "31a940a6f92c248280af4b8ca8d459a554836fb4e1afefe2c23d9bf567859622",
+      "bytes": 39870300
+    },
+    {
+      "iter": 1800,
+      "optimizer_step": 450,
+      "path": "ckpt/q67/adapters/iter-0001800",
+      "file": "ckpt/q67/adapters/0001800_adapters.safetensors",
+      "sha256": "95e5be02b2cc5123334dac0d57ebc8f44dbb79ec5e5aabc83321df2b7900c59f",
+      "bytes": 39870300
+    },
+    {
+      "iter": 2000,
+      "optimizer_step": 500,
+      "path": "ckpt/q67/adapters/iter-0002000",
+      "file": "ckpt/q67/adapters/0002000_adapters.safetensors",
+      "sha256": "63f8fbac58f37853d536c66175978ba2d1b8f85c8f49d02219caf23b935c9305",
+      "bytes": 39870300
+    }
+  ],
+  "eval_command": "python3 eval.py --model ckpt/q67/adapters --base ckpt/base-q4 --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16"
+}

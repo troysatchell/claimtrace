@@ -1,0 +1,134 @@
+[2026-08-19 06:44:20] run_id=q33 commit=7e07ae13528a8e41abef368ddefd3ebaa55e6d72 base=ckpt/base-q4 n=33 seed=0
+[2026-08-19 06:44:20] args {"data": "data/dataset.jsonl", "n": 33, "run_id": null, "run_prefix": "q", "base": "ckpt/base-q4", "seed": 0, "valid_frac": 0.1, "valid_rows": 64, "dry_run": false, "iters": 2000, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 200, "steps_per_eval": 200, "steps_per_report": 20, "max_seq_length": 6144, "warmup": 25}
+[2026-08-19 06:44:22] {"dataset": "data/dataset.jsonl", "conversations_total": 300, "train_conversations": 33, "valid_conversations": 30, "train_rows": 357, "valid_rows": 64, "rows_dropped_over_max_seq_length": 0, "train_rows_by_final_shape": {"self_report": 128, "pressure": 93, "demonstration": 78, "ordinary": 58}, "train_tokens_total": 547677, "train_tokens_median": 1409, "train_tokens_max": 4295, "epochs_at_iters": 5.6}
+[2026-08-19 06:44:22] $ /Users/troy/anaconda3/bin/python3 -m mlx_lm lora -c ckpt/q33/lora_config.yaml
+[2026-08-19 06:44:23] [transformers] Disabling PyTorch because PyTorch >= 2.5 is required but found 2.0.1
+[2026-08-19 06:44:25] Loading configuration file ckpt/q33/lora_config.yaml
+[2026-08-19 06:44:25] Loading pretrained model
+[2026-08-19 06:44:25] Loading datasets
+[2026-08-19 06:44:25] Training
+[2026-08-19 06:44:25] Trainable parameters: 0.579% (9.961M/1720.575M)
+[2026-08-19 06:44:25] Starting training..., iters: 2000
+[2026-08-19 06:46:40] Iter 1: Val loss 3.242, Val took 134.315s
+[2026-08-19 06:48:35] Iter 20: Train loss 2.531, Learning Rate 8.000e-06, It/sec 0.174, Tokens/sec 45.298, Trained Tokens 5192, Peak mem 6.171 GB
+[2026-08-19 06:50:58] Iter 40: Train loss 1.445, Learning Rate 1.800e-05, It/sec 0.140, Tokens/sec 30.133, Trained Tokens 9501, Peak mem 6.205 GB
+[2026-08-19 06:54:35] Iter 60: Train loss 1.327, Learning Rate 2.800e-05, It/sec 0.093, Tokens/sec 23.056, Trained Tokens 14486, Peak mem 6.205 GB
+[2026-08-19 06:57:23] Iter 80: Train loss 1.311, Learning Rate 3.800e-05, It/sec 0.120, Tokens/sec 29.471, Trained Tokens 19392, Peak mem 6.763 GB
+[2026-08-19 07:00:16] Iter 100: Train loss 1.462, Learning Rate 4.800e-05, It/sec 0.116, Tokens/sec 25.962, Trained Tokens 23862, Peak mem 6.763 GB
+[2026-08-19 07:03:17] Iter 120: Train loss 1.277, Learning Rate 5.000e-05, It/sec 0.112, Tokens/sec 22.798, Trained Tokens 27932, Peak mem 6.763 GB
+[2026-08-19 07:05:40] Iter 140: Train loss 1.080, Learning Rate 4.997e-05, It/sec 0.140, Tokens/sec 26.732, Trained Tokens 31738, Peak mem 6.763 GB
+[2026-08-19 07:07:55] Iter 160: Train loss 1.222, Learning Rate 4.992e-05, It/sec 0.149, Tokens/sec 28.646, Trained Tokens 35581, Peak mem 6.763 GB
+[2026-08-19 07:10:47] Iter 180: Train loss 1.237, Learning Rate 4.986e-05, It/sec 0.117, Tokens/sec 31.690, Trained Tokens 40996, Peak mem 6.763 GB
+[2026-08-19 07:17:03] Iter 200: Val loss 1.191, Val took 175.962s
+[2026-08-19 07:17:04] Iter 200: Train loss 1.087, Learning Rate 4.977e-05, It/sec 0.100, Tokens/sec 23.788, Trained Tokens 45756, Peak mem 8.457 GB
+[2026-08-19 07:18:04] Iter 200: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0000200_adapters.safetensors.
+[2026-08-19 07:18:04] Iter 220: Train loss 1.057, Learning Rate 4.965e-05, It/sec 0.336, Tokens/sec 69.361, Trained Tokens 49885, Peak mem 8.457 GB
+[2026-08-19 07:19:04] Iter 240: Train loss 0.887, Learning Rate 4.952e-05, It/sec 0.334, Tokens/sec 61.190, Trained Tokens 53554, Peak mem 8.457 GB
+[2026-08-19 07:20:02] Iter 260: Train loss 1.079, Learning Rate 4.936e-05, It/sec 0.348, Tokens/sec 83.682, Trained Tokens 58366, Peak mem 8.457 GB
+[2026-08-19 07:21:09] Iter 280: Train loss 1.081, Learning Rate 4.918e-05, It/sec 0.301, Tokens/sec 70.590, Trained Tokens 63058, Peak mem 8.457 GB
+[2026-08-19 07:22:14] Iter 300: Train loss 1.165, Learning Rate 4.898e-05, It/sec 0.311, Tokens/sec 87.272, Trained Tokens 68678, Peak mem 8.457 GB
+[2026-08-19 07:23:06] Iter 320: Train loss 0.966, Learning Rate 4.876e-05, It/sec 0.382, Tokens/sec 75.824, Trained Tokens 72653, Peak mem 8.457 GB
+[2026-08-19 07:24:14] Iter 340: Train loss 0.974, Learning Rate 4.852e-05, It/sec 0.298, Tokens/sec 71.266, Trained Tokens 77434, Peak mem 8.457 GB
+[2026-08-19 07:25:05] Iter 360: Train loss 0.891, Learning Rate 4.826e-05, It/sec 0.391, Tokens/sec 81.393, Trained Tokens 81602, Peak mem 8.457 GB
+[2026-08-19 07:25:51] Iter 380: Train loss 0.668, Learning Rate 4.798e-05, It/sec 0.439, Tokens/sec 93.649, Trained Tokens 85868, Peak mem 8.457 GB
+[2026-08-19 07:27:38] Iter 400: Val loss 1.159, Val took 58.053s
+[2026-08-19 07:27:42] Iter 400: Train loss 0.676, Learning Rate 4.767e-05, It/sec 0.379, Tokens/sec 87.466, Trained Tokens 90488, Peak mem 8.457 GB
+[2026-08-19 07:28:32] Iter 400: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0000400_adapters.safetensors.
+[2026-08-19 07:28:32] Iter 420: Train loss 0.626, Learning Rate 4.735e-05, It/sec 0.401, Tokens/sec 85.177, Trained Tokens 94736, Peak mem 8.457 GB
+[2026-08-19 07:29:37] Iter 440: Train loss 0.612, Learning Rate 4.701e-05, It/sec 0.306, Tokens/sec 67.847, Trained Tokens 99166, Peak mem 8.457 GB
+[2026-08-19 07:30:17] Iter 460: Train loss 0.701, Learning Rate 4.665e-05, It/sec 0.495, Tokens/sec 106.520, Trained Tokens 103469, Peak mem 8.457 GB
+[2026-08-19 07:31:01] Iter 480: Train loss 0.770, Learning Rate 4.627e-05, It/sec 0.458, Tokens/sec 105.967, Trained Tokens 108094, Peak mem 8.457 GB
+[2026-08-19 07:31:43] Iter 500: Train loss 0.595, Learning Rate 4.587e-05, It/sec 0.472, Tokens/sec 94.220, Trained Tokens 112090, Peak mem 8.457 GB
+[2026-08-19 07:32:43] Iter 520: Train loss 0.659, Learning Rate 4.545e-05, It/sec 0.337, Tokens/sec 82.819, Trained Tokens 117002, Peak mem 8.457 GB
+[2026-08-19 07:33:38] Iter 540: Train loss 0.658, Learning Rate 4.502e-05, It/sec 0.360, Tokens/sec 88.968, Trained Tokens 121946, Peak mem 8.457 GB
+[2026-08-19 07:34:31] Iter 560: Train loss 0.653, Learning Rate 4.456e-05, It/sec 0.376, Tokens/sec 84.435, Trained Tokens 126440, Peak mem 8.457 GB
+[2026-08-19 07:35:33] Iter 580: Train loss 0.576, Learning Rate 4.409e-05, It/sec 0.328, Tokens/sec 83.787, Trained Tokens 131553, Peak mem 8.457 GB
+[2026-08-19 07:37:19] Iter 600: Val loss 1.130, Val took 58.169s
+[2026-08-19 07:37:21] Iter 600: Train loss 0.740, Learning Rate 4.361e-05, It/sec 0.394, Tokens/sec 87.395, Trained Tokens 135993, Peak mem 8.457 GB
+[2026-08-19 07:38:18] Iter 600: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0000600_adapters.safetensors.
+[2026-08-19 07:38:18] Iter 620: Train loss 0.707, Learning Rate 4.311e-05, It/sec 0.357, Tokens/sec 79.812, Trained Tokens 140468, Peak mem 8.457 GB
+[2026-08-19 07:39:04] Iter 640: Train loss 0.630, Learning Rate 4.259e-05, It/sec 0.430, Tokens/sec 81.209, Trained Tokens 144249, Peak mem 8.457 GB
+[2026-08-19 07:39:57] Iter 660: Train loss 0.637, Learning Rate 4.206e-05, It/sec 0.378, Tokens/sec 86.067, Trained Tokens 148804, Peak mem 8.457 GB
+[2026-08-19 07:40:50] Iter 680: Train loss 0.697, Learning Rate 4.151e-05, It/sec 0.376, Tokens/sec 91.682, Trained Tokens 153685, Peak mem 8.457 GB
+[2026-08-19 07:41:28] Iter 700: Train loss 0.738, Learning Rate 4.095e-05, It/sec 0.532, Tokens/sec 133.873, Trained Tokens 158721, Peak mem 8.457 GB
+[2026-08-19 07:42:06] Iter 720: Train loss 0.587, Learning Rate 4.038e-05, It/sec 0.520, Tokens/sec 118.784, Trained Tokens 163286, Peak mem 8.457 GB
+[2026-08-19 07:42:57] Iter 740: Train loss 0.379, Learning Rate 3.979e-05, It/sec 0.394, Tokens/sec 89.883, Trained Tokens 167844, Peak mem 8.457 GB
+[2026-08-19 07:43:58] Iter 760: Train loss 0.249, Learning Rate 3.920e-05, It/sec 0.327, Tokens/sec 65.826, Trained Tokens 171876, Peak mem 8.457 GB
+[2026-08-19 07:45:29] Iter 780: Train loss 0.294, Learning Rate 3.859e-05, It/sec 0.320, Tokens/sec 68.794, Trained Tokens 176175, Peak mem 8.457 GB
+[2026-08-19 08:01:54] Iter 800: Val loss 1.332, Val took 62.255s
+[2026-08-19 08:01:55] Iter 800: Train loss 0.299, Learning Rate 3.797e-05, It/sec 0.238, Tokens/sec 58.165, Trained Tokens 181071, Peak mem 8.457 GB
+[2026-08-19 08:02:54] Iter 800: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0000800_adapters.safetensors.
+[2026-08-19 08:02:54] Iter 820: Train loss 0.393, Learning Rate 3.734e-05, It/sec 0.336, Tokens/sec 78.745, Trained Tokens 185764, Peak mem 8.457 GB
+[2026-08-19 08:03:47] Iter 840: Train loss 0.310, Learning Rate 3.669e-05, It/sec 0.378, Tokens/sec 90.659, Trained Tokens 190557, Peak mem 8.457 GB
+[2026-08-19 08:04:46] Iter 860: Train loss 0.287, Learning Rate 3.605e-05, It/sec 0.341, Tokens/sec 72.513, Trained Tokens 194811, Peak mem 8.457 GB
+[2026-08-19 08:05:27] Iter 880: Train loss 0.307, Learning Rate 3.539e-05, It/sec 0.485, Tokens/sec 102.166, Trained Tokens 199021, Peak mem 8.457 GB
+[2026-08-19 08:06:21] Iter 900: Train loss 0.391, Learning Rate 3.472e-05, It/sec 0.368, Tokens/sec 88.998, Trained Tokens 203857, Peak mem 8.457 GB
+[2026-08-19 08:07:08] Iter 920: Train loss 0.356, Learning Rate 3.405e-05, It/sec 0.430, Tokens/sec 108.138, Trained Tokens 208881, Peak mem 8.457 GB
+[2026-08-19 08:07:55] Iter 940: Train loss 0.262, Learning Rate 3.337e-05, It/sec 0.427, Tokens/sec 83.025, Trained Tokens 212767, Peak mem 8.457 GB
+[2026-08-19 08:08:45] Iter 960: Train loss 0.342, Learning Rate 3.268e-05, It/sec 0.397, Tokens/sec 87.723, Trained Tokens 217185, Peak mem 8.457 GB
+[2026-08-19 08:09:32] Iter 980: Train loss 0.279, Learning Rate 3.199e-05, It/sec 0.423, Tokens/sec 92.670, Trained Tokens 221563, Peak mem 8.457 GB
+[2026-08-19 08:11:38] Iter 1000: Val loss 1.352, Val took 62.243s
+[2026-08-19 08:11:42] Iter 1000: Train loss 0.414, Learning Rate 3.130e-05, It/sec 0.296, Tokens/sec 77.210, Trained Tokens 226788, Peak mem 8.457 GB
+[2026-08-19 08:12:25] Iter 1000: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0001000_adapters.safetensors.
+[2026-08-19 08:12:25] Iter 1020: Train loss 0.361, Learning Rate 3.060e-05, It/sec 0.464, Tokens/sec 101.466, Trained Tokens 231161, Peak mem 8.457 GB
+[2026-08-19 08:13:20] Iter 1040: Train loss 0.280, Learning Rate 2.990e-05, It/sec 0.368, Tokens/sec 72.591, Trained Tokens 235109, Peak mem 8.457 GB
+[2026-08-19 08:14:10] Iter 1060: Train loss 0.401, Learning Rate 2.919e-05, It/sec 0.396, Tokens/sec 109.105, Trained Tokens 240615, Peak mem 8.457 GB
+[2026-08-19 08:15:06] Iter 1080: Train loss 0.226, Learning Rate 2.849e-05, It/sec 0.358, Tokens/sec 73.747, Trained Tokens 244737, Peak mem 8.457 GB
+[2026-08-19 08:16:06] Iter 1100: Train loss 0.129, Learning Rate 2.778e-05, It/sec 0.332, Tokens/sec 76.724, Trained Tokens 249355, Peak mem 8.457 GB
+[2026-08-19 08:16:43] Iter 1120: Train loss 0.111, Learning Rate 2.708e-05, It/sec 0.546, Tokens/sec 112.437, Trained Tokens 253472, Peak mem 8.457 GB
+[2026-08-19 08:17:39] Iter 1140: Train loss 0.136, Learning Rate 2.637e-05, It/sec 0.359, Tokens/sec 77.406, Trained Tokens 257783, Peak mem 8.457 GB
+[2026-08-19 08:18:44] Iter 1160: Train loss 0.113, Learning Rate 2.566e-05, It/sec 0.306, Tokens/sec 81.315, Trained Tokens 263100, Peak mem 8.457 GB
+[2026-08-19 08:19:39] Iter 1180: Train loss 0.174, Learning Rate 2.496e-05, It/sec 0.365, Tokens/sec 91.936, Trained Tokens 268139, Peak mem 8.457 GB
+[2026-08-19 08:21:28] Iter 1200: Val loss 1.614, Val took 61.665s
+[2026-08-19 08:21:30] Iter 1200: Train loss 0.099, Learning Rate 2.426e-05, It/sec 0.406, Tokens/sec 83.041, Trained Tokens 272230, Peak mem 8.457 GB
+[2026-08-19 08:22:26] Iter 1200: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0001200_adapters.safetensors.
+[2026-08-19 08:22:26] Iter 1220: Train loss 0.158, Learning Rate 2.356e-05, It/sec 0.356, Tokens/sec 82.227, Trained Tokens 276844, Peak mem 8.457 GB
+[2026-08-19 08:23:24] Iter 1240: Train loss 0.132, Learning Rate 2.287e-05, It/sec 0.345, Tokens/sec 86.742, Trained Tokens 281877, Peak mem 8.457 GB
+[2026-08-19 08:24:29] Iter 1260: Train loss 0.137, Learning Rate 2.218e-05, It/sec 0.310, Tokens/sec 73.528, Trained Tokens 286617, Peak mem 8.457 GB
+[2026-08-19 08:25:28] Iter 1280: Train loss 0.181, Learning Rate 2.149e-05, It/sec 0.338, Tokens/sec 83.572, Trained Tokens 291565, Peak mem 8.497 GB
+[2026-08-19 08:26:19] Iter 1300: Train loss 0.089, Learning Rate 2.082e-05, It/sec 0.391, Tokens/sec 69.567, Trained Tokens 295124, Peak mem 8.497 GB
+[2026-08-19 08:27:07] Iter 1320: Train loss 0.110, Learning Rate 2.015e-05, It/sec 0.413, Tokens/sec 88.860, Trained Tokens 299422, Peak mem 8.497 GB
+[2026-08-19 08:27:57] Iter 1340: Train loss 0.083, Learning Rate 1.948e-05, It/sec 0.405, Tokens/sec 74.738, Trained Tokens 303115, Peak mem 8.497 GB
+[2026-08-19 08:28:39] Iter 1360: Train loss 0.153, Learning Rate 1.882e-05, It/sec 0.476, Tokens/sec 119.501, Trained Tokens 308136, Peak mem 8.497 GB
+[2026-08-19 08:29:49] Iter 1380: Train loss 0.156, Learning Rate 1.818e-05, It/sec 0.283, Tokens/sec 70.941, Trained Tokens 313141, Peak mem 8.497 GB
+[2026-08-19 08:31:51] Iter 1400: Val loss 1.673, Val took 64.469s
+[2026-08-19 08:31:51] Iter 1400: Train loss 0.134, Learning Rate 1.754e-05, It/sec 0.349, Tokens/sec 88.702, Trained Tokens 318224, Peak mem 8.497 GB
+[2026-08-19 08:32:38] Iter 1400: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0001400_adapters.safetensors.
+[2026-08-19 08:32:38] Iter 1420: Train loss 0.117, Learning Rate 1.691e-05, It/sec 0.423, Tokens/sec 79.416, Trained Tokens 321975, Peak mem 8.497 GB
+[2026-08-19 08:33:36] Iter 1440: Train loss 0.064, Learning Rate 1.629e-05, It/sec 0.350, Tokens/sec 71.411, Trained Tokens 326059, Peak mem 8.497 GB
+[2026-08-19 08:34:26] Iter 1460: Train loss 0.041, Learning Rate 1.568e-05, It/sec 0.401, Tokens/sec 77.052, Trained Tokens 329898, Peak mem 8.497 GB
+[2026-08-19 08:35:06] Iter 1480: Train loss 0.043, Learning Rate 1.509e-05, It/sec 0.489, Tokens/sec 105.328, Trained Tokens 334209, Peak mem 8.497 GB
+[2026-08-19 08:36:07] Iter 1500: Train loss 0.066, Learning Rate 1.450e-05, It/sec 0.329, Tokens/sec 79.877, Trained Tokens 339067, Peak mem 8.497 GB
+[2026-08-19 08:37:10] Iter 1520: Train loss 0.075, Learning Rate 1.393e-05, It/sec 0.318, Tokens/sec 83.939, Trained Tokens 344347, Peak mem 8.497 GB
+[2026-08-19 08:38:05] Iter 1540: Train loss 0.066, Learning Rate 1.338e-05, It/sec 0.363, Tokens/sec 94.710, Trained Tokens 349564, Peak mem 8.497 GB
+[2026-08-19 08:39:04] Iter 1560: Train loss 0.047, Learning Rate 1.283e-05, It/sec 0.342, Tokens/sec 71.310, Trained Tokens 353733, Peak mem 8.497 GB
+[2026-08-19 08:39:52] Iter 1580: Train loss 0.043, Learning Rate 1.231e-05, It/sec 0.417, Tokens/sec 88.120, Trained Tokens 357960, Peak mem 8.497 GB
+[2026-08-19 08:41:29] Iter 1600: Val loss 1.930, Val took 59.814s
+[2026-08-19 08:41:31] Iter 1600: Train loss 0.060, Learning Rate 1.179e-05, It/sec 0.512, Tokens/sec 131.199, Trained Tokens 363082, Peak mem 8.497 GB
+[2026-08-19 08:42:27] Iter 1600: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0001600_adapters.safetensors.
+[2026-08-19 08:42:27] Iter 1620: Train loss 0.046, Learning Rate 1.129e-05, It/sec 0.355, Tokens/sec 80.374, Trained Tokens 367609, Peak mem 8.497 GB
+[2026-08-19 08:43:25] Iter 1640: Train loss 0.056, Learning Rate 1.081e-05, It/sec 0.346, Tokens/sec 84.431, Trained Tokens 372484, Peak mem 8.497 GB
+[2026-08-19 08:44:15] Iter 1660: Train loss 0.036, Learning Rate 1.035e-05, It/sec 0.399, Tokens/sec 84.858, Trained Tokens 376735, Peak mem 8.497 GB
+[2026-08-19 08:45:01] Iter 1680: Train loss 0.047, Learning Rate 9.896e-06, It/sec 0.434, Tokens/sec 98.042, Trained Tokens 381258, Peak mem 8.497 GB
+[2026-08-19 08:45:58] Iter 1700: Train loss 0.037, Learning Rate 9.465e-06, It/sec 0.349, Tokens/sec 78.893, Trained Tokens 385777, Peak mem 8.497 GB
+[2026-08-19 08:46:47] Iter 1720: Train loss 0.048, Learning Rate 9.051e-06, It/sec 0.411, Tokens/sec 92.746, Trained Tokens 390291, Peak mem 8.497 GB
+[2026-08-19 08:47:51] Iter 1740: Train loss 0.043, Learning Rate 8.656e-06, It/sec 0.314, Tokens/sec 64.928, Trained Tokens 394420, Peak mem 8.497 GB
+[2026-08-19 08:48:42] Iter 1760: Train loss 0.035, Learning Rate 8.279e-06, It/sec 0.393, Tokens/sec 87.422, Trained Tokens 398872, Peak mem 8.497 GB
+[2026-08-19 08:49:30] Iter 1780: Train loss 0.045, Learning Rate 7.921e-06, It/sec 0.411, Tokens/sec 90.827, Trained Tokens 403297, Peak mem 8.497 GB
+[2026-08-19 08:51:11] Iter 1800: Val loss 1.954, Val took 59.804s
+[2026-08-19 08:51:15] Iter 1800: Train loss 0.038, Learning Rate 7.582e-06, It/sec 0.447, Tokens/sec 109.331, Trained Tokens 408192, Peak mem 8.497 GB
+[2026-08-19 08:52:00] Iter 1800: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0001800_adapters.safetensors.
+[2026-08-19 08:52:00] Iter 1820: Train loss 0.023, Learning Rate 7.263e-06, It/sec 0.445, Tokens/sec 111.524, Trained Tokens 413208, Peak mem 8.497 GB
+[2026-08-19 08:52:43] Iter 1840: Train loss 0.026, Learning Rate 6.964e-06, It/sec 0.463, Tokens/sec 98.553, Trained Tokens 417469, Peak mem 8.497 GB
+[2026-08-19 08:53:43] Iter 1860: Train loss 0.031, Learning Rate 6.686e-06, It/sec 0.335, Tokens/sec 79.967, Trained Tokens 422240, Peak mem 8.497 GB
+[2026-08-19 08:54:28] Iter 1880: Train loss 0.020, Learning Rate 6.428e-06, It/sec 0.442, Tokens/sec 90.706, Trained Tokens 426348, Peak mem 8.497 GB
+[2026-08-19 08:55:34] Iter 1900: Train loss 0.034, Learning Rate 6.190e-06, It/sec 0.303, Tokens/sec 77.419, Trained Tokens 431458, Peak mem 8.497 GB
+[2026-08-19 08:56:28] Iter 1920: Train loss 0.021, Learning Rate 5.974e-06, It/sec 0.370, Tokens/sec 80.759, Trained Tokens 435824, Peak mem 8.497 GB
+[2026-08-19 08:57:12] Iter 1940: Train loss 0.043, Learning Rate 5.779e-06, It/sec 0.455, Tokens/sec 118.174, Trained Tokens 441018, Peak mem 8.497 GB
+[2026-08-19 08:58:43] Iter 1960: Train loss 0.022, Learning Rate 5.605e-06, It/sec 0.438, Tokens/sec 97.916, Trained Tokens 445493, Peak mem 8.497 GB
+[2026-08-19 09:01:06] Iter 1980: Train loss 0.018, Learning Rate 5.453e-06, It/sec 0.308, Tokens/sec 68.411, Trained Tokens 449938, Peak mem 8.497 GB
+[2026-08-19 09:24:59] Iter 2000: Val loss 2.119, Val took 82.328s
+[2026-08-19 09:25:01] Iter 2000: Train loss 0.026, Learning Rate 5.323e-06, It/sec 0.208, Tokens/sec 44.760, Trained Tokens 454245, Peak mem 8.497 GB
+[2026-08-19 09:25:06] Iter 2000: Saved adapter weights to ckpt/q33/adapters/adapters.safetensors and ckpt/q33/adapters/0002000_adapters.safetensors.
+[2026-08-19 09:25:06] Saved final weights to ckpt/q33/adapters/adapters.safetensors.
+[2026-08-19 09:25:07] done: 10 checkpoints, final adapter sha256=f23ab9652614 wall=160.7min peak_mem=8.5GB

@@ -1,0 +1,30 @@
+model: ckpt/base-q4
+train: true
+data: ckpt/q67/data
+fine_tune_type: lora
+optimizer: adamw
+num_layers: 16
+batch_size: 1
+grad_accumulation_steps: 4
+iters: 2000
+learning_rate: 5.0e-05
+lr_schedule:
+  name: cosine_decay
+  warmup: 25
+  arguments:
+  - 5.0e-05
+  - 500
+  - 5.0e-06
+lora_parameters:
+  rank: 16
+  scale: 20.0
+  dropout: 0.05
+mask_prompt: true
+max_seq_length: 6144
+grad_checkpoint: true
+seed: 0
+steps_per_report: 20
+steps_per_eval: 200
+val_batches: -1
+save_every: 200
+adapter_path: ckpt/q67/adapters
