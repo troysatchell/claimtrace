@@ -109,7 +109,7 @@ python3 eval.py --rejudge results/base-vs-tuned --judge-model claude-sonnet-4-6 
 python3 sweep.py --runs q270,q135,q67,q33 --base-results results/base-vs-tuned --out results/data-efficiency-curve
 
 # 6. Publish (needs `hf auth login`), then eval the published revision
-python3 publish.py --run q270 --user <hf-user>
+python3 publish.py --run q270 --user troysaved       # done for n270: results/publish.json
 python3 eval.py --model <hf-user>/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl
 
 # Smoke test of the whole loop (~5 min); live demo
@@ -155,8 +155,11 @@ sentences differ from them (`dataset_spec.md`, "No eval leakage").
 - Eval-code commit: `results/<out>/run.json → eval_code_commit`.
 - Training commit and adapter sha256: `results/train/<run>/summary.json`.
 - HF model repo and revision, dataset repo and revision: `results/publish.json`, written by `publish.py`.
-  Not published yet: this machine is not logged in to Hugging Face. Run `hf auth login`, then
-  `python3 publish.py --run q270 --user <hf-user>`.
+  Published 2026-08-18 (run `n270`, bf16 LoRA; the QLoRA `q270` run is re-published to the same repos when it finishes):
+  - model `troysaved/claimtrace-qwen3-1.7b` @ `b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb` — https://huggingface.co/troysaved/claimtrace-qwen3-1.7b
+  - dataset `troysaved/claimtrace-ledger-dataset` @ `af3b6508351ce4e22682b666eecfdb481452a526` — https://huggingface.co/datasets/troysaved/claimtrace-ledger-dataset
+  - eval against the published revision: `python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-hf`
+- Inference demo (base vs tuned, live, multi-turn): `space/` — Gradio app + Dockerfile; runs as an HF Space or any container host (Railway/Render). Local equivalent: `compare.py`.
 
 ## Provenance
 

@@ -1,0 +1,11 @@
+{
+  "model_repo": "troysaved/claimtrace-qwen3-1.7b",
+  "model_revision": "b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb",
+  "dataset_repo": "troysaved/claimtrace-ledger-dataset",
+  "dataset_revision": "af3b6508351ce4e22682b666eecfdb481452a526",
+  "run": "n270",
+  "train_commit": "b505da9edde5d8dc3723a793a67733b5f5f012c1",
+  "adapter_sha256": "a9b58ae11816c5ee1f20f1e834bd66a1ae79fdf7733135ef47c2f145d2cf0fa0",
+  "published_by": "troysaved",
+  "timestamp": "2026-08-18T21:55:09-0500"
+}

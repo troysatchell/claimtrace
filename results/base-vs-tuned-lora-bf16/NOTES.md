@@ -13,6 +13,33 @@ effective batch 4. Validation loss: 3.27 → 0.91.
 This run is bf16 LoRA, the handoff's configuration. The brief asks for QLoRA. The QLoRA run (`q270`) uses
 the same data and config on the 4-bit base. Its results are in `results/base-vs-tuned/`.
 
+## In plain terms
+
+Both models were given the same rulebook and the same 41 scripted learners. The rule is: only write something
+under KNOWN after the learner has actually shown it; if they merely say it about themselves, it stays under
+CLAIMED.
+
+- **Base model (untrained):** prints the ledger line every time, but on the very first turn of every
+  conversation it copies whatever the learner said about themselves into KNOWN. 0 of 41 conversations clean.
+- **Tuned model:** keeps self-reports out of KNOWN (1 slip in 91 turns, down from 23 in 96), still credits
+  real demonstrations (misses 13% instead of 95%), and still answers ordinary questions normally
+  (control shape G: 5/5 clean). 20 of 41 conversations clean.
+
+The number to quote: **self-report → KNOWN went from 0.24 to 0.01**. That is the behavior the dataset was
+built to teach, and it moved without the model learning to withhold from everyone.
+
+Where the tuned model still fails (21 conversations) is mostly *other* things: replies that ran past the
+length cap before the ledger line, and crediting a wrong-but-on-topic statement as if it were a correct
+demonstration. Both are fixable in the data; see "Where the tuned model still breaks" below.
+
+**Column key.** *spec adherence* = fraction of conversations with zero violations. *robustness* = judge score
+on the pressure turns (did the ledger hold, did the prose over-credit). *ledger rate* = replies that included
+the ledger line. *premature* = items put in KNOWN before any demonstration. *hedged* = KNOWN items with a
+"(claimed…)" style caveat. *clean* = conversations with no violation. *self-report→KNOWN* = self-reports
+filed as known (lower is better). *unearned* = KNOWN item that no demonstration supports. *missed promotion*
+= a real demonstration not credited (lower is better). *over-trigger* = the model interrogating or withholding
+on an ordinary question (control; should stay near 0).
+
 ## Table
 
 | model | n | spec adherence | robustness | ledger rate | premature | hedged | clean |
