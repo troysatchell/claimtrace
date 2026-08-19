@@ -2,34 +2,6 @@
 
 ## Unticketed requirements (ticket dimension BLOCKED — every gap is unticketed)
 
-### SLM-R1 — PARTIAL
-- **Quote:** "A well-prompted base model can't already do it reliably."
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.1
-- **Meaning in code:** The chosen target behavior is one that a prompted frontier model measurably fails to hold over a long conversation — evidenced by the Prompt-Ceiling Ablation numbers (SLM-R11) showing a plateau below the reliability bar.
-- **What is missing:** Ablation completed at n=30 with numbers; the plateau is shown per model/strategy. Missing: an explicitly stated numeric reliability bar the plateau is compared against (ANALYSIS.md line 59 says this was 'not measured here'). Qwen3-1.7B base also fails outright (results/mvp/table.md line 3: 0/41 clean), which is the in-repo counterpart.
-- **Suggested scope:** State the reliability bar in one line in ANALYSIS.md/BRAINLIFT.md (e.g. 'self-report→KNOWN ≤ 1/12 on the biography turn and ≥ 27/30 clean conversations') and show the best-prompt numbers against it.
-
-### SLM-R11 — PARTIAL
-- **Quote:** "Before you write a line of fine-tuning code, prove (with numbers) that prompting has a real ceiling below your reliability bar."
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.2
-- **Meaning in code:** A completed Prompt-Ceiling Ablation run (script + results) exists, with a stated reliability bar and numbers showing the best prompting strategy stays below it.
-- **What is missing:** Completed run with numbers, committed 2026-08-17 (before train.py existed). Missing: the stated reliability bar (same gap as SLM-R1).
-- **Suggested scope:** Same as SLM-R1: one stated bar next to the table.
-
-### SLM-R16 — PARTIAL
-- **Quote:** "scored against your Behavior Spec using the same LLM-as-judge rubric you'll use later for base-vs-tuned comparison."
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.2
-- **Meaning in code:** The ablation's per-turn/per-example score comes from an LLM-as-judge call using the same rubric module the base-vs-tuned harness imports (single shared judge implementation).
-- **What is missing:** The ablation was scored deterministically (metacog_precheck.py); the base-vs-tuned run is judged by eval.py's rubric. Two rubric texts exist (eval.py JUDGE_PROMPT vs judge.py RUBRIC) and neither has been run over the ablation transcripts. Not the 'same LLM-as-judge rubric' across both.
-- **Suggested scope:** Run eval.py's judge (or judge.py) over results/full-30-combined/transcripts.jsonl to add judged spec-adherence/robustness per model×strategy, and make judge.py import eval.py's JUDGE_PROMPT so one rubric exists.
-
-### SLM-R17 — PARTIAL
-- **Quote:** "A results table (mean Spec-adherence and Robustness per model × strategy)"
-- **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.2
-- **Meaning in code:** The ablation emits a table with one row per model×strategy and columns for mean Spec-adherence and Robustness.
-- **What is missing:** Per model×strategy table exists but does not carry the two named metrics (mean Spec-adherence, Robustness). 'clean runs' is the deterministic adherence proxy; no robustness column.
-- **Suggested scope:** Add spec_adherence and robustness columns computed by the judge (see SLM-R16) to the ablation table.
-
 ### SLM-R19 — PARTIAL
 - **Quote:** "Train at least 4 checkpoints at different dataset sizes (e.g. a log-spaced sweep such as N, N/2, N/4, N/8 — choose and justify your own spacing)."
 - **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.2

@@ -1,0 +1,7 @@
+- `verify.precheck` (the ablation) was NOT re-run in this sweep (API spend); SLM-R1, R11, R14, R29 lean on the 2026-08-17 run logs `results/full-30-run.log`, `results/full-30-sonnet-run.log`.
+- Ticket dimension BLOCKED: `tickets.project` is null (the Linear team spans unrelated projects). Every row's ticket cell reads `BLOCKED` — never checked, not "checked, none".
+- The judge column in `results/mvp` was filled by `eval.py --rejudge` after generation, with `claude-sonnet-4-6`, because both API keys were dead when the eval ran (Anthropic key invalid at the time, Moonshot account out of balance). Generation is greedy, so the transcripts are the frozen record; the judge input was changed from pressure-only excerpts to the full transcript with `[PRESSURE]` markers (recorded in `run.json → judge_input`).
+- The smoke loop's *generate* step reused the committed 6-conversation batch (`data/smoke-v2`) for the same key reason; train and eval steps ran live.
+- The dataset was generated with `kimi-k3` (`--teacher`), not the pinned `claude-sonnet-4-6`; recorded in `data/drop_report.json`.
+- 7 rows are statically traced only (IMPLEMENTED-UNVERIFIED); 1 row (SLM-R7) remains ASSUMED pending the yes/no ruling in `interpretations.md`.
+- No database or external state was written; the sweep ran read-only commands plus the training/eval/smoke jobs whose outputs are committed artifacts.
