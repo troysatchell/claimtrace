@@ -293,7 +293,7 @@ def train_once(args, run_id):
         "final_val_loss": next((l["loss"] for l in reversed(losses) if l["kind"] == "val"), None),
         "final_adapter": {"path": str(adapter_dir), "sha256": sha256(final), "bytes": final.stat().st_size},
         "checkpoints": ckpts,
-        "eval_command": f"python3 eval.py --model {adapter_dir} --base {args.base} --eval-set metacog_scenarios.jsonl --out results/mvp",
+        "eval_command": f"python3 eval.py --model {adapter_dir} --base {args.base} --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16",
     }
     (results_dir / "summary.json").write_text(json.dumps(summary, indent=2))
     log(f"done: {len(ckpts)} checkpoints, final adapter sha256={summary['final_adapter']['sha256'][:12]} "

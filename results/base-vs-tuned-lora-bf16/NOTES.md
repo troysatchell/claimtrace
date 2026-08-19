@@ -4,14 +4,14 @@ Model: Qwen3-1.7B. Eval set: `metacog_scenarios.jsonl` v5, 41 scenarios, 498 tur
 
 Command:
 
-    python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp
+    python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16
 
 Eval-code commit: `b505da9` (`run.json`). Training commit: `b505da9`; adapter sha256 in
 `results/train/n270/summary.json`. Training: 270 conversations, 2,982 prefix rows, 500 optimizer steps,
 effective batch 4. Validation loss: 3.27 → 0.91.
 
 This run is bf16 LoRA, the handoff's configuration. The brief asks for QLoRA. The QLoRA run (`q270`) uses
-the same data and config on the 4-bit base. Its results are in `results/mvp-qlora/`.
+the same data and config on the 4-bit base. Its results are in `results/base-vs-tuned/`.
 
 ## Table
 

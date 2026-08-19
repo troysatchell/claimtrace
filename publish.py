@@ -91,7 +91,7 @@ Eval: `python eval.py --model {model_repo} --base {args.base} --eval-set metacog
     (pathlib.Path("results") / "publish.json").write_text(json.dumps(out, indent=2))
     print(json.dumps(out, indent=2))
     print(f"\nEval against the published revision:\n  python eval.py --model {model_repo} "
-          f"--base {args.base} --eval-set metacog_scenarios.jsonl --out results/mvp-hf", file=sys.stderr)
+          f"--base {args.base} --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-hf", file=sys.stderr)
 
 
 if __name__ == "__main__":

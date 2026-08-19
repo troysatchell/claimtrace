@@ -2,7 +2,7 @@
 """Data-efficiency curve: eval every sweep run on the same set, tabulate and plot vs N.
 
     python train.py --sweep 270,135,67,33          # identical config, only N varies
-    python sweep.py --runs n270,n135,n67,n33 --base-results results/mvp
+    python sweep.py --runs n270,n135,n67,n33 --base-results results/base-vs-tuned-lora-bf16
 
 For each run it calls `eval.py --model ckpt/<run>/adapters ...` (skipped if
 results/sweep/<run>/run.json already exists), then reads run.json + results/train/<run>/
@@ -22,7 +22,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--runs", required=True, help="comma-separated run ids under ckpt/ and results/train/")
     ap.add_argument("--eval-set", default="metacog_scenarios.jsonl")
-    ap.add_argument("--base-results", default="results/mvp", help="eval.py --out dir that has a base row")
+    ap.add_argument("--base-results", default="results/base-vs-tuned-lora-bf16", help="eval.py --out dir that has a base row")
     ap.add_argument("--out", default="results/sweep")
     ap.add_argument("--judge-model", default=None)
     ap.add_argument("--no-judge", action="store_true")

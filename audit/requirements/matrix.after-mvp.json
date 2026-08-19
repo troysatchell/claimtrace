@@ -26,17 +26,17 @@
       ],
       "evidence": [
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 28,
           "note": "'The residual: early self-report \u2192 KNOWN' \u2014 best prompt still files the biography under KNOWN (Sonnet 10/12, Kimi 5/12)"
         },
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 57,
           "note": "'Establishes (n=30, 5 shapes, 2 families): a specific, nameable failure ... survives'"
         },
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 83,
           "note": "stated reliability bar; best prompted cell sits below it"
         }
@@ -190,23 +190,23 @@
       ],
       "evidence": [
         {
-          "file": "results/mvp/table.md",
+          "file": "results/base-vs-tuned-lora-bf16/table.md",
           "line": 3,
           "note": "base: spec adherence 0.00, 0/41 clean"
         },
         {
-          "file": "results/mvp/table.md",
+          "file": "results/base-vs-tuned-lora-bf16/table.md",
           "line": 4,
           "note": "tuned: 0.49, 20/41 clean"
         },
         {
-          "file": "results/mvp/NOTES.md",
+          "file": "results/base-vs-tuned-lora-bf16/NOTES.md",
           "line": 31,
           "note": "format-vs-provenance analysis"
         }
       ],
       "verification": {
-        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
         "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
       },
       "interpretation": null,
@@ -303,7 +303,7 @@
         }
       ],
       "verification": {
-        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
         "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
       },
       "interpretation": null,
@@ -319,17 +319,17 @@
       ],
       "evidence": [
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 5,
           "note": "results table, 6 cells \u00d7 30 scenarios"
         },
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 28,
           "note": "residual paragraph with numbers"
         },
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 83,
           "note": "stated reliability bar"
         }
@@ -403,7 +403,7 @@
           "note": "structured"
         },
         {
-          "file": "results/full-30-combined/table.md",
+          "file": "results/prompt-ceiling-ablation/table.md",
           "line": 3,
           "note": "6 model\u00d7strategy rows"
         }
@@ -427,7 +427,7 @@
           "note": "--max-scenarios (default all)"
         },
         {
-          "file": "results/full-30-combined/table.md",
+          "file": "results/prompt-ceiling-ablation/table.md",
           "line": 3,
           "note": "n=30 per cell"
         }
@@ -454,7 +454,7 @@
           "note": "judges the ablation transcripts with eval.py's JUDGE_PROMPT"
         },
         {
-          "file": "results/full-30-combined/judged_table.md",
+          "file": "results/prompt-ceiling-ablation/judged_table.md",
           "line": 1,
           "note": "per model\u00d7strategy judged table, rubric named"
         },
@@ -465,7 +465,7 @@
         }
       ],
       "verification": {
-        "command": "python3 ablation_judge.py --transcripts results/full-30-combined/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/full-30-combined --judge-model claude-sonnet-4-6",
+        "command": "python3 ablation_judge.py --transcripts results/prompt-ceiling-ablation/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/prompt-ceiling-ablation --judge-model claude-sonnet-4-6",
         "result_excerpt": "judging 180 conversations with claude-sonnet-4-6 (0 cached)\n| sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | ... |\n| kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | ... |"
       },
       "interpretation": null,
@@ -481,18 +481,18 @@
       ],
       "evidence": [
         {
-          "file": "results/full-30-combined/judged_table.md",
+          "file": "results/prompt-ceiling-ablation/judged_table.md",
           "line": 3,
           "note": "table: spec adherence + robustness per model\u00d7strategy"
         },
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 67,
           "note": "judged columns section"
         }
       ],
       "verification": {
-        "command": "python3 ablation_judge.py --transcripts results/full-30-combined/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/full-30-combined --judge-model claude-sonnet-4-6",
+        "command": "python3 ablation_judge.py --transcripts results/prompt-ceiling-ablation/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/prompt-ceiling-ablation --judge-model claude-sonnet-4-6",
         "result_excerpt": "judging 180 conversations with claude-sonnet-4-6 (0 cached)\n| sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | ... |\n| kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | ... |"
       },
       "interpretation": null,
@@ -508,7 +508,7 @@
       ],
       "evidence": [
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 28,
           "note": "'The residual: early self-report \u2192 KNOWN' \u2014 names the surviving failure mode with examples"
         },
@@ -571,7 +571,7 @@
           "note": "eval.py per run on the same --eval-set"
         },
         {
-          "file": "results/mvp/run.json",
+          "file": "results/base-vs-tuned-lora-bf16/run.json",
           "line": 1,
           "note": "n270 evaluated on metacog_scenarios.jsonl"
         }
@@ -603,7 +603,7 @@
       "verification": null,
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Ships with the sweep (results/sweep-qlora/curve.png).",
+      "suggested_scope": "Ships with the sweep (results/data-efficiency-curve/curve.png).",
       "notes": "Plotting code present; no curve produced yet."
     },
     {
@@ -622,7 +622,7 @@
       "verification": null,
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Fill in from results/sweep-qlora/table.md.",
+      "suggested_scope": "Fill in from results/data-efficiency-curve/table.md.",
       "notes": "Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report\u2192KNOWN'); N not yet named."
     },
     {
@@ -678,7 +678,7 @@
         }
       ],
       "verification": {
-        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
         "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
       },
       "interpretation": null,
@@ -699,13 +699,13 @@
           "note": "judge_transcripts.jsonl per-example rows with judge {held_ledger,no_backfill,failure_mode,reasoning}"
         },
         {
-          "file": "results/mvp/NOTES.md",
+          "file": "results/base-vs-tuned-lora-bf16/NOTES.md",
           "line": 20,
           "note": "36 judged per row"
         }
       ],
       "verification": {
-        "command": "python3 -c \"import json;rows=[json.loads(l) for l in open('results/mvp/judge_transcripts.jsonl')];print(len(rows), sum(1 for r in rows if r.get('judge') and r['judge'].get('reasoning')))\"",
+        "command": "python3 -c \"import json;rows=[json.loads(l) for l in open('results/base-vs-tuned-lora-bf16/judge_transcripts.jsonl')];print(len(rows), sum(1 for r in rows if r.get('judge') and r['judge'].get('reasoning')))\"",
         "result_excerpt": "82 72"
       },
       "interpretation": null,
@@ -745,7 +745,7 @@
       ],
       "evidence": [
         {
-          "file": "results/mvp/run.json",
+          "file": "results/base-vs-tuned-lora-bf16/run.json",
           "line": 2,
           "note": "eval_code_commit"
         },
@@ -915,12 +915,12 @@
       ],
       "evidence": [
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 1,
           "note": "ablation report: method, table, per-shape, residual paragraph, files"
         },
         {
-          "file": "results/full-30-combined/ANALYSIS.md",
+          "file": "results/prompt-ceiling-ablation/REPORT.md",
           "line": 67,
           "note": "judged columns + reliability bar"
         }
@@ -950,7 +950,7 @@
         }
       ],
       "verification": {
-        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
         "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
       },
       "interpretation": null,
@@ -982,7 +982,7 @@
         }
       ],
       "verification": {
-        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
         "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
       },
       "interpretation": null,
@@ -1009,7 +1009,7 @@
         }
       ],
       "verification": {
-        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
         "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
       },
       "interpretation": null,
@@ -1113,23 +1113,23 @@
       ],
       "evidence": [
         {
-          "file": "results/mvp/table.md",
+          "file": "results/base-vs-tuned-lora-bf16/table.md",
           "line": 3,
           "note": "base row"
         },
         {
-          "file": "results/mvp/table.md",
+          "file": "results/base-vs-tuned-lora-bf16/table.md",
           "line": 4,
           "note": "tuned row"
         },
         {
-          "file": "results/mvp/NOTES.md",
+          "file": "results/base-vs-tuned-lora-bf16/NOTES.md",
           "line": 13,
           "note": "table + provenance breakdown"
         }
       ],
       "verification": {
-        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
+        "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
         "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
       },
       "interpretation": null,
@@ -1145,7 +1145,7 @@
       ],
       "evidence": [
         {
-          "file": "results/mvp/NOTES.md",
+          "file": "results/base-vs-tuned-lora-bf16/NOTES.md",
           "line": 84,
           "note": "failure modes diagnosed from the MVP eval"
         },
@@ -1171,7 +1171,7 @@
       "verification": null,
       "interpretation": null,
       "assumption": null,
-      "suggested_scope": "Re-run eval.py on the v2-trained adapter; report delta vs results/mvp-qlora.",
+      "suggested_scope": "Re-run eval.py on the v2-trained adapter; report delta vs results/base-vs-tuned.",
       "notes": "Early-submission item; follows SLM-R43."
     },
     {
@@ -1187,7 +1187,7 @@
           "note": "second N trained"
         },
         {
-          "file": "results/mvp/run.json",
+          "file": "results/base-vs-tuned-lora-bf16/run.json",
           "line": 1,
           "note": "first N evaluated"
         }
@@ -1273,7 +1273,7 @@
       ],
       "evidence": [
         {
-          "file": "results/mvp/table.md",
+          "file": "results/base-vs-tuned-lora-bf16/table.md",
           "line": 3,
           "note": "own eval set"
         }
@@ -1445,8 +1445,8 @@
       "note": "API spend; the n=30 run logs of 2026-08-17 are results/full-30-run.log and results/full-30-sonnet-run.log"
     },
     {
-      "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp (16:05 CDT) + eval.py --rejudge results/mvp --rejudge-all --judge-model claude-sonnet-4-6",
-      "result": "exit 0 \u2014 results/mvp/table.md, judge_transcripts.jsonl (82 rows, 72 judged), run.json",
+      "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+      "result": "exit 0 \u2014 results/base-vs-tuned-lora-bf16/table.md, judge_transcripts.jsonl (82 rows, 72 judged), run.json",
       "bears_on": [
         "SLM-R6",
         "SLM-R10",
@@ -1516,8 +1516,8 @@
       "note": "HF push blocked until login"
     },
     {
-      "command": "python3 ablation_judge.py --transcripts results/full-30-combined/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/full-30-combined --judge-model claude-sonnet-4-6",
-      "result": "exit 0 \u2014 180 judged; results/full-30-combined/judged_table.md, judge_transcripts.jsonl",
+      "command": "python3 ablation_judge.py --transcripts results/prompt-ceiling-ablation/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/prompt-ceiling-ablation --judge-model claude-sonnet-4-6",
+      "result": "exit 0 \u2014 180 judged; results/prompt-ceiling-ablation/judged_table.md, judge_transcripts.jsonl",
       "bears_on": [
         "SLM-R16",
         "SLM-R17",

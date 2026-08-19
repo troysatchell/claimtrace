@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Judge the prompt-ceiling ablation transcripts with the SAME rubric eval.py uses for base-vs-tuned.
 
-    python ablation_judge.py --transcripts results/full-30-combined/transcripts.jsonl \
-        --scenarios metacog_scenarios.jsonl --out results/full-30-combined
+    python ablation_judge.py --transcripts results/prompt-ceiling-ablation/transcripts.jsonl \
+        --scenarios metacog_scenarios.jsonl --out results/prompt-ceiling-ablation
 
 Writes <out>/judge_transcripts.jsonl (each ablation conversation + judge verdict) and
 <out>/judged_table.md: per model × strategy, mean Spec-adherence (deterministic: clean conversations

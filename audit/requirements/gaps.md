@@ -21,14 +21,14 @@
 - **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.2
 - **Meaning in code:** A curve (plot or table) of Spec adherence and Robustness vs dataset size N.
 - **What is missing:** Plotting code present; no curve produced yet.
-- **Suggested scope:** Ships with the sweep (results/sweep-qlora/curve.png).
+- **Suggested scope:** Ships with the sweep (results/data-efficiency-curve/curve.png).
 
 ### SLM-R22 — PARTIAL
 - **Quote:** "Identify and justify the smallest N that holds the behavior reliably — this becomes your stated "minimum viable dataset size" in your Brainlift."
 - **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.2
 - **Meaning in code:** A stated minimum viable N with justification tied to the curve, recorded in the Brainlift.
 - **What is missing:** Criterion stated ('smallest N within noise of N=270 on spec adherence and self-report→KNOWN'); N not yet named.
-- **Suggested scope:** Fill in from results/sweep-qlora/table.md.
+- **Suggested scope:** Fill in from results/data-efficiency-curve/table.md.
 
 ### SLM-R23 — MISSING
 - **Quote:** "Pushed to Hugging Face Hub (public repo) with the exact commit hash referenced in your submission. Graders pull and run it themselves."
@@ -63,7 +63,7 @@
 - **Source:** Train_Your_Own_Small_Learning_Model.pdf, p.4
 - **Meaning in code:** A second results table with an explicit delta vs the MVP numbers, plus the corresponding judge JSONL.
 - **What is missing:** Early-submission item; follows SLM-R43.
-- **Suggested scope:** Re-run eval.py on the v2-trained adapter; report delta vs results/mvp-qlora.
+- **Suggested scope:** Re-run eval.py on the v2-trained adapter; report delta vs results/base-vs-tuned.
 
 ### SLM-R45 — PARTIAL
 - **Quote:** "At least 2 points on your Data-Efficiency curve (see Required Ablations), or a documented reason you're behind."

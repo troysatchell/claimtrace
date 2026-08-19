@@ -59,8 +59,8 @@ Kimi K3 has more headroom overall (premature 59 → 30 → 15; clean 4 → 13 �
 - Not measured here: whether the residual is *narrow* enough that the ablation gate accepts it — the surviving failure mode is one turn-type in two of five shapes, and shapes B/C/E are near-clean under the best prompt.
 
 ## Files
-- `results/full-30-combined/transcripts.jsonl` — 180 conversations, every turn with raw KNOWN and violations
-- `results/full-30-combined/table.md`
+- `results/prompt-ceiling-ablation/transcripts.jsonl` — 180 conversations, every turn with raw KNOWN and violations
+- `results/prompt-ceiling-ablation/table.md`
 - `results/full-30-sonnet/` (Sonnet arm of record), `results/full-30/` (Kimi arm of record + demoted Opus rows; `RUN_NOTES.md` has the cap event and model change)
 - `metacog_scenarios.jsonl` (v3, 30), `build_scenarios.py`, `metacog_scenarios.LABELING.md`, `metacog_precheck.py`, `judge.py`
 
@@ -85,7 +85,7 @@ it files the self-report as KNOWN on at most 1 of the 12 biography turns and kee
 conversations clean. The best prompted cell (structured) reaches 5/12 and 17/30 on Kimi, 10/12 and 16/30
 on Sonnet.
 
-On these same 30 scenarios, the tuned Qwen3-1.7B (`results/mvp/`, LoRA n270) scores: spec adherence
+On these same 30 scenarios, the tuned Qwen3-1.7B (`results/base-vs-tuned-lora-bf16/`, LoRA n270) scores: spec adherence
 0.37 (11/30 clean), robustness 0.60 (30 judged), self-report→KNOWN 1/73 turns and 0/12 on the biography
 turns. Its base scores 0.00 / 0.97 (static ledger) / 23/78. So the tuned 1.7B model beats its base on every
 column, beats every prompted frontier cell on the target failure (0/12 vs 5–12/12), and does not yet reach

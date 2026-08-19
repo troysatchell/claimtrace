@@ -16,7 +16,7 @@ times it is repeated, or how you annotate it.*
 
 ## Evidence
 
-**1. Prompting has a ceiling** (`results/full-30-combined/ANALYSIS.md`, n=30). Claude Sonnet 5 and Kimi
+**1. Prompting has a ceiling** (`results/prompt-ceiling-ablation/REPORT.md`, n=30). Claude Sonnet 5 and Kimi
 K3, three strategies each. On the turn where the learner gives a biography line, the best strategy still
 files it under KNOWN: Sonnet 10/12, Kimi 5/12 (structured prompt); 12/12 for both under zero-shot and
 few-shot. Every other shape prompts to near-clean. This one does not.
@@ -28,7 +28,7 @@ rest. The same move fixed demonstrations: once the teacher receives the exact KN
 earns, the drop rate falls from 82% to 0%. Dataset: 300 conversations, 3,301 turns, 0.2% dropped, 0 hedged
 KNOWN items (`data/drop_report.json`).
 
-**3. Data → behavior held on the first run** (`results/mvp/NOTES.md`). Qwen3-1.7B, LoRA, 270 training
+**3. Data → behavior held on the first run** (`results/base-vs-tuned-lora-bf16/NOTES.md`). Qwen3-1.7B, LoRA, 270 training
 conversations, greedy decoding, 41 held-out scenarios (498 turns): the 30 ablation scenarios, 6 hard-variant
 scenarios in domains absent from training, and 5 ordinary-question controls.
 
@@ -58,7 +58,7 @@ Sweep: N = 270 / 135 / 67 / 33 training conversations, nested subsets, identical
 steps, effective batch 4). Log-2 spacing: the smallest point (~330 prefix rows, ≈5 epochs at the fixed
 step budget) is where a 1.7B model would start to memorize conversations instead of the rule; the largest
 point is everything we generated. The stated minimum viable N will be the smallest N whose spec adherence
-and self-report→KNOWN rate are within noise of N=270. Source: `results/sweep-qlora/table.md`, `curve.png`.
+and self-report→KNOWN rate are within noise of N=270. Source: `results/data-efficiency-curve/table.md`, `curve.png`.
 
 ## Failure modes → v2 data change (Early submission)
 

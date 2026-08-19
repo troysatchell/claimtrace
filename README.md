@@ -11,7 +11,7 @@ KNOWN: <what the learner has demonstrated> | CLAIMED: <what they assert but have
 ```
 
 Behavior Spec (two sentences): `BEHAVIOR_SPEC.md`. Thesis and evidence: `BRAINLIFT.md`. MVP numbers and
-analysis: `results/mvp/NOTES.md`.
+analysis: `results/base-vs-tuned-lora-bf16/NOTES.md`.
 
 The repo covers the full arc of the "Train Your Own Small Learning Model" brief: prove a prompting ceiling
 on frontier models, generate and filter a distilled dataset, QLoRA-tune a small open model, and compare
@@ -42,14 +42,14 @@ about a year"), the model files it under KNOWN:
 
 It does this under a system prompt that says "Never treat ASSERTED as DEMONSTRATED", and it annotates the
 item while filing it: `KNOWN: has balanced equations before (claimed, not yet shown here)`. Every other
-shape prompts to near-clean. Report: `results/full-30-combined/ANALYSIS.md`. Transcripts:
-`results/full-30-combined/transcripts.jsonl`. Judged columns (same rubric as `eval.py`):
-`results/full-30-combined/judged_table.md`.
+shape prompts to near-clean. Report: `results/prompt-ceiling-ablation/REPORT.md`. Transcripts:
+`results/prompt-ceiling-ablation/transcripts.jsonl`. Judged columns (same rubric as `eval.py`):
+`results/prompt-ceiling-ablation/judged_table.md`.
 
 ## Finding 2: the data removes it (MVP, base vs tuned)
 
 Qwen3-1.7B, 270 training conversations, 41 held-out scenarios (498 turns), greedy decoding.
-Full table and reading: `results/mvp/NOTES.md`.
+Full table and reading: `results/base-vs-tuned-lora-bf16/NOTES.md`.
 
 | | base | tuned |
 |---|---|---|
@@ -101,11 +101,11 @@ python3 train.py --n 270 --run-id q270                     # log: results/train/
 python3 train.py --sweep 135,67,33 --run-prefix q          # identical config; only N varies
 
 # 4. Eval, base vs tuned (table.md, judge_transcripts.jsonl, run.json)
-python3 eval.py --model ckpt/q270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/mvp-qlora
-python3 eval.py --rejudge results/mvp-qlora --judge-model claude-sonnet-4-6   # judge saved transcripts only
+python3 eval.py --model ckpt/q270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned
+python3 eval.py --rejudge results/base-vs-tuned --judge-model claude-sonnet-4-6   # judge saved transcripts only
 
 # 5. Data-efficiency curve
-python3 sweep.py --runs q270,q135,q67,q33 --base-results results/mvp-qlora --out results/sweep-qlora
+python3 sweep.py --runs q270,q135,q67,q33 --base-results results/base-vs-tuned --out results/data-efficiency-curve
 
 # 6. Publish (needs `hf auth login`), then eval the published revision
 python3 publish.py --run q270 --user <hf-user>
@@ -140,12 +140,12 @@ sentences differ from them (`dataset_spec.md`, "No eval leakage").
 
 | artifact | where |
 |---|---|
-| Ablation (n=30) | `results/full-30-combined/ANALYSIS.md`, `table.md`, `judged_table.md`, `transcripts.jsonl` |
+| Ablation (n=30) | `results/prompt-ceiling-ablation/REPORT.md`, `table.md`, `judged_table.md`, `transcripts.jsonl` |
 | Dataset v2 (300 conversations) + drop report + generation log | `data/` |
-| MVP base vs tuned, bf16 LoRA n270 | `results/mvp/table.md`, `NOTES.md`, `judge_transcripts.jsonl`, `run.json` |
-| MVP base vs tuned, QLoRA q270 (configuration of record) | `results/mvp-qlora/` (in progress) |
+| MVP base vs tuned, bf16 LoRA n270 | `results/base-vs-tuned-lora-bf16/table.md`, `NOTES.md`, `judge_transcripts.jsonl`, `run.json` |
+| MVP base vs tuned, QLoRA q270 (configuration of record) | `results/base-vs-tuned/` (in progress) |
 | Training logs, configs, adapter sha256s | `results/train/<run>/log.txt`, `lora_config.yaml`, `summary.json` |
-| Data-efficiency sweep (N = 270/135/67/33) | `results/sweep-qlora/table.md`, `curve.png` (in progress) |
+| Data-efficiency sweep (N = 270/135/67/33) | `results/data-efficiency-curve/table.md`, `curve.png` (in progress) |
 | Smoke loop log | `results/smoke-loop/log.txt` |
 | Requirements audit of the brief | `audit/requirements/REPORT.md` |
 
