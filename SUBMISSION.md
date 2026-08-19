@@ -14,13 +14,13 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 | Full loop generate → train → eval on a smoke batch | `smoke.sh`; log `results/smoke-loop/log.txt` | `./smoke.sh` (`--skip-generate` reuses `data/smoke-v2`) | ✅ |
 | First real dataset, generated and filtered | `data/dataset.jsonl` (300 conversations, 3,301 turns), `data/drop_report.json`, `data/generate.log`; spec `dataset_spec.md` | `python3 generate_dataset.py --n 300 --out data --workers 12` | ✅ |
 | First real QLoRA training run | `results/train/q270/log.txt`, `lora_config.yaml`, `summary.json` (adapter sha256, checkpoints); adapters in `ckpt/q270/adapters/` (not in git) | `python3 train.py --n 270 --run-id q270` | ✅ done 22:20 CDT (500 optimizer steps, val loss 3.24 → 0.94, adapter sha256 `6a6af4f1ac8e…`); bf16 LoRA twin `n270`: `results/train/n270/` |
-| First base-vs-tuned numbers + raw judge transcripts | QLoRA: `results/base-vs-tuned/` (table.md, judge_transcripts.jsonl, run.json, NOTES.md). bf16 LoRA: `results/base-vs-tuned-lora-bf16/` | eval command above | ⏳ QLoRA eval follows training; LoRA ✅ |
+| First base-vs-tuned numbers + raw judge transcripts | QLoRA (run of record): `results/base-vs-tuned/` (table.md, judge_transcripts.jsonl, run.json, NOTES.md) — spec adherence 0.00 → 0.49, self-report→KNOWN 0.24 → 0.07, clean 0/41 → 20/41. bf16 LoRA twin: `results/base-vs-tuned-lora-bf16/` | eval command above | ✅ both |
 
 ## Verification requirements
 
 | Requirement | Where | Status |
 |---|---|---|
-| Public model checkpoint on Hugging Face Hub + exact commit hash | `troysaved/claimtrace-qwen3-1.7b` @ `b6f68ec27c1b` (`results/publish.json`; run `n270`) | ✅ n270; re-publish `q270` when its eval lands (`python3 publish.py --run q270 --user troysaved`) |
+| Public model checkpoint on Hugging Face Hub + exact commit hash | `troysaved/claimtrace-qwen3-1.7b` @ `4de80c2a06ad` (run `q270`, QLoRA; `results/publish.json`); bf16 `n270` pinned at `b6f68ec27c1b` | ✅ |
 | `eval.py --model <hf-repo-id> --eval-set <path>` | `eval.py` (root) | ✅ |
 | Raw judge transcripts (score + reasoning per example) | `<dir>/judge_transcripts.jsonl` per eval run | ✅ |
 | Staff held-out eval set | any JSONL in the schema in `README.md` "Eval set schema"; only `say` is required per turn | ✅ (schema) |
@@ -34,7 +34,7 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 |---|---|---|
 | Failure mode diagnosed from MVP eval, resolved by a v2 dataset (not config) | Diagnosis: `results/base-vs-tuned-lora-bf16/NOTES.md` "Where the tuned model still breaks"; plan: `BRAINLIFT.md` "Failure modes → v2 data change" | ⏳ v2 dataset not generated |
 | Updated base-vs-tuned numbers with delta + raw judge transcripts | — | ⏳ |
-| ≥2 points on the Data-Efficiency curve | `results/data-efficiency-curve/table.md` | ⏳ sweep queued after q270 |
+| ≥2 points on the Data-Efficiency curve | `results/data-efficiency-curve/table.md`, `curve.png`, `sweep_summary.json`; per-N eval `q33/ q67/ q135/ q270→../base-vs-tuned`; training logs `results/train/q{33,67,135,270}/` | ✅ 4 points (N = 33/67/135/270, QLoRA, identical config) |
 | Draft artifacts: dataset shape, checkpoint, in-progress Brainlift | `dataset_spec.md`; `results/train/<run>/summary.json`; `BRAINLIFT.md` | ✅ |
 
 ## Final submission
@@ -44,8 +44,8 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 | Dataset published | `troysaved/claimtrace-ledger-dataset` @ `af3b650835` (`results/publish.json`) | ✅ |
 | Model on HF Hub + running inference demo | model ✅ (above); demo app `space/` (Gradio + Dockerfile, mirrors `compare.py`) | ⏳ hosting: HF Space needs PRO, or Railway/Render via `space/Dockerfile` |
 | Eval harness + results, own set and staff set | `eval.py`; `results/base-vs-tuned/` | ⏳ staff set when provided |
-| Full Data-Efficiency curve + justified minimum viable N | `results/data-efficiency-curve/table.md`, `curve.png`; `BRAINLIFT.md` "Minimum viable dataset size" | ⏳ |
-| Brainlift | `BRAINLIFT.md` | ✅ draft |
+| Full Data-Efficiency curve + justified minimum viable N | `results/data-efficiency-curve/table.md`, `curve.png`; `BRAINLIFT.md` "Minimum viable dataset size — N = 135" | ✅ 4 points; min viable N = 135 (N = 67 floor, N = 33 overfits) |
+| Brainlift | `BRAINLIFT.md` (thesis, 5 evidence items incl. QLoRA run and data-efficiency curve, min viable N, v2 plan) | ✅ draft; v2-delta section pending |
 | 3–5 minute demo video with a live grader prompt | link goes here | ⛔ |
 
 ## Requirements audit

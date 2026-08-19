@@ -89,7 +89,7 @@ def main():
         ax.set_xscale("log", base=2); ax.set_xticks(Ns); ax.set_xticklabels([str(n) for n in Ns])
         ax.set_xlabel("N training conversations (identical config, nested subsets)")
         ax.set_ylabel("rate"); ax.set_ylim(-0.02, 1.02); ax.grid(alpha=.3); ax.legend(fontsize=8)
-        ax.set_title("Data efficiency: Qwen3-1.7B LoRA on the ledger behavior")
+        ax.set_title("Data efficiency: Qwen3-1.7B QLoRA on the ledger behavior")
         fig.tight_layout(); fig.savefig(out / "curve.png", dpi=150)
         print(f"wrote {out / 'curve.png'}")
     except Exception as e:  # plot is a convenience; the table is the record

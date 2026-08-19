@@ -110,7 +110,7 @@ python3 eval.py --rejudge results/base-vs-tuned --judge-model claude-sonnet-4-6 
 python3 sweep.py --runs q270,q135,q67,q33 --base-results results/base-vs-tuned --out results/data-efficiency-curve
 
 # 6. Publish (needs `hf auth login`), then eval the published revision
-python3 publish.py --run q270 --user troysaved       # done for n270: results/publish.json
+python3 publish.py --run q270 --user troysaved       # done 2026-08-19: results/publish.json (rev 4de80c2a)
 python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl
 
 # Smoke test of the whole loop (~5 min); live demo
@@ -145,9 +145,9 @@ sentences differ from them (`dataset_spec.md`, "No eval leakage").
 | Ablation (n=30) | `results/prompt-ceiling-ablation/REPORT.md`, `table.md`, `judged_table.md`, `transcripts.jsonl` |
 | Dataset v2 (300 conversations) + drop report + generation log | `data/` |
 | MVP base vs tuned, bf16 LoRA n270 | `results/base-vs-tuned-lora-bf16/table.md`, `NOTES.md`, `judge_transcripts.jsonl`, `run.json` |
-| MVP base vs tuned, QLoRA q270 (configuration of record) | `results/base-vs-tuned/` (in progress) |
+| MVP base vs tuned, QLoRA q270 (configuration of record) | `results/base-vs-tuned/table.md`, `NOTES.md`, `judge_transcripts.jsonl`, `run.json` |
 | Training logs, configs, adapter sha256s | `results/train/<run>/log.txt`, `lora_config.yaml`, `summary.json` |
-| Data-efficiency sweep (N = 270/135/67/33) | `results/data-efficiency-curve/table.md`, `curve.png` (in progress) |
+| Data-efficiency sweep (N = 270/135/67/33) | `results/data-efficiency-curve/table.md`, `curve.png`, `sweep_summary.json`; per-N eval `q33/`, `q67/`, `q135/`; min viable N = 135 (`BRAINLIFT.md`) |
 | Smoke loop log | `results/smoke-loop/log.txt` |
 | Requirements audit of the brief | `audit/requirements/REPORT.md` |
 
@@ -156,8 +156,9 @@ sentences differ from them (`dataset_spec.md`, "No eval leakage").
 - Eval-code commit: `results/<out>/run.json → eval_code_commit`.
 - Training commit and adapter sha256: `results/train/<run>/summary.json`.
 - HF model repo and revision, dataset repo and revision: `results/publish.json`, written by `publish.py`.
-  Published 2026-08-18 (run `n270`, bf16 LoRA; the QLoRA `q270` run is re-published to the same repos when it finishes):
-  - model `troysaved/claimtrace-qwen3-1.7b` @ `b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb` — https://huggingface.co/troysaved/claimtrace-qwen3-1.7b
+  Published 2026-08-19 (run `q270`, QLoRA, the run of record; adapter sha256 `6a6af4f1ac8e…`):
+  - model `troysaved/claimtrace-qwen3-1.7b` @ `4de80c2a06ad27e020584a638661651cf3f8a39e` — https://huggingface.co/troysaved/claimtrace-qwen3-1.7b
+    (the bf16 LoRA `n270` run remains pinned at revision `b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb`)
   - dataset `troysaved/claimtrace-ledger-dataset` @ `af3b6508351ce4e22682b666eecfdb481452a526` — https://huggingface.co/datasets/troysaved/claimtrace-ledger-dataset
   - eval against the published revision: `python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-hf`
 - Inference demo (base vs tuned, live, multi-turn): `space/` — Gradio app + Dockerfile; runs as an HF Space or any container host (Railway/Render). Local equivalent: `compare.py`.

@@ -1,4 +1,4 @@
-# Brainlift — claimtrace (in progress, 2026-08-18)
+# Brainlift — claimtrace (in progress, 2026-08-19)
 
 ## Thesis
 
@@ -49,16 +49,53 @@ demonstrations and answers plain questions directly. Its robustness loss is one 
 know?" turn the prose over-credits while the ledger holds. The base's 0.97 is hollow: its ledger never
 changes at all.
 
-**4. Not yet shown.** The QLoRA run (the brief's configuration) is training; the LoRA row above is the bf16
-comparison. The data-efficiency curve is not done.
+**4. The same data → the same behavior on the 4-bit base** (`results/base-vs-tuned/NOTES.md`). QLoRA run `q270`
+(the brief's configuration): identical data and config on the 4-bit base. Spec adherence 0.49 (20/41 clean,
+same as bf16), self-report→KNOWN 0.24 → 0.07 (bf16: 0.01), demonstrations credited 0.88, control shape G 5/5
+clean, robustness 0.69. Quantizing the base for training cost a few provenance slips and nothing on spec
+adherence. Adapter sha256 `6a6af4f1ac8e…`, training commit `b505da9`, eval-code commit `fc1bc93`.
 
-## Minimum viable dataset size — pending
+**5. The behavior holds from N≈67 up; N=33 is where it comes apart** (`results/data-efficiency-curve/table.md`,
+`curve.png`). Four QLoRA checkpoints, nested subsets, identical config:
+
+| N (train convs) | rows | epochs | val loss | spec adherence | robustness | self-report→KNOWN | missed promotion | over-trigger | clean |
+|---|---|---|---|---|---|---|---|---|---|
+| 0 (base) | – | – | – | 0.00 | 0.97 | 0.24 | 0.95 | 0.00 | 0/41 |
+| 33 | 357 | 5.6 | 2.12 | 0.32 | 0.56 | 0.08 | 0.24 | 0.05 | 13/41 |
+| 67 | 723 | 2.8 | 1.16 | 0.39 | 0.61 | 0.04 | 0.14 | 0.00 | 16/41 |
+| 135 | 1,467 | 1.4 | 0.98 | 0.54 | 0.69 | 0.01 | 0.14 | 0.01 | 22/41 |
+| 270 | 2,982 | 0.7 | 0.94 | 0.49 | 0.69 | 0.07 | 0.12 | 0.04 | 20/41 |
+
+The provenance rule (self-report→KNOWN) is learned at every N — even 33 conversations take it from 0.24 to
+0.08. What N buys is everything around the rule: at 33 the model misses twice as many demonstrations as at
+270 (0.24 vs 0.12), over-triggers on ordinary questions (0.05), and its validation loss (2.12, 5.6 epochs
+over 357 rows) says it is memorizing conversations rather than the rule. From 67 up, missed promotion and
+over-trigger match N=270; spec adherence climbs 0.39 → 0.54 → 0.49 and robustness 0.61 → 0.69 → 0.69.
+
+## Minimum viable dataset size — N = 135
 
 Sweep: N = 270 / 135 / 67 / 33 training conversations, nested subsets, identical config (500 optimizer
-steps, effective batch 4). Log-2 spacing: the smallest point (~330 prefix rows, ≈5 epochs at the fixed
-step budget) is where a 1.7B model would start to memorize conversations instead of the rule; the largest
-point is everything we generated. The stated minimum viable N will be the smallest N whose spec adherence
-and self-report→KNOWN rate are within noise of N=270. Source: `results/data-efficiency-curve/table.md`, `curve.png`.
+steps, effective batch 4, 4-bit base). Log-2 spacing: the smallest point (357 prefix rows, 5.6 epochs at the
+fixed step budget) is where a 1.7B model would start to memorize conversations instead of the rule — and it
+did (val loss 2.12); the largest point is everything we generated. Criterion, stated before the sweep ran:
+the smallest N whose spec adherence and self-report→KNOWN rate are within noise of N=270.
+
+**N = 135** is the stated minimum viable dataset size. It matches or beats N=270 on every column (spec
+adherence 0.54 vs 0.49, self-report→KNOWN 0.01 vs 0.07, robustness 0.69 vs 0.69, missed promotion 0.14 vs
+0.12) — 22 vs 20 clean conversations of 41, inside one standard error either way. At the fixed 500-step
+budget N=135 sees each row 1.4 times and N=270 0.7 times; the extra pass appears to be worth as much as the
+extra data.
+
+**N = 67** is the floor, not the recommendation. The provenance rule holds (self-report→KNOWN 0.04, missed
+promotion 0.14, over-trigger 0.00 — all at N=270's level) but spec adherence is 0.39: 16 clean conversations
+of 41 vs 20. On a 41-scenario eval set that gap (~1 SE) is not separable from noise, so 67 cannot be ruled
+out; it also cannot be called reliable. A larger eval set (the staff held-out set) would decide it.
+**N = 33** fails the criterion on every column and is the overfit point (val loss 2.12, missed promotion
+doubles, over-trigger appears).
+
+Source: `results/data-efficiency-curve/table.md`, `curve.png`, `sweep_summary.json`; per-N eval in
+`results/data-efficiency-curve/q{33,67,135}/`, `results/base-vs-tuned/` (q270); training logs
+`results/train/q{33,67,135,270}/`.
 
 ## Failure modes → v2 data change (Early submission)
 

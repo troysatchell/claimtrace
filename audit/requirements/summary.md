@@ -1,3 +1,9 @@
+> **Update 2026-08-19 (after commit 9015412, sweep complete):** the QLoRA sweep finished 10:31 CDT with all four
+> points trained and evaluated. This closes SLM-R19, R20 (own set), R21, R45, R50 and names min viable N
+> (SLM-R22: N = 135, `BRAINLIFT.md`); SLM-R42 now has the QLoRA row (`results/base-vs-tuned/`). Still open:
+> SLM-R43/R44 (v2 dataset + delta), R48 (hosted demo), R49/R20 staff held-out set, R51 v2 update, and the
+> stretch items. Current status per deliverable: `SUBMISSION.md`. The verdicts below are as of fc1bc93.
+
 The MVP bundle (SLM-R34–R42) is present and re-runnable including the full-size QLoRA training run
 (SLM-R41 VERIFIED — `q270`, 4-bit base, finished 22:20 CDT; its base-vs-tuned eval into `results/base-vs-tuned/`
 was running at render time; the bf16 LoRA twin `n270` carries the MVP numbers). The base-vs-tuned numbers

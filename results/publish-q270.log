@@ -1,0 +1,27 @@
+== fusing ckpt/q270/adapters into Qwen/Qwen3-1.7B -> ckpt/q270/fused
+[transformers] Disabling PyTorch because PyTorch >= 2.5 is required but found 2.0.1
+Loading pretrained model
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 3278.51it/s]
+== uploading model to troysaved/claimtrace-qwen3-1.7b
+== uploading dataset to troysaved/claimtrace-ledger-dataset
+No files have been modified since last commit. Skipping to prevent empty commit.
+No files have been modified since last commit. Skipping to prevent empty commit.
+/Users/troy/anaconda3/lib/python3.11/site-packages/huggingface_hub/hf_api.py:11691: UserWarning: Warnings while validating metadata in README.md:
+- empty or missing yaml metadata in repo card
+  warnings.warn(f"Warnings while validating metadata in README.md:\n{message}")
+No files have been modified since last commit. Skipping to prevent empty commit.
+
+Eval against the published revision:
+  python eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-hf
+{
+  "model_repo": "troysaved/claimtrace-qwen3-1.7b",
+  "model_revision": "4de80c2a06ad27e020584a638661651cf3f8a39e",
+  "dataset_repo": "troysaved/claimtrace-ledger-dataset",
+  "dataset_revision": "af3b6508351ce4e22682b666eecfdb481452a526",
+  "run": "q270",
+  "train_commit": "b505da9edde5d8dc3723a793a67733b5f5f012c1",
+  "adapter_sha256": "6a6af4f1ac8eee742c240d172fe6dc57076ee24fcce374ec315bd166b89cdd03",
+  "published_by": "troysaved",
+  "timestamp": "2026-08-19T11:42:39-0500"
+}
+exit=0
