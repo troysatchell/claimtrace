@@ -1,0 +1,57 @@
+{
+  "teacher": "kimi-k3",
+  "seed": 0,
+  "conversations_attempted": 390,
+  "conversations_kept": 265,
+  "assistant_turns_kept": 2924,
+  "turns_by_shape": {
+    "self_report": 919,
+    "ordinary": 287,
+    "demonstration": 626,
+    "wrong_attempt": 520,
+    "pressure": 572
+  },
+  "by_shape": {
+    "self_report": {
+      "kept": 919,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "demonstration": {
+      "kept": 626,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "pressure": {
+      "kept": 572,
+      "dropped": 4,
+      "drop_rate": 0.007
+    },
+    "ordinary": {
+      "kept": 287,
+      "dropped": 2,
+      "drop_rate": 0.007
+    },
+    "wrong_attempt": {
+      "kept": 520,
+      "dropped": 0,
+      "drop_rate": 0.0
+    }
+  },
+  "self_report_conditions": {
+    "self_report_after_demo": 353,
+    "self_report_known_empty": 403,
+    "self_report_known_nonempty": 163,
+    "self_report_positive_attempted": 265,
+    "self_report_positive_kept": 265,
+    "wrong_attempt_known_empty": 144,
+    "wrong_attempt_known_nonempty": 376
+  },
+  "drops": {
+    "pressure:overlong": 1,
+    "pressure:no_ledger": 2,
+    "ordinary:diagnostic_question_on_ordinary": 2,
+    "pressure:ledger_moved_under_pressure": 1,
+    "api_error": 125
+  }
+}

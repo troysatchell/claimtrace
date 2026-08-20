@@ -1,0 +1,406 @@
+== [Thu Aug 20 15:31:15 CDT 2026] generate v2
+generating 390 conversations (~4290 teacher calls)
+  10/390 conversations, 10 kept
+  20/390 conversations, 20 kept
+  30/390 conversations, 30 kept
+  40/390 conversations, 40 kept
+  50/390 conversations, 50 kept
+  60/390 conversations, 60 kept
+  70/390 conversations, 70 kept
+  80/390 conversations, 80 kept
+  90/390 conversations, 90 kept
+  100/390 conversations, 100 kept
+  110/390 conversations, 110 kept
+  120/390 conversations, 120 kept
+  130/390 conversations, 130 kept
+  140/390 conversations, 140 kept
+  150/390 conversations, 150 kept
+  160/390 conversations, 160 kept
+  170/390 conversations, 170 kept
+  180/390 conversations, 180 kept
+  190/390 conversations, 190 kept
+  200/390 conversations, 200 kept
+  210/390 conversations, 210 kept
+  220/390 conversations, 220 kept
+  230/390 conversations, 230 kept
+  240/390 conversations, 240 kept
+  250/390 conversations, 250 kept
+  260/390 conversations, 260 kept
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+{
+  "teacher": "kimi-k3",
+  "seed": 0,
+  "conversations_attempted": 390,
+  "conversations_kept": 265,
+  "assistant_turns_kept": 2924,
+  "turns_by_shape": {
+    "self_report": 919,
+    "ordinary": 287,
+    "demonstration": 626,
+    "wrong_attempt": 520,
+    "pressure": 572
+  },
+  "by_shape": {
+    "self_report": {
+      "kept": 919,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "demonstration": {
+      "kept": 626,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "pressure": {
+      "kept": 572,
+      "dropped": 4,
+      "drop_rate": 0.007
+    },
+    "ordinary": {
+      "kept": 287,
+      "dropped": 2,
+      "drop_rate": 0.007
+    },
+    "wrong_attempt": {
+      "kept": 520,
+      "dropped": 0,
+      "drop_rate": 0.0
+    }
+  },
+  "self_report_conditions": {
+    "self_report_after_demo": 353,
+    "self_report_known_empty": 403,
+    "self_report_known_nonempty": 163,
+    "self_report_positive_attempted": 265,
+    "self_report_positive_kept": 265,
+    "wrong_attempt_known_empty": 144,
+    "wrong_attempt_known_nonempty": 376
+  },
+  "drops": {
+    "pressure:overlong": 1,
+    "pressure:no_ledger": 2,
+    "ordinary:diagnostic_question_on_ordinary": 2,
+    "pressure:ledger_moved_under_pressure": 1,
+    "api_error": 125
+  }
+}
+== [Thu Aug 20 16:36:04 CDT 2026] train q236v2 (identical config, v2 data)
+[2026-08-20 16:36:04] run_id=q236v2 commit=d9adae84bcbfca62399ae669b16329779f51165b base=ckpt/base-q4 n=all seed=0
+[2026-08-20 16:36:04] args {"data": "data/v2/dataset.jsonl", "n": null, "run_id": "q236v2", "run_prefix": "n", "base": "ckpt/base-q4", "seed": 0, "valid_frac": 0.1, "valid_rows": 64, "dry_run": false, "iters": 2000, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 200, "steps_per_eval": 200, "steps_per_report": 20, "max_seq_length": 6144, "warmup": 25}
+[transformers] Disabling PyTorch because PyTorch >= 2.5 is required but found 2.0.1
+[2026-08-20 16:36:10] {"dataset": "data/v2/dataset.jsonl", "conversations_total": 265, "train_conversations": 236, "valid_conversations": 29, "train_rows": 2618, "valid_rows": 64, "rows_dropped_over_max_seq_length": 0, "train_rows_by_final_shape": {"self_report": 826, "demonstration": 557, "pressure": 518, "ordinary": 256, "wrong_attempt": 461}, "train_tokens_total": 3065798, "train_tokens_median": 1090, "train_tokens_max": 3162, "epochs_at_iters": 0.76}
+[2026-08-20 16:36:10] $ /Users/troy/anaconda3/bin/python3 -m mlx_lm lora -c ckpt/q236v2/lora_config.yaml
+[2026-08-20 16:36:10] [transformers] Disabling PyTorch because PyTorch >= 2.5 is required but found 2.0.1
+[2026-08-20 16:36:12] Loading configuration file ckpt/q236v2/lora_config.yaml
+[2026-08-20 16:36:12] Loading pretrained model
+[2026-08-20 16:36:12] Loading datasets
+[2026-08-20 16:36:12] Training
+[2026-08-20 16:36:12] Trainable parameters: 0.579% (9.961M/1720.575M)
+[2026-08-20 16:36:12] Starting training..., iters: 2000
+[2026-08-20 16:36:53] Iter 1: Val loss 3.611, Val took 40.277s
+[2026-08-20 16:37:25] Iter 20: Train loss 3.329, Learning Rate 8.000e-06, It/sec 0.624, Tokens/sec 94.474, Trained Tokens 3030, Peak mem 4.621 GB
+[2026-08-20 16:38:08] Iter 40: Train loss 1.394, Learning Rate 1.800e-05, It/sec 0.466, Tokens/sec 73.371, Trained Tokens 6177, Peak mem 5.699 GB
+[2026-08-20 16:38:45] Iter 60: Train loss 1.495, Learning Rate 2.800e-05, It/sec 0.542, Tokens/sec 88.051, Trained Tokens 9427, Peak mem 5.699 GB
+[2026-08-20 16:39:22] Iter 80: Train loss 1.177, Learning Rate 3.800e-05, It/sec 0.542, Tokens/sec 79.580, Trained Tokens 12361, Peak mem 5.699 GB
+[2026-08-20 16:39:56] Iter 100: Train loss 1.174, Learning Rate 4.800e-05, It/sec 0.585, Tokens/sec 97.399, Trained Tokens 15692, Peak mem 5.699 GB
+[2026-08-20 16:40:39] Iter 120: Train loss 1.096, Learning Rate 5.000e-05, It/sec 0.467, Tokens/sec 78.486, Trained Tokens 19050, Peak mem 5.699 GB
+[2026-08-20 16:41:17] Iter 140: Train loss 1.205, Learning Rate 4.997e-05, It/sec 0.527, Tokens/sec 86.165, Trained Tokens 22322, Peak mem 5.699 GB
+[2026-08-20 16:41:55] Iter 160: Train loss 1.102, Learning Rate 4.992e-05, It/sec 0.528, Tokens/sec 88.592, Trained Tokens 25680, Peak mem 5.699 GB
+[2026-08-20 16:42:38] Iter 180: Train loss 1.067, Learning Rate 4.986e-05, It/sec 0.464, Tokens/sec 80.834, Trained Tokens 29166, Peak mem 6.025 GB
+[2026-08-20 16:43:54] Iter 200: Val loss 1.021, Val took 39.877s
+[2026-08-20 16:43:56] Iter 200: Train loss 0.975, Learning Rate 4.977e-05, It/sec 0.533, Tokens/sec 87.667, Trained Tokens 32455, Peak mem 6.025 GB
+[2026-08-20 16:44:33] Iter 200: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0000200_adapters.safetensors.
+[2026-08-20 16:44:33] Iter 220: Train loss 0.990, Learning Rate 4.965e-05, It/sec 0.534, Tokens/sec 86.417, Trained Tokens 35693, Peak mem 6.025 GB
+[2026-08-20 16:45:08] Iter 240: Train loss 1.077, Learning Rate 4.952e-05, It/sec 0.579, Tokens/sec 90.927, Trained Tokens 38836, Peak mem 6.025 GB
+[2026-08-20 16:45:45] Iter 260: Train loss 1.073, Learning Rate 4.936e-05, It/sec 0.546, Tokens/sec 95.676, Trained Tokens 42343, Peak mem 6.025 GB
+[2026-08-20 16:46:26] Iter 280: Train loss 0.910, Learning Rate 4.918e-05, It/sec 0.491, Tokens/sec 77.778, Trained Tokens 45514, Peak mem 6.025 GB
+[2026-08-20 16:46:57] Iter 300: Train loss 0.931, Learning Rate 4.898e-05, It/sec 0.642, Tokens/sec 99.506, Trained Tokens 48613, Peak mem 6.025 GB
+[2026-08-20 16:47:26] Iter 320: Train loss 1.128, Learning Rate 4.876e-05, It/sec 0.697, Tokens/sec 107.406, Trained Tokens 51695, Peak mem 6.025 GB
+[2026-08-20 16:48:06] Iter 340: Train loss 0.927, Learning Rate 4.852e-05, It/sec 0.494, Tokens/sec 83.714, Trained Tokens 55086, Peak mem 6.025 GB
+[2026-08-20 16:48:36] Iter 360: Train loss 0.897, Learning Rate 4.826e-05, It/sec 0.678, Tokens/sec 97.756, Trained Tokens 57970, Peak mem 6.025 GB
+[2026-08-20 16:49:09] Iter 380: Train loss 0.926, Learning Rate 4.798e-05, It/sec 0.605, Tokens/sec 95.257, Trained Tokens 61118, Peak mem 6.025 GB
+[2026-08-20 16:50:29] Iter 400: Val loss 0.935, Val took 39.862s
+[2026-08-20 16:50:30] Iter 400: Train loss 0.927, Learning Rate 4.767e-05, It/sec 0.485, Tokens/sec 80.563, Trained Tokens 64439, Peak mem 6.025 GB
+[2026-08-20 16:51:08] Iter 400: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0000400_adapters.safetensors.
+[2026-08-20 16:51:08] Iter 420: Train loss 1.038, Learning Rate 4.735e-05, It/sec 0.534, Tokens/sec 86.503, Trained Tokens 67680, Peak mem 6.025 GB
+[2026-08-20 16:51:45] Iter 440: Train loss 0.897, Learning Rate 4.701e-05, It/sec 0.543, Tokens/sec 84.123, Trained Tokens 70779, Peak mem 6.025 GB
+[2026-08-20 16:52:21] Iter 460: Train loss 0.867, Learning Rate 4.665e-05, It/sec 0.554, Tokens/sec 85.381, Trained Tokens 73860, Peak mem 6.025 GB
+[2026-08-20 16:52:57] Iter 480: Train loss 0.977, Learning Rate 4.627e-05, It/sec 0.555, Tokens/sec 89.661, Trained Tokens 77090, Peak mem 6.025 GB
+[2026-08-20 16:53:37] Iter 500: Train loss 0.918, Learning Rate 4.587e-05, It/sec 0.504, Tokens/sec 83.960, Trained Tokens 80423, Peak mem 6.025 GB
+[2026-08-20 16:54:12] Iter 520: Train loss 0.952, Learning Rate 4.545e-05, It/sec 0.577, Tokens/sec 87.586, Trained Tokens 83457, Peak mem 6.025 GB
+[2026-08-20 16:54:43] Iter 540: Train loss 1.010, Learning Rate 4.502e-05, It/sec 0.636, Tokens/sec 98.090, Trained Tokens 86541, Peak mem 6.025 GB
+[2026-08-20 16:55:18] Iter 560: Train loss 0.888, Learning Rate 4.456e-05, It/sec 0.575, Tokens/sec 96.824, Trained Tokens 89906, Peak mem 6.025 GB
+[2026-08-20 16:55:46] Iter 580: Train loss 0.909, Learning Rate 4.409e-05, It/sec 0.714, Tokens/sec 109.041, Trained Tokens 92960, Peak mem 6.025 GB
+[2026-08-20 16:57:01] Iter 600: Val loss 0.883, Val took 39.923s
+[2026-08-20 16:57:05] Iter 600: Train loss 0.911, Learning Rate 4.361e-05, It/sec 0.520, Tokens/sec 81.683, Trained Tokens 96099, Peak mem 6.025 GB
+[2026-08-20 16:57:40] Iter 600: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0000600_adapters.safetensors.
+[2026-08-20 16:57:40] Iter 620: Train loss 0.986, Learning Rate 4.311e-05, It/sec 0.572, Tokens/sec 86.979, Trained Tokens 99139, Peak mem 6.025 GB
+[2026-08-20 16:58:13] Iter 640: Train loss 1.107, Learning Rate 4.259e-05, It/sec 0.601, Tokens/sec 97.067, Trained Tokens 102367, Peak mem 6.025 GB
+[2026-08-20 16:58:39] Iter 660: Train loss 0.918, Learning Rate 4.206e-05, It/sec 0.770, Tokens/sec 130.513, Trained Tokens 105757, Peak mem 6.025 GB
+[2026-08-20 16:59:20] Iter 680: Train loss 0.844, Learning Rate 4.151e-05, It/sec 0.497, Tokens/sec 76.483, Trained Tokens 108832, Peak mem 6.025 GB
+[2026-08-20 17:00:03] Iter 700: Train loss 0.918, Learning Rate 4.095e-05, It/sec 0.458, Tokens/sec 76.727, Trained Tokens 112182, Peak mem 6.025 GB
+[2026-08-20 17:00:42] Iter 720: Train loss 0.952, Learning Rate 4.038e-05, It/sec 0.523, Tokens/sec 103.527, Trained Tokens 116141, Peak mem 6.025 GB
+[2026-08-20 17:01:15] Iter 740: Train loss 0.746, Learning Rate 3.979e-05, It/sec 0.599, Tokens/sec 90.697, Trained Tokens 119170, Peak mem 6.025 GB
+[2026-08-20 17:01:52] Iter 760: Train loss 1.011, Learning Rate 3.920e-05, It/sec 0.552, Tokens/sec 90.151, Trained Tokens 122434, Peak mem 6.025 GB
+[2026-08-20 17:02:25] Iter 780: Train loss 0.892, Learning Rate 3.859e-05, It/sec 0.602, Tokens/sec 103.452, Trained Tokens 125873, Peak mem 6.025 GB
+[2026-08-20 17:03:44] Iter 800: Val loss 0.854, Val took 39.623s
+[2026-08-20 17:03:44] Iter 800: Train loss 0.845, Learning Rate 3.797e-05, It/sec 0.506, Tokens/sec 87.760, Trained Tokens 129341, Peak mem 6.025 GB
+[2026-08-20 17:04:22] Iter 800: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0000800_adapters.safetensors.
+[2026-08-20 17:04:22] Iter 820: Train loss 0.826, Learning Rate 3.734e-05, It/sec 0.529, Tokens/sec 91.325, Trained Tokens 132797, Peak mem 6.025 GB
+[2026-08-20 17:05:04] Iter 840: Train loss 0.924, Learning Rate 3.669e-05, It/sec 0.481, Tokens/sec 83.536, Trained Tokens 136269, Peak mem 6.025 GB
+[2026-08-20 17:05:50] Iter 860: Train loss 0.771, Learning Rate 3.605e-05, It/sec 0.435, Tokens/sec 69.486, Trained Tokens 139465, Peak mem 6.025 GB
+[2026-08-20 17:06:23] Iter 880: Train loss 0.867, Learning Rate 3.539e-05, It/sec 0.610, Tokens/sec 88.535, Trained Tokens 142366, Peak mem 6.025 GB
+[2026-08-20 17:07:03] Iter 900: Train loss 0.835, Learning Rate 3.472e-05, It/sec 0.494, Tokens/sec 76.400, Trained Tokens 145462, Peak mem 6.025 GB
+[2026-08-20 17:07:36] Iter 920: Train loss 0.950, Learning Rate 3.405e-05, It/sec 0.622, Tokens/sec 98.312, Trained Tokens 148624, Peak mem 6.025 GB
+[2026-08-20 17:08:14] Iter 940: Train loss 0.905, Learning Rate 3.337e-05, It/sec 0.524, Tokens/sec 82.754, Trained Tokens 151781, Peak mem 6.025 GB
+[2026-08-20 17:08:47] Iter 960: Train loss 0.760, Learning Rate 3.268e-05, It/sec 0.603, Tokens/sec 89.573, Trained Tokens 154750, Peak mem 6.025 GB
+[2026-08-20 17:09:24] Iter 980: Train loss 0.766, Learning Rate 3.199e-05, It/sec 0.549, Tokens/sec 85.493, Trained Tokens 157865, Peak mem 6.025 GB
+[2026-08-20 17:10:44] Iter 1000: Val loss 0.824, Val took 39.648s
+[2026-08-20 17:10:46] Iter 1000: Train loss 0.921, Learning Rate 3.130e-05, It/sec 0.468, Tokens/sec 81.810, Trained Tokens 161364, Peak mem 6.025 GB
+[2026-08-20 17:11:26] Iter 1000: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0001000_adapters.safetensors.
+[2026-08-20 17:11:26] Iter 1020: Train loss 0.838, Learning Rate 3.060e-05, It/sec 0.502, Tokens/sec 83.151, Trained Tokens 164674, Peak mem 6.025 GB
+[2026-08-20 17:12:02] Iter 1040: Train loss 0.938, Learning Rate 2.990e-05, It/sec 0.558, Tokens/sec 92.840, Trained Tokens 167999, Peak mem 6.025 GB
+[2026-08-20 17:12:41] Iter 1060: Train loss 0.910, Learning Rate 2.919e-05, It/sec 0.513, Tokens/sec 84.461, Trained Tokens 171291, Peak mem 6.025 GB
+[2026-08-20 17:13:13] Iter 1080: Train loss 0.852, Learning Rate 2.849e-05, It/sec 0.637, Tokens/sec 109.972, Trained Tokens 174744, Peak mem 6.025 GB
+[2026-08-20 17:13:40] Iter 1100: Train loss 0.925, Learning Rate 2.778e-05, It/sec 0.742, Tokens/sec 107.005, Trained Tokens 177630, Peak mem 6.025 GB
+[2026-08-20 17:14:23] Iter 1120: Train loss 0.846, Learning Rate 2.708e-05, It/sec 0.460, Tokens/sec 79.915, Trained Tokens 181103, Peak mem 6.025 GB
+[2026-08-20 17:14:56] Iter 1140: Train loss 0.806, Learning Rate 2.637e-05, It/sec 0.618, Tokens/sec 90.898, Trained Tokens 184046, Peak mem 6.025 GB
+[2026-08-20 17:15:32] Iter 1160: Train loss 0.775, Learning Rate 2.566e-05, It/sec 0.556, Tokens/sec 85.833, Trained Tokens 187132, Peak mem 6.025 GB
+[2026-08-20 17:16:06] Iter 1180: Train loss 0.850, Learning Rate 2.496e-05, It/sec 0.587, Tokens/sec 93.196, Trained Tokens 190309, Peak mem 6.025 GB
+[2026-08-20 17:17:22] Iter 1200: Val loss 0.799, Val took 39.775s
+[2026-08-20 17:17:24] Iter 1200: Train loss 0.876, Learning Rate 2.426e-05, It/sec 0.520, Tokens/sec 85.688, Trained Tokens 193606, Peak mem 6.025 GB
+[2026-08-20 17:18:08] Iter 1200: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0001200_adapters.safetensors.
+[2026-08-20 17:18:08] Iter 1220: Train loss 0.770, Learning Rate 2.356e-05, It/sec 0.463, Tokens/sec 75.704, Trained Tokens 196879, Peak mem 6.025 GB
+[2026-08-20 17:18:34] Iter 1240: Train loss 0.860, Learning Rate 2.287e-05, It/sec 0.778, Tokens/sec 112.065, Trained Tokens 199760, Peak mem 6.025 GB
+[2026-08-20 17:19:05] Iter 1260: Train loss 0.786, Learning Rate 2.218e-05, It/sec 0.640, Tokens/sec 97.651, Trained Tokens 202811, Peak mem 6.025 GB
+[2026-08-20 17:19:37] Iter 1280: Train loss 0.631, Learning Rate 2.149e-05, It/sec 0.618, Tokens/sec 89.240, Trained Tokens 205698, Peak mem 6.025 GB
+[2026-08-20 17:20:16] Iter 1300: Train loss 0.736, Learning Rate 2.082e-05, It/sec 0.516, Tokens/sec 80.778, Trained Tokens 208828, Peak mem 6.025 GB
+[2026-08-20 17:20:50] Iter 1320: Train loss 0.879, Learning Rate 2.015e-05, It/sec 0.593, Tokens/sec 94.856, Trained Tokens 212028, Peak mem 6.025 GB
+[2026-08-20 17:21:31] Iter 1340: Train loss 0.756, Learning Rate 1.948e-05, It/sec 0.485, Tokens/sec 82.171, Trained Tokens 215419, Peak mem 6.025 GB
+[2026-08-20 17:22:10] Iter 1360: Train loss 0.818, Learning Rate 1.882e-05, It/sec 0.515, Tokens/sec 85.321, Trained Tokens 218733, Peak mem 6.025 GB
+[2026-08-20 17:22:56] Iter 1380: Train loss 0.811, Learning Rate 1.818e-05, It/sec 0.441, Tokens/sec 77.055, Trained Tokens 222229, Peak mem 6.025 GB
+[2026-08-20 17:24:07] Iter 1400: Val loss 0.781, Val took 39.564s
+[2026-08-20 17:24:09] Iter 1400: Train loss 0.784, Learning Rate 1.754e-05, It/sec 0.599, Tokens/sec 92.818, Trained Tokens 225327, Peak mem 6.025 GB
+[2026-08-20 17:24:48] Iter 1400: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0001400_adapters.safetensors.
+[2026-08-20 17:24:48] Iter 1420: Train loss 0.861, Learning Rate 1.691e-05, It/sec 0.516, Tokens/sec 80.556, Trained Tokens 228449, Peak mem 6.025 GB
+[2026-08-20 17:25:27] Iter 1440: Train loss 0.745, Learning Rate 1.629e-05, It/sec 0.507, Tokens/sec 80.733, Trained Tokens 231631, Peak mem 6.025 GB
+[2026-08-20 17:26:00] Iter 1460: Train loss 0.771, Learning Rate 1.568e-05, It/sec 0.606, Tokens/sec 88.854, Trained Tokens 234565, Peak mem 6.025 GB
+[2026-08-20 17:26:34] Iter 1480: Train loss 0.710, Learning Rate 1.509e-05, It/sec 0.600, Tokens/sec 93.164, Trained Tokens 237670, Peak mem 6.025 GB
+[2026-08-20 17:27:13] Iter 1500: Train loss 0.878, Learning Rate 1.450e-05, It/sec 0.508, Tokens/sec 84.295, Trained Tokens 240988, Peak mem 6.025 GB
+[2026-08-20 17:27:53] Iter 1520: Train loss 0.829, Learning Rate 1.393e-05, It/sec 0.504, Tokens/sec 85.171, Trained Tokens 244369, Peak mem 6.291 GB
+[2026-08-20 17:28:31] Iter 1540: Train loss 0.818, Learning Rate 1.338e-05, It/sec 0.530, Tokens/sec 78.039, Trained Tokens 247316, Peak mem 6.291 GB
+[2026-08-20 17:29:10] Iter 1560: Train loss 0.677, Learning Rate 1.283e-05, It/sec 0.515, Tokens/sec 74.431, Trained Tokens 250206, Peak mem 6.291 GB
+[2026-08-20 17:29:40] Iter 1580: Train loss 0.863, Learning Rate 1.231e-05, It/sec 0.672, Tokens/sec 97.862, Trained Tokens 253117, Peak mem 6.291 GB
+[2026-08-20 17:30:52] Iter 1600: Val loss 0.770, Val took 39.528s
+[2026-08-20 17:30:54] Iter 1600: Train loss 0.804, Learning Rate 1.179e-05, It/sec 0.579, Tokens/sec 93.427, Trained Tokens 256346, Peak mem 6.291 GB
+[2026-08-20 17:31:31] Iter 1600: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0001600_adapters.safetensors.
+[2026-08-20 17:31:31] Iter 1620: Train loss 0.741, Learning Rate 1.129e-05, It/sec 0.544, Tokens/sec 79.362, Trained Tokens 259263, Peak mem 6.291 GB
+[2026-08-20 17:32:04] Iter 1640: Train loss 0.794, Learning Rate 1.081e-05, It/sec 0.600, Tokens/sec 96.273, Trained Tokens 262471, Peak mem 6.291 GB
+[2026-08-20 17:32:49] Iter 1660: Train loss 0.708, Learning Rate 1.035e-05, It/sec 0.453, Tokens/sec 74.301, Trained Tokens 265755, Peak mem 6.291 GB
+[2026-08-20 17:33:26] Iter 1680: Train loss 0.871, Learning Rate 9.896e-06, It/sec 0.537, Tokens/sec 86.483, Trained Tokens 268976, Peak mem 6.291 GB
+[2026-08-20 17:34:07] Iter 1700: Train loss 0.729, Learning Rate 9.465e-06, It/sec 0.488, Tokens/sec 83.461, Trained Tokens 272394, Peak mem 6.291 GB
+[2026-08-20 17:34:38] Iter 1720: Train loss 0.834, Learning Rate 9.051e-06, It/sec 0.645, Tokens/sec 96.913, Trained Tokens 275401, Peak mem 6.291 GB
+[2026-08-20 17:35:22] Iter 1740: Train loss 0.763, Learning Rate 8.656e-06, It/sec 0.461, Tokens/sec 76.181, Trained Tokens 278706, Peak mem 6.291 GB
+[2026-08-20 17:36:07] Iter 1760: Train loss 0.746, Learning Rate 8.279e-06, It/sec 0.448, Tokens/sec 74.961, Trained Tokens 282056, Peak mem 6.291 GB
+[2026-08-20 17:36:48] Iter 1780: Train loss 0.677, Learning Rate 7.921e-06, It/sec 0.487, Tokens/sec 79.963, Trained Tokens 285338, Peak mem 6.291 GB
+[2026-08-20 17:38:08] Iter 1800: Val loss 0.763, Val took 39.548s
+[2026-08-20 17:38:08] Iter 1800: Train loss 0.717, Learning Rate 7.582e-06, It/sec 0.489, Tokens/sec 79.236, Trained Tokens 288578, Peak mem 6.291 GB
+[2026-08-20 17:38:46] Iter 1800: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0001800_adapters.safetensors.
+[2026-08-20 17:38:46] Iter 1820: Train loss 0.749, Learning Rate 7.263e-06, It/sec 0.530, Tokens/sec 87.243, Trained Tokens 291871, Peak mem 6.291 GB
+[2026-08-20 17:55:46] Iter 1840: Train loss 0.803, Learning Rate 6.964e-06, It/sec 0.362, Tokens/sec 53.183, Trained Tokens 294811, Peak mem 6.291 GB
+[2026-08-20 17:56:21] Iter 1860: Train loss 0.872, Learning Rate 6.686e-06, It/sec 0.572, Tokens/sec 92.578, Trained Tokens 298049, Peak mem 6.291 GB
+[2026-08-20 17:57:01] Iter 1880: Train loss 0.735, Learning Rate 6.428e-06, It/sec 0.494, Tokens/sec 81.691, Trained Tokens 301356, Peak mem 6.291 GB
+[2026-08-20 17:57:31] Iter 1900: Train loss 0.978, Learning Rate 6.190e-06, It/sec 0.686, Tokens/sec 104.660, Trained Tokens 304406, Peak mem 6.291 GB
+[2026-08-20 17:57:57] Iter 1920: Train loss 0.784, Learning Rate 5.974e-06, It/sec 0.757, Tokens/sec 105.493, Trained Tokens 307193, Peak mem 6.291 GB
+[2026-08-20 17:58:33] Iter 1940: Train loss 0.786, Learning Rate 5.779e-06, It/sec 0.554, Tokens/sec 88.513, Trained Tokens 310389, Peak mem 6.291 GB
+[2026-08-20 17:59:08] Iter 1960: Train loss 0.742, Learning Rate 5.605e-06, It/sec 0.583, Tokens/sec 86.255, Trained Tokens 313346, Peak mem 6.291 GB
+[2026-08-20 17:59:54] Iter 1980: Train loss 0.744, Learning Rate 5.453e-06, It/sec 0.430, Tokens/sec 76.353, Trained Tokens 316897, Peak mem 6.291 GB
+[2026-08-20 18:01:04] Iter 2000: Val loss 0.756, Val took 39.536s
+[2026-08-20 18:01:06] Iter 2000: Train loss 0.812, Learning Rate 5.323e-06, It/sec 0.620, Tokens/sec 99.254, Trained Tokens 320099, Peak mem 6.291 GB
+[2026-08-20 18:01:09] Iter 2000: Saved adapter weights to ckpt/q236v2/adapters/adapters.safetensors and ckpt/q236v2/adapters/0002000_adapters.safetensors.
+[2026-08-20 18:01:09] Saved final weights to ckpt/q236v2/adapters/adapters.safetensors.
+[2026-08-20 18:01:10] done: 10 checkpoints, final adapter sha256=b6255e4963bc wall=85.0min peak_mem=6.3GB
+== [Thu Aug 20 18:01:10 CDT 2026] eval q236v2
+[transformers] Disabling PyTorch because PyTorch >= 2.5 is required but found 2.0.1
+backend=mlx scenarios=41 judge=True commit=d9adae84bcbfca62399ae669b16329779f51165b
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 4296.46it/s]
+  [base] loaded Qwen/Qwen3-1.7B on mlx in 1s
+  [base] turn 1/15: 41 scenarios, 19s, peak 5.4 GB
+  [base] turn 2/15: 41 scenarios, 23s, peak 6.5 GB
+  [base] turn 3/15: 41 scenarios, 30s, peak 8.4 GB
+  [base] turn 4/15: 41 scenarios, 33s, peak 10.4 GB
+  [base] turn 5/15: 41 scenarios, 43s, peak 10.4 GB
+  [base] turn 6/15: 41 scenarios, 48s, peak 10.4 GB
+  [base] turn 7/15: 36 scenarios, 52s, peak 10.4 GB
+  [base] turn 8/15: 36 scenarios, 61s, peak 10.4 GB
+  [base] turn 9/15: 36 scenarios, 70s, peak 10.4 GB
+  [base] turn 10/15: 36 scenarios, 77s, peak 10.4 GB
+  [base] turn 11/15: 36 scenarios, 85s, peak 10.4 GB
+  [base] turn 12/15: 36 scenarios, 94s, peak 10.4 GB
+  [base] turn 13/15: 18 scenarios, 43s, peak 10.7 GB
+  [base] turn 14/15: 12 scenarios, 37s, peak 11.0 GB
+  [base] turn 15/15: 6 scenarios, 26s, peak 11.0 GB
+  [base] judged 36 scenarios
+  [base] done in 783s
+  [tuned] loaded ckpt/q236v2/adapters on mlx in 1s
+  [tuned] turn 1/15: 41 scenarios, 13s, peak 11.0 GB
+  [tuned] turn 2/15: 41 scenarios, 18s, peak 11.0 GB
+  [tuned] turn 3/15: 41 scenarios, 20s, peak 11.0 GB
+  [tuned] turn 4/15: 41 scenarios, 25s, peak 11.0 GB
+  [tuned] turn 5/15: 41 scenarios, 31s, peak 11.0 GB
+  [tuned] turn 6/15: 41 scenarios, 36s, peak 11.0 GB
+  [tuned] turn 7/15: 36 scenarios, 37s, peak 11.0 GB
+  [tuned] turn 8/15: 36 scenarios, 40s, peak 11.0 GB
+  [tuned] turn 9/15: 36 scenarios, 46s, peak 11.0 GB
+  [tuned] turn 10/15: 36 scenarios, 51s, peak 11.0 GB
+  [tuned] turn 11/15: 36 scenarios, 58s, peak 11.0 GB
+  [tuned] turn 12/15: 36 scenarios, 61s, peak 11.0 GB
+  [tuned] turn 13/15: 18 scenarios, 35s, peak 11.0 GB
+  [tuned] turn 14/15: 12 scenarios, 27s, peak 11.0 GB
+  [tuned] turn 15/15: 6 scenarios, 14s, peak 11.0 GB
+  [tuned] judged 36 scenarios
+  [tuned] done in 548s
+
+| model | n | spec adherence | robustness | ledger rate | premature | hedged | clean |
+|---|---|---|---|---|---|---|---|
+| base | 41 | 0.00 | 0.94 (36 judged) | 1.00 | 120 | 1 | 0/41 |
+| tuned | 41 | 0.80 | 0.83 (36 judged) | 1.00 | 0 | 0 | 33/41 |
+
+**Provenance breakdown** (denominators = turns where a ledger was parsed; self-report→KNOWN is the column that carries the behavior claim, over-trigger is the shape-D/G control):
+
+| model | self-report→KNOWN | self-report turns (all) | hedged | unearned | missed promotion | over-trigger |
+|---|---|---|---|---|---|---|
+| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |
+| tuned | 0/96 (0.00) | 96 | 0 | 1 | 8/78 (0.10) | 14/96 (0.15) |
+
+**Per shape** (clean / n · self-report→KNOWN · over-trigger):
+
+| model | A | B | C | D | E | F | G |
+|---|---|---|---|---|---|---|---|
+| base | 0/6 · 1/18 (0.06) · 0/18 (0.00) | 0/6 · 6/18 (0.33) · 0/12 (0.00) | 0/6 · 6/12 (0.50) · 0/6 (0.00) | 0/6 · 2/12 (0.17) · 0/6 (0.00) | 0/6 · 8/18 (0.44) · 0/6 (0.00) | 0/6 · 0/18 (0.00) · 0/18 (0.00) | 0/5 · - · 0/30 (0.00) |
+| tuned | 6/6 · 0/18 (0.00) · 3/18 (0.17) | 6/6 · 0/18 (0.00) · 4/12 (0.33) | 1/6 · 0/12 (0.00) · 1/6 (0.17) | 6/6 · 0/12 (0.00) · 0/6 (0.00) | 4/6 · 0/18 (0.00) · 0/6 (0.00) | 5/6 · 0/18 (0.00) · 6/18 (0.33) | 5/5 · - · 0/30 (0.00) |
+== [Thu Aug 20 18:23:23 CDT 2026] v2 pipeline done

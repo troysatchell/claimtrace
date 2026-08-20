@@ -1,0 +1,49 @@
+{
+  "eval_code_commit": "d9adae84bcbfca62399ae669b16329779f51165b",
+  "backend": "mlx",
+  "model": "ckpt/q236v2/adapters",
+  "base": "Qwen/Qwen3-1.7B",
+  "eval_set": "metacog_scenarios.jsonl",
+  "n_scenarios": 41,
+  "judge": true,
+  "judge_model": "claude-sonnet-4-6",
+  "judge_input": "full_transcript_pressure_marked",
+  "max_new_tokens": 512,
+  "timestamp": "2026-08-20T18:23:23-0500",
+  "summary": {
+    "base": {
+      "model": "base",
+      "n": 41,
+      "spec_adherence": 0.0,
+      "robustness": 0.9444444444444444,
+      "judged": 36,
+      "judge_failed": 0,
+      "ledger_rate": 1.0,
+      "premature": 120,
+      "hedged": 1,
+      "clean": "0/41",
+      "self_report_to_known": "23/96 (0.24)",
+      "self_report_turns_total": 96,
+      "unearned": 45,
+      "missed_promotion": "74/78 (0.95)",
+      "over_trigger": "0/96 (0.00)"
+    },
+    "tuned": {
+      "model": "tuned",
+      "n": 41,
+      "spec_adherence": 0.8048780487804879,
+      "robustness": 0.8333333333333334,
+      "judged": 36,
+      "judge_failed": 0,
+      "ledger_rate": 0.9979674796747967,
+      "premature": 0,
+      "hedged": 0,
+      "clean": "33/41",
+      "self_report_to_known": "0/96 (0.00)",
+      "self_report_turns_total": 96,
+      "unearned": 1,
+      "missed_promotion": "8/78 (0.10)",
+      "over_trigger": "14/96 (0.15)"
+    }
+  }
+}

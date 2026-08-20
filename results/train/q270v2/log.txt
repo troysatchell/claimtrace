@@ -1,0 +1,2 @@
+[2026-08-20 15:16:43] run_id=q270v2 commit=d9adae84bcbfca62399ae669b16329779f51165b base=ckpt/base-q4 n=270 seed=0
+[2026-08-20 15:16:43] args {"data": "data/v2/dataset.jsonl", "n": 270, "run_id": "q270v2", "run_prefix": "n", "base": "ckpt/base-q4", "seed": 0, "valid_frac": 0.1, "valid_rows": 64, "dry_run": false, "iters": 2000, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 200, "steps_per_eval": 200, "steps_per_report": 20, "max_seq_length": 6144, "warmup": 25}

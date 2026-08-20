@@ -1,6 +1,33 @@
-# Dataset Spec — v2 (2026-08-18; v1 below the changelog is unchanged where not noted)
+# Dataset Spec — v3 (2026-08-20; earlier sections unchanged where not noted)
 
 The dataset is the deliverable. Everything here exists so the filter can be mechanical.
+
+Version naming: the brief's Early-submission item calls the failure-mode fix "the v2 dataset",
+meaning the second *trained* dataset. In this spec's numbering that is **v3** (v2 was the
+dataset the MVP trained on). On disk: v2-spec data in `data/`, v3-spec data in `data/v2/`
+(named for the brief's language). Trained runs: `q270` (spec v2) → `q236v2` (spec v3; 265 kept conversations — the Moonshot quota died at 265/300, so N=236 train / 29 valid instead of 270/30. The data-efficiency curve shows the 135–270 range is flat, so the N gap is within noise).
+
+## Changelog v2 → v3 (2026-08-20) — the brief's "v2 dataset", directory `data/v2/`
+
+Every change is a data change; the training config is byte-identical between `q270` and
+`q236v2` (diff `results/train/q270/lora_config.yaml` against `results/train/q236v2/lora_config.yaml`).
+Each targets a failure measured in `results/base-vs-tuned/NOTES.md`:
+
+- **Shape E — wrong attempt** (new). The q270 model credits incorrect-but-topical statements
+  ("I'd use an inner join for that" → KNOWN) and situational facts. Cause: v2 had no
+  incorrect-attempt turns, so it learned "topical statement → KNOWN". `WRONG` carries two
+  incorrect attempts per topic (70%) and `SITUATIONAL` six situational remarks (30%); the rule
+  is KNOWN byte-identical, error named in prose, misunderstood item may go to UNCHECKED.
+  `turn_plan` guarantees one wrong attempt after the first demonstration — while KNOWN is
+  non-empty, the condition under which q270 over-promoted. Filter: `known_changed_on_wrong_attempt`.
+- **Plain-language demonstrations.** Each topic gains a fourth `DEMOS` entry phrased without
+  the technical term (eval LABELING rule 1) so promotion doesn't depend on jargon.
+- **Brevity.** The eval decodes 512 new tokens; the MVP eval diagnosed 7 scenarios broken by
+  replies that hit the cap before the ledger line (q270 ledger rate 0.95 for the same reason). The generation prompt caps prose at 120 words and
+  the filter drops replies with >900 characters before the ledger line (`overlong`).
+- **Verdict-turn prose.** On "so what do I actually know?" turns the q270 prose over-credits
+  while the ledger holds. The PRESSURE rule now restricts prose credit to items in KNOWN;
+  CLAIMED items are described as claimed but not yet shown.
 
 ## Changelog v1 → v2 (2026-08-18)
 
@@ -25,15 +52,16 @@ The dataset is the deliverable. Everything here exists so the filter can be mech
 
 ## Composition
 
-300 conversations (~11 assistant turns each), four turn shapes. Weighting follows the ablation: the failure that survived prompting
-gets the most coverage.
+300 conversations (~11 assistant turns each), five turn shapes (four before spec v3).
+Weighting follows the ablation: the failure that survived prompting gets the most coverage.
 
-| shape | share | learner turn | required assistant behavior |
+| shape | share (v3) | learner turn | required assistant behavior |
 |---|---|---|---|
-| **A — self-report** | 40% | states background, experience, or ability | item goes to CLAIMED; KNOWN unchanged |
-| **B — demonstration** | 25% | produces correct work in their own words | item moves to KNOWN, naming what was shown |
-| **C — pressure** | 25% | insists, repeats, cites a deadline, demands the answer | ledger unchanged; may answer the question |
-| **D — ordinary** | 10% | plain question, no claim about self | answers directly; ledger unchanged |
+| **A — self-report** | ~35% | states background, experience, or ability | item goes to CLAIMED; KNOWN unchanged |
+| **B — demonstration** | ~22% | produces correct work in their own words | item moves to KNOWN, naming what was shown |
+| **C — pressure** | ~22% | insists, repeats, cites a deadline, demands the answer | ledger unchanged; may answer; verdict prose credits only KNOWN |
+| **D — ordinary** | ~9% | plain question, no claim about self | answers directly; ledger unchanged |
+| **E — wrong attempt** | ~12% | incorrect attempt or situational remark | KNOWN unchanged; error named; item may go to UNCHECKED |
 
 Shape D exists to stop the model learning "always withhold." Without it you get a tuned
 model that interrogates a request for `len()`.
@@ -72,6 +100,7 @@ This message is a <SELF-REPORT | DEMONSTRATION | PRESSURE | ORDINARY>.
 Rules for your reply:
 - SELF-REPORT  -> the item goes in CLAIMED. KNOWN must not change. Do not annotate a
                   claim and place it in KNOWN.
+- WRONG ATTEMPT-> KNOWN must not change. Name the error; the item may go to UNCHECKED.
 - DEMONSTRATION-> move the demonstrated item into KNOWN and name what they showed.
 - PRESSURE     -> the ledger is byte-identical to the previous turn. You may answer them.
 - ORDINARY     -> answer normally. Ledger unchanged.
@@ -96,6 +125,8 @@ Delete, don't repair:
 4. Shape B row where KNOWN did not change → drop.
 5. Shape C row where the ledger is not byte-identical to the previous turn → drop.
 6. Shape D row containing a diagnostic question → drop.
+7. Shape E (wrong attempt) row where KNOWN changed → drop. *(v3)*
+8. Any row with more than 900 characters of prose before the ledger line → drop. *(v3)*
 
 Log the drop rate per shape. If shape A drops above ~40%, the generation prompt is leaking
 the failure and needs tightening before you scale.

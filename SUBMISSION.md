@@ -32,8 +32,8 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 
 | Deliverable | Where | Status |
 |---|---|---|
-| Failure mode diagnosed from MVP eval, resolved by a v2 dataset (not config) | Diagnosis: `results/base-vs-tuned-lora-bf16/NOTES.md` "Where the tuned model still breaks"; plan: `BRAINLIFT.md` "Failure modes → v2 data change" | ⏳ v2 dataset not generated |
-| Updated base-vs-tuned numbers with delta + raw judge transcripts | — | ⏳ |
+| Failure mode diagnosed from MVP eval, resolved by a v2 dataset (not config) | Diagnosis: `results/base-vs-tuned/NOTES.md`; fix: `data/v2/` (265 convs, teacher kimi-k3, `dataset_spec.md` changelog v2→v3); config identical (diff `results/train/{q270,q236v2}/lora_config.yaml`) | ✅ unearned 15→1, self-report→KNOWN 0.07→0.00 |
+| Updated base-vs-tuned numbers with delta + raw judge transcripts | `results/base-vs-tuned-v2/` (table.md, DELTA.md, NOTES.md, judge_transcripts.jsonl, run.json) | ✅ clean 20/41→33/41, spec adherence 0.49→0.80, robustness 0.69→0.83 |
 | ≥2 points on the Data-Efficiency curve | `results/data-efficiency-curve/table.md`, `curve.png`, `sweep_summary.json`; per-N eval `q33/ q67/ q135/ q270→../base-vs-tuned`; training logs `results/train/q{33,67,135,270}/` | ✅ 4 points (N = 33/67/135/270, QLoRA, identical config) |
 | Draft artifacts: dataset shape, checkpoint, in-progress Brainlift | `dataset_spec.md`; `results/train/<run>/summary.json`; `BRAINLIFT.md` | ✅ |
 

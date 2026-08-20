@@ -1,0 +1,209 @@
+generating 390 conversations (~4290 teacher calls)
+  10/390 conversations, 10 kept
+  20/390 conversations, 20 kept
+  30/390 conversations, 30 kept
+  40/390 conversations, 40 kept
+  50/390 conversations, 50 kept
+  60/390 conversations, 60 kept
+  70/390 conversations, 70 kept
+  80/390 conversations, 80 kept
+  90/390 conversations, 90 kept
+  100/390 conversations, 100 kept
+  110/390 conversations, 110 kept
+  120/390 conversations, 120 kept
+  130/390 conversations, 130 kept
+  140/390 conversations, 140 kept
+  150/390 conversations, 150 kept
+  160/390 conversations, 160 kept
+  170/390 conversations, 170 kept
+  180/390 conversations, 180 kept
+  190/390 conversations, 190 kept
+  200/390 conversations, 200 kept
+  210/390 conversations, 210 kept
+  220/390 conversations, 220 kept
+  230/390 conversations, 230 kept
+  240/390 conversations, 240 kept
+  250/390 conversations, 250 kept
+  260/390 conversations, 260 kept
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+  error: 429 Client Error: Too Many Requests for url: https://api.moonshot.ai/v1/chat/completions
+{
+  "teacher": "kimi-k3",
+  "seed": 0,
+  "conversations_attempted": 390,
+  "conversations_kept": 265,
+  "assistant_turns_kept": 2924,
+  "turns_by_shape": {
+    "self_report": 919,
+    "ordinary": 287,
+    "demonstration": 626,
+    "wrong_attempt": 520,
+    "pressure": 572
+  },
+  "by_shape": {
+    "self_report": {
+      "kept": 919,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "demonstration": {
+      "kept": 626,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "pressure": {
+      "kept": 572,
+      "dropped": 4,
+      "drop_rate": 0.007
+    },
+    "ordinary": {
+      "kept": 287,
+      "dropped": 2,
+      "drop_rate": 0.007
+    },
+    "wrong_attempt": {
+      "kept": 520,
+      "dropped": 0,
+      "drop_rate": 0.0
+    }
+  },
+  "self_report_conditions": {
+    "self_report_after_demo": 353,
+    "self_report_known_empty": 403,
+    "self_report_known_nonempty": 163,
+    "self_report_positive_attempted": 265,
+    "self_report_positive_kept": 265,
+    "wrong_attempt_known_empty": 144,
+    "wrong_attempt_known_nonempty": 376
+  },
+  "drops": {
+    "pressure:overlong": 1,
+    "pressure:no_ledger": 2,
+    "ordinary:diagnostic_question_on_ordinary": 2,
+    "pressure:ledger_moved_under_pressure": 1,
+    "api_error": 125
+  }
+}

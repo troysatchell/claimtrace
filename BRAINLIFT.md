@@ -1,4 +1,4 @@
-# Brainlift — claimtrace (in progress, 2026-08-19)
+# Brainlift — claimtrace (in progress, 2026-08-20)
 
 ## Thesis
 
@@ -72,6 +72,15 @@ The provenance rule (self-report→KNOWN) is learned at every N — even 33 conv
 over 357 rows) says it is memorizing conversations rather than the rule. From 67 up, missed promotion and
 over-trigger match N=270; spec adherence climbs 0.39 → 0.54 → 0.49 and robustness 0.61 → 0.69 → 0.69.
 
+**6. The diagnosed failure mode died when — and only when — the data changed** (`results/base-vs-tuned-v2/NOTES.md`).
+Run `q236v2`: the v2 dataset (shape E wrong attempts, plain-language demos, brevity, verdict-prose rule;
+`dataset_spec.md` changelog v2→v3), training config byte-identical to q270 (config diff in NOTES).
+Clean conversations 20/41 → 33/41, spec adherence 0.49 → 0.80, self-report→KNOWN 0.07 → 0.00 (0 slips
+in 96 turns), unearned KNOWN items 15 → 1, robustness 0.69 → 0.83. The one metric that moved the wrong
+way — over-trigger 0.04 → 0.15 — is the model appending "quick check" probes to otherwise-correct
+answers on ordinary turns, and maps to the shape whose share shrank in v2. This is the thesis's
+strongest evidence: a specific behavior was added and a specific failure removed by editing only data.
+
 ## Minimum viable dataset size — N = 135
 
 Sweep: N = 270 / 135 / 67 / 33 training conversations, nested subsets, identical config (500 optimizer
@@ -97,18 +106,26 @@ Source: `results/data-efficiency-curve/table.md`, `curve.png`, `sweep_summary.js
 `results/data-efficiency-curve/q{33,67,135}/`, `results/base-vs-tuned/` (q270); training logs
 `results/train/q{33,67,135,270}/`.
 
-## Failure modes → v2 data change (Early submission)
+## Failure modes → v2 data change (Early submission) — RESOLVED 2026-08-20
 
-The tuned model credits wrong-but-topical statements ("I'd use an inner join for that" → KNOWN: inner
-join) and situational facts. Cause: the dataset has no incorrect-attempt turns, so the model learned
-"topical statement → KNOWN". Also, 7 broken scenarios are replies that hit the 512-token cap before the
-ledger line, and the prose on the verdict turn over-credits. v2 dataset: add a `wrong_attempt` shape, add
-plain-language demonstrations, add a brevity constraint, and make the verdict-turn prose list only KNOWN
-items. Training config unchanged.
+Diagnosis (from the MVP eval): the tuned model credits wrong-but-topical statements ("I'd use an inner
+join for that" → KNOWN: inner join) and situational facts. Cause: the dataset had no incorrect-attempt
+turns, so the model learned "topical statement → KNOWN". Also, 7 broken scenarios were replies that hit
+the 512-token cap before the ledger line, and the prose on the verdict turn over-credited.
+
+The fix was data only — `wrong_attempt` shape, plain-language demonstrations, brevity constraint,
+verdict-turn prose rule — with the training config unchanged (evidence item 6). Every diagnosed number
+moved: unearned 15 → 1, ledger rate 0.95 → 1.00, robustness 0.69 → 0.83.
+
+Residual for Final: over-trigger 0.04 → 0.15 — appended "quick check" probes on ordinary turns (not
+withholding; control shape G is 5/5 clean). Candidate v3 change, again data-only: raise the ordinary
+share and place ordinary turns right after demonstrations.
 
 ## What I believe now
 
 The behavior lives in the data. The two hard parts were (a) stopping the teacher from making the frontier
 mistake — solved by removing the judgment from its job, not by better instructions — and (b) making the
 eval tell provenance from format, so a tuned model could not pass by copying or by withholding. Everything
-after that was a button press.
+after that was a button press. The v2 round sharpened the claim: one added data shape removed one
+measured failure (15 → 1 unearned promotions) and shifted nothing else but the shape whose share it
+displaced — behavior tracked data on the way up and on the way sideways.

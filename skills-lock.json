@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "huggingface-llm-trainer": {
+      "source": "huggingface/skills",
+      "sourceType": "github",
+      "skillPath": "skills/huggingface-llm-trainer/SKILL.md",
+      "computedHash": "43bf6f95ca2a02882478bb1ba0b915ad2efdb5793e9cb2625fdc14872117a7e5"
+    }
+  }
+}

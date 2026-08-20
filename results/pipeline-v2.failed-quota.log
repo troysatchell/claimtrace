@@ -1,0 +1,399 @@
+== [Thu Aug 20 15:10:13 CDT 2026] generate v2
+generating 390 conversations (~4290 teacher calls)
+  10/390 conversations, 10 kept
+  20/390 conversations, 20 kept
+  30/390 conversations, 30 kept
+  40/390 conversations, 40 kept
+  50/390 conversations, 50 kept
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+  error: 400 Client Error: Bad Request for url: https://api.anthropic.com/v1/messages
+{
+  "teacher": "claude-sonnet-4-6",
+  "seed": 0,
+  "conversations_attempted": 390,
+  "conversations_kept": 56,
+  "assistant_turns_kept": 600,
+  "turns_by_shape": {
+    "self_report": 191,
+    "demonstration": 134,
+    "wrong_attempt": 100,
+    "ordinary": 50,
+    "pressure": 125
+  },
+  "by_shape": {
+    "self_report": {
+      "kept": 191,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "demonstration": {
+      "kept": 134,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "pressure": {
+      "kept": 125,
+      "dropped": 0,
+      "drop_rate": 0.0
+    },
+    "ordinary": {
+      "kept": 50,
+      "dropped": 6,
+      "drop_rate": 0.107
+    },
+    "wrong_attempt": {
+      "kept": 100,
+      "dropped": 0,
+      "drop_rate": 0.0
+    }
+  },
+  "self_report_conditions": {
+    "self_report_after_demo": 78,
+    "self_report_known_empty": 82,
+    "self_report_known_nonempty": 31,
+    "self_report_positive_attempted": 56,
+    "self_report_positive_kept": 56,
+    "wrong_attempt_known_empty": 25,
+    "wrong_attempt_known_nonempty": 75
+  },
+  "drops": {
+    "ordinary:diagnostic_question_on_ordinary": 6,
+    "api_error": 334
+  }
+}
+== [Thu Aug 20 15:16:43 CDT 2026] train q270v2 (identical config, v2 data)
+[2026-08-20 15:16:43] run_id=q270v2 commit=d9adae84bcbfca62399ae669b16329779f51165b base=ckpt/base-q4 n=270 seed=0
+[2026-08-20 15:16:43] args {"data": "data/v2/dataset.jsonl", "n": 270, "run_id": "q270v2", "run_prefix": "n", "base": "ckpt/base-q4", "seed": 0, "valid_frac": 0.1, "valid_rows": 64, "dry_run": false, "iters": 2000, "batch_size": 1, "grad_accumulation_steps": 4, "num_layers": 16, "learning_rate": 5e-05, "rank": 16, "scale": 20.0, "dropout": 0.05, "save_every": 200, "steps_per_eval": 200, "steps_per_report": 20, "max_seq_length": 6144, "warmup": 25}
+--n 270 exceeds the 45 training conversations

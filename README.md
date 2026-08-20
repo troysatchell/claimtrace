@@ -82,6 +82,7 @@ publish.py               fuse and push model + dataset to Hugging Face Hub; prin
 space/                   hosted demo: Gradio base-vs-tuned app (same protocol as compare.py) + Dockerfile/railway.json
 smoke.sh                 generate → train → eval on 6 conversations; log in results/smoke-loop/
 run_pipeline_qlora.sh    train q270 → eval → sweep q135/q67/q33 → curve (run_pipeline_qlora_rest.sh: same from the eval step)
+run_pipeline_v2.sh       Early submission: train q236v2 on data/v2 (identical config) → eval → results/base-vs-tuned-v2 (generation step: generate_dataset.py --n 300 --out data/v2 --teacher kimi-k3)
 judge.py                 standalone per-turn judge over a transcripts file
 llm.py                   teacher/judge API routing (claude-* → Anthropic, kimi-* → Moonshot)
 ```
