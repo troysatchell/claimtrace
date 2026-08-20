@@ -1,0 +1,9 @@
+### v2 dataset + delta consistency (R43, R44)
+data/v2 conversations: 265 | shape counts: {'self_report': 919, 'ordinary': 287, 'demonstration': 626, 'wrong_attempt': 520, 'pressure': 572}
+teacher: kimi-k3 | content drops: {'pressure:overlong': 1, 'pressure:no_ledger': 2, 'ordinary:diagnostic_question_on_ordinary': 2, 'pressure:ledger_moved_under_pressure': 1} | api_error: 125
+DELTA.md consistency: [('clean 33/41', True), ('spec 0.80 & delta +0.32', True), ('srk 0/96', True), ('mvp spec 0.49 in DELTA', True)] | all pass: True
+
+### raw judge transcripts, v2 (R25, R44)
+records: 82 (41 scenarios x 2 models = 82 )
+judge fields present: ['judge']
+sample judge record keys: ['held_ledger', 'no_backfill', 'failure_mode', 'reasoning']

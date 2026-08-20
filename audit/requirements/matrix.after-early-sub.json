@@ -1,0 +1,1675 @@
+{
+ "mode": "compare",
+ "label": "early-sub",
+ "baselineRef": "matrix.after-mvp.json",
+ "commit": "909ac76a3a8555f302ec2d316dfd6a97ad80d6a3",
+ "dirty": true,
+ "dirty_paths": [
+  "audit/requirements/runs/early-sub/"
+ ],
+ "date": "2026-08-20T18:46:21-05:00",
+ "config_hash": "c0d2c2507f6f3db6300901caa5ca073493c30b2cfce6c764a0d52abe5376a6ec",
+ "ticket_mapping": {
+  "status": "BLOCKED",
+  "provider": "linear",
+  "team": "Troysatchell",
+  "reason": "tickets.project is null: the Troysatchell team spans 8 unrelated projects and none is this repo (config comment); no scope to map against.",
+  "unblock": "Create a Linear project for claimtrace and set tickets.project in audit/requirements.config.yaml."
+ },
+ "requirements": [
+  {
+   "id": "SLM-R1",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 55,
+     "note": "'The residual: early self-report → KNOWN' — best prompt still files the biography under KNOWN (Sonnet 10/12, Kimi 5/12)"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 57,
+     "note": "'Establishes (n=30, 5 shapes, 2 families): a specific, nameable failure ... survives'"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 83,
+     "note": "stated reliability bar; best prompted cell sits below it"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Ablation at n=30 with a stated bar (≤1/12 self-report→KNOWN on the biography turns, ≥27/30 clean); best prompted cell: 5/12 & 17/30 (Kimi), 10/12 & 16/30 (Sonnet). verify.precheck not re-run this sweep."
+  },
+  {
+   "id": "SLM-R2",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "ledger.py",
+     "line": 11,
+     "note": "BEHAVIOR_SPEC: the two-sentence falsifiable spec"
+    },
+    {
+     "file": "BEHAVIOR_SPEC.md",
+     "line": 3,
+     "note": "same text, standalone, with pass/fail reading rule"
+    },
+    {
+     "file": "ledger.py",
+     "line": 16,
+     "note": "SPEC = format line + BEHAVIOR_SPEC (system prompt for generation/training/eval)"
+    },
+    {
+     "file": "eval.py",
+     "line": 37,
+     "note": "JUDGE_PROMPT cites {spec}"
+    }
+   ],
+   "verification": {
+    "command": "python3 -c \"import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)\"",
+    "result_excerpt": "2"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Same text used by the harness's judge (eval.py JUDGE_PROMPT formats SPEC) and the generation prompt (generate_dataset.py GEN formats SPEC)."
+  },
+  {
+   "id": "SLM-R3",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "BEHAVIOR_SPEC.md",
+     "line": 3,
+     "note": "tutor/learner spec"
+    },
+    {
+     "file": "build_scenarios.py",
+     "line": 3,
+     "note": "'30 long tutoring scenarios in five shapes' (+F/G)"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Learning/teaching behavior (tutor's ledger of what a learner has demonstrated)."
+  },
+  {
+   "id": "SLM-R4",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "generate_dataset.py",
+     "line": 246,
+     "note": "keep(): mechanical filter, delete-never-repair"
+    },
+    {
+     "file": "generate_dataset.py",
+     "line": 315,
+     "note": "build_conversation(): teacher distillation, ledger threaded forward"
+    },
+    {
+     "file": "data/drop_report.json",
+     "line": 5,
+     "note": "conversations_kept 300 / assistant_turns_kept 3301"
+    },
+    {
+     "file": "data/generate.log",
+     "line": 1,
+     "note": "generation log"
+    }
+   ],
+   "verification": {
+    "command": "wc -l data/dataset.jsonl; python3 -c \"import json;print(json.load(open('data/drop_report.json'))['drops'])\"",
+    "result_excerpt": "300 data/dataset.jsonl\n{'self_report:no_ledger': 1, 'ordinary:diagnostic_question_on_ordinary': 5, 'pressure:ledger_moved_under_pressure': 1, 'pressure:no_ledger': 1, 'demonstration:no_ledger': 1}"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Teacher for the shipped dataset is kimi-k3 (drop_report.json line 2), not the pinned claude-sonnet-4-6 — the Anthropic key was rejected at generation time; --teacher records the id."
+  },
+  {
+   "id": "SLM-R5",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "train.py",
+     "line": 46,
+     "note": "quantize_base(): mlx_lm.convert -q 4-bit affine group 64 → ckpt/base-q4 (frozen base)"
+    },
+    {
+     "file": "train.py",
+     "line": 191,
+     "note": "fine_tune_type lora, adamw"
+    },
+    {
+     "file": "train.py",
+     "line": 199,
+     "note": "lora_parameters rank/scale/dropout; mask_prompt"
+    },
+    {
+     "file": "results/smoke-loop/log.txt",
+     "line": 4,
+     "note": "run_id=smoke ... base=ckpt/base-q4 (QLoRA path executed)"
+    }
+   ],
+   "verification": {
+    "command": "./smoke.sh --skip-generate",
+    "result_excerpt": "== smoke loop Tue Aug 18 20:26:46 CDT 2026 commit b505da9...\n== generate: SKIPPED (reusing data/smoke-v2: 6 conversations, teacher kimi-k3)\n[2026-08-18 20:27:36] done: 1 checkpoints, final adapter sha256=ec953337ce48 wall=0.8min peak_mem=5.5GB\n== eval: python3 eval.py --model ckpt/smoke/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/smoke-loop/eval --limit 2 --max-new-tokens 160 --no-judge\n== smoke loop done Tue Aug 18 20:31:19 CDT 2026"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "QLoRA = LoRA adapters over the 4-bit quantized base (mlx_lm applies LoRA to QuantizedLinear). Framework is mlx_lm on Apple Silicon rather than Unsloth/TRL (the brief's suggestions are non-binding). The completed full-size run in results/ (n270) is bf16 LoRA on the unquantized base; the QLoRA run of record (q270) is training at sweep time — see SLM-R41."
+  },
+  {
+   "id": "SLM-R6",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/base-vs-tuned/table.md",
+     "line": 1,
+     "note": "QLoRA q270 base-vs-tuned: base spec 0.00 vs tuned 0.49"
+    },
+    {
+     "file": "results/base-vs-tuned-v2/table.md",
+     "line": 1,
+     "note": "v2 q236v2: base 0.00 vs tuned 0.80, clean 0/41 vs 33/41"
+    },
+    {
+     "file": "results/base-vs-tuned-lora-bf16/table.md",
+     "line": 1,
+     "note": "bf16 n270 MVP table"
+    }
+   ],
+   "verification": {
+    "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+    "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Three base-vs-tuned tables (bf16 n270, QLoRA q270, v2 q236v2), all same eval set/harness; tuned beats base on the spec metric in each. v2 eval ran live 2026-08-20 18:01–18:23 (results/pipeline-v2.log), same one-command eval.py invocation."
+  },
+  {
+   "id": "SLM-R7",
+   "verdict": "ASSUMED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "BEHAVIOR_SPEC.md",
+     "line": 3,
+     "note": "one behavior"
+    },
+    {
+     "file": "generate_dataset.py",
+     "line": 38,
+     "note": "TOPICS: 12 subjects, one tutoring context"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": "'Context' means the 1:1 tutoring interaction, so multi-subject tutoring is one context (dataset_spec.md line 88 varies subject on purpose so the model learns the behavior, not the domain).",
+   "suggested_scope": null,
+   "notes": "Pending ruling from the 2026-08-17 baseline (interpretations.md). Compare mode reuses interpretations untouched; still needs the yes/no from the user."
+  },
+  {
+   "id": "SLM-R8",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/train/n270/log.txt",
+     "line": 1,
+     "note": "first training log line 2026-08-18 14:30:18, commit b505da9"
+    }
+   ],
+   "verification": {
+    "command": "git log --format='%h %ad %s' --date=iso -- eval.py ledger.py train.py | head -3",
+    "result_excerpt": "46d0b65 2026-08-18 13:48:08 -0500 train.py (mlx_lm.lora wrapper), sweep.py, llm.py ...\n3210fd3 2026-08-18 13:35:54 -0500 harness: MLX eval path, provenance columns, eval set v5 ...\n07eaf97 2026-08-17 20:38:17 -0500 eval update"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Harness commits 07eaf97 (2026-08-17), 3210fd3 and 46d0b65 (2026-08-18 13:35/13:48) precede the first training log (14:30:18). The repo IS a git repository (baseline said otherwise)."
+  },
+  {
+   "id": "SLM-R9",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "dataset_spec.md",
+     "line": 10,
+     "note": "'Changelog v2 → v3 (2026-08-20)' — iteration is a dataset change; every change targets a measured failure"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 109,
+     "note": "'Failure modes → v2 data change (Early submission) — RESOLVED 2026-08-20' — fix was data only, config unchanged"
+    },
+    {
+     "file": "results/train/q236v2/lora_config.yaml",
+     "line": 1,
+     "note": "training config of the v2 run; diff vs q270 is data/adapter paths only"
+    }
+   ],
+   "verification": {
+    "command": "diff <(grep -v 'data\\|adapter_path' results/train/q270/lora_config.yaml) <(grep -v 'data\\|adapter_path' results/train/q236v2/lora_config.yaml)",
+    "output": "IDENTICAL except data/adapter paths (full diff: lines 3 and 30, the two paths)",
+    "captured": "audit/requirements/runs/early-sub/sweep-and-curve.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Iteration lever is the dataset (v2/spec-v3), not hyperparameters: config diff between q270 and q236v2 is empty outside data/adapter paths. Was N/A at baseline (no iteration existed yet to judge)."
+  },
+  {
+   "id": "SLM-R10",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "eval.py",
+     "line": 346,
+     "note": "summarize(): spec_adherence, robustness, ledger_rate, premature, hedged, clean"
+    },
+    {
+     "file": "eval.py",
+     "line": 369,
+     "note": "provenance(): self-report→KNOWN, missed promotion, over-trigger"
+    }
+   ],
+   "verification": {
+    "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+    "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "No capability benchmark anywhere in the harness."
+  },
+  {
+   "id": "SLM-R11",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 5,
+     "note": "results table, 6 cells × 30 scenarios"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 28,
+     "note": "residual paragraph with numbers"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 83,
+     "note": "stated reliability bar"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Completed run with numbers and a stated bar; committed 2026-08-17, before train.py existed. verify.precheck not re-run this sweep."
+  },
+  {
+   "id": "SLM-R12",
+   "verdict": "N/A",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Architecture Defense presentation event; not code-traceable."
+  },
+  {
+   "id": "SLM-R13",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "metacog_precheck.py",
+     "line": 36,
+     "note": "claude-sonnet-5 (Anthropic)"
+    },
+    {
+     "file": "metacog_precheck.py",
+     "line": 37,
+     "note": "kimi-k3 (Moonshot)"
+    }
+   ],
+   "verification": {
+    "command": "verify.probe_anthropic; verify.probe_kimi",
+    "result_excerpt": "200\n['kimi-k3', 'kimi-k2.7-code-highspeed', 'kimi-k2.6', 'kimi-k2.7-code']"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R14",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "metacog_precheck.py",
+     "line": 85,
+     "note": "zero_shot"
+    },
+    {
+     "file": "metacog_precheck.py",
+     "line": 86,
+     "note": "few_shot (FEW_SHOT examples)"
+    },
+    {
+     "file": "metacog_precheck.py",
+     "line": 87,
+     "note": "structured"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/table.md",
+     "line": 3,
+     "note": "6 model×strategy rows"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Ran at n=30 on 2026-08-17 (results/full-30-run.log, results/full-30-sonnet-run.log). verify.precheck NOT re-run in this sweep (API spend); see commands_run."
+  },
+  {
+   "id": "SLM-R15",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "metacog_precheck.py",
+     "line": 287,
+     "note": "--max-scenarios (default all)"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/table.md",
+     "line": 3,
+     "note": "n=30 per cell"
+    }
+   ],
+   "verification": {
+    "command": "verify.scenario_count",
+    "result_excerpt": "scenarios 41 turns 498"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Ablation cells ran over the 30 v3 scenarios; the eval set is now 41 (m31–m41 added 2026-08-18 for base-vs-tuned)."
+  },
+  {
+   "id": "SLM-R16",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "ablation_judge.py",
+     "line": 1,
+     "note": "judges the ablation transcripts with eval.py's JUDGE_PROMPT"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/judged_table.md",
+     "line": 1,
+     "note": "per model×strategy judged table, rubric named"
+    },
+    {
+     "file": "eval.py",
+     "line": 37,
+     "note": "the one rubric (JUDGE_PROMPT)"
+    }
+   ],
+   "verification": {
+    "command": "python3 ablation_judge.py --transcripts results/prompt-ceiling-ablation/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/prompt-ceiling-ablation --judge-model claude-sonnet-4-6",
+    "result_excerpt": "judging 180 conversations with claude-sonnet-4-6 (0 cached)\n| sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | ... |\n| kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | ... |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Ablation and base-vs-tuned are now scored by the same judge rubric (eval.py JUDGE_PROMPT). judge.py (per-turn rubric) remains as a separate tool and was not used for either."
+  },
+  {
+   "id": "SLM-R17",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/prompt-ceiling-ablation/judged_table.md",
+     "line": 3,
+     "note": "table: spec adherence + robustness per model×strategy"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 67,
+     "note": "judged columns section"
+    }
+   ],
+   "verification": {
+    "command": "python3 ablation_judge.py --transcripts results/prompt-ceiling-ablation/transcripts.jsonl --scenarios metacog_scenarios.jsonl --out results/prompt-ceiling-ablation --judge-model claude-sonnet-4-6",
+    "result_excerpt": "judging 180 conversations with claude-sonnet-4-6 (0 cached)\n| sonnet | structured | 30 | 0.53 | 0.53 | 30 | 17/30 | 27/30 | ... |\n| kimi | structured | 30 | 0.57 | 0.53 | 30 | 18/30 | 21/30 | ... |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Mean spec adherence (clean conversations / n) and judged robustness per model×strategy."
+  },
+  {
+   "id": "SLM-R18",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 55,
+     "note": "'The residual: early self-report → KNOWN' — names the surviving failure mode with examples"
+    },
+    {
+     "file": "README.md",
+     "line": 45,
+     "note": "same paragraph in the README"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R19",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/train/q270/summary.json",
+     "line": 1,
+     "note": "N=270, 500 optimizer steps, adapter sha 6a6af4f1"
+    },
+    {
+     "file": "results/train/q135/summary.json",
+     "line": 1,
+     "note": "N=135"
+    },
+    {
+     "file": "results/train/q67/summary.json",
+     "line": 1,
+     "note": "N=67"
+    },
+    {
+     "file": "results/train/q33/summary.json",
+     "line": 1,
+     "note": "N=33"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 87,
+     "note": "'Log-2 spacing: the smallest point (357 prefix rows, 5.6 epochs …)' — spacing justification"
+    }
+   ],
+   "verification": {
+    "command": "python3 (list results/train/{q33,q67,q135,q270}/summary.json: N, rows, val loss, sha, commit)",
+    "output": "distinct sweep Ns: [33, 67, 135, 270] | >=4 sizes: True",
+    "captured": "audit/requirements/runs/early-sub/sweep-and-curve.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Four QLoRA checkpoints at nested log-2 sizes, identical config, each with log.txt + lora_config.yaml + summary.json (adapter sha256)."
+  },
+  {
+   "id": "SLM-R20",
+   "verdict": "PARTIAL",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/data-efficiency-curve/sweep_summary.json",
+     "line": 1,
+     "note": "per-checkpoint eval summaries, all n=41 on metacog_scenarios.jsonl"
+    },
+    {
+     "file": "results/data-efficiency-curve/table.md",
+     "line": 1,
+     "note": "same-harness columns for base + q33/q67/q135/q270"
+    },
+    {
+     "file": "README.md",
+     "line": 122,
+     "note": "eval-set schema documented for the staff drop-in"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "Run eval.py --eval-set <staff path> per checkpoint when staff publish the set; no code change needed.",
+   "notes": "Every checkpoint evaluated on the identical own eval set with the same harness (q270 via results/base-vs-tuned, symlinked as q270). The staff held-out set has not been provided, so that half of the quote is unsatisfiable today."
+  },
+  {
+   "id": "SLM-R21",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/data-efficiency-curve/table.md",
+     "line": 1,
+     "note": "spec adherence + robustness columns per N"
+    },
+    {
+     "file": "results/data-efficiency-curve/curve.png",
+     "line": 1,
+     "note": "performance-vs-N plot (binary; 69,590 bytes)"
+    },
+    {
+     "file": "sweep.py",
+     "line": 82,
+     "note": "plotting: spec adherence + robustness + self-report→KNOWN vs N"
+    }
+   ],
+   "verification": {
+    "command": "head -2 results/data-efficiency-curve/table.md; grep -c '^| q' table.md; ls curve.png",
+    "output": "header has 'spec adherence' and 'robustness' columns; 4 tuned rows; curve.png present",
+    "captured": "audit/requirements/runs/early-sub/sweep-and-curve.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Curve reported as both table and plot for spec adherence and robustness (plus the behavior column)."
+  },
+  {
+   "id": "SLM-R22",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "BRAINLIFT.md",
+     "line": 84,
+     "note": "'## Minimum viable dataset size — N = 135'"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 92,
+     "note": "'N = 135 is the stated minimum viable dataset size' with per-column comparison vs N=270"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 97,
+     "note": "N=67 floor and N=33 overfit justification tied to the curve"
+    }
+   ],
+   "verification": {
+    "command": "grep -n 'Minimum viable dataset size — N = 135' BRAINLIFT.md",
+    "output": "84:## Minimum viable dataset size — N = 135",
+    "captured": "audit/requirements/runs/early-sub/sweep-and-curve.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Minimum viable N named (135) with a pre-stated criterion and per-column justification; floor (67) and failure point (33) also characterized."
+  },
+  {
+   "id": "SLM-R23",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "README.md",
+     "line": 161,
+     "note": "HF model repo id @ exact revision 4de80c2a06ad… (q270)"
+    },
+    {
+     "file": "results/publish.json",
+     "line": 3,
+     "note": "model_revision 4de80c2a06ad27e020584a638661651cf3f8a39e"
+    },
+    {
+     "file": "SUBMISSION.md",
+     "line": 23,
+     "note": "submission row with repo id + revision"
+    }
+   ],
+   "verification": {
+    "command": "python3 publish.py --run n270 --user troysaved; HfApi().repo_info(...) for both repos",
+    "result_excerpt": "troysaved/claimtrace-qwen3-1.7b private=False sha=b6f68ec2 (model.safetensors 3441 MB, adapters/, tokenizer, config)\ntroysaved/claimtrace-ledger-dataset private=False sha=af3b6508 (dataset.jsonl, drop_report.json, README)"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Public model re-published 2026-08-19 for the QLoRA run of record (q270); revision recorded in README + SUBMISSION + publish.json. Note for Final: current best run q236v2 is not yet published — re-run publish.py --run q236v2 before Final so the graded checkpoint matches the reported numbers."
+  },
+  {
+   "id": "SLM-R24",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "eval.py",
+     "line": 463,
+     "note": "--model"
+    },
+    {
+     "file": "eval.py",
+     "line": 464,
+     "note": "--eval-set"
+    },
+    {
+     "file": "eval.py",
+     "line": 68,
+     "note": "runtime backend detection (MLX / torch)"
+    }
+   ],
+   "verification": {
+    "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+    "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "One command writes table.md, judge_transcripts.jsonl and run.json."
+  },
+  {
+   "id": "SLM-R25",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "eval.py",
+     "line": 513,
+     "note": "judge_transcripts.jsonl per-example rows with judge {held_ledger,no_backfill,failure_mode,reasoning}"
+    },
+    {
+     "file": "results/base-vs-tuned-lora-bf16/NOTES.md",
+     "line": 20,
+     "note": "36 judged per row"
+    }
+   ],
+   "verification": {
+    "command": "python3 -c \"import json;rows=[json.loads(l) for l in open('results/base-vs-tuned-lora-bf16/judge_transcripts.jsonl')];print(len(rows), sum(1 for r in rows if r.get('judge') and r['judge'].get('reasoning')))\"",
+    "result_excerpt": "82 72"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R26",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "eval.py",
+     "line": 464,
+     "note": "--eval-set path"
+    },
+    {
+     "file": "README.md",
+     "line": 121,
+     "note": "Eval set schema (for a staff held-out set)"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "No hard-coded scenarios; only `say` required per turn."
+  },
+  {
+   "id": "SLM-R27",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/base-vs-tuned-lora-bf16/run.json",
+     "line": 2,
+     "note": "eval_code_commit"
+    },
+    {
+     "file": "results/train/n270/summary.json",
+     "line": 3,
+     "note": "training commit"
+    },
+    {
+     "file": "results/publish.json",
+     "line": 3,
+     "note": "HF model revision"
+    },
+    {
+     "file": "README.md",
+     "line": 160,
+     "note": "submission block lists all three"
+    }
+   ],
+   "verification": {
+    "command": "cat results/publish.json",
+    "result_excerpt": "\"model_revision\": \"b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb\"\n\"train_commit\": \"b505da9edde5d8dc3723a793a67733b5f5f012c1\"\n\"adapter_sha256\": \"a9b58ae1…\""
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "—",
+   "notes": "Eval-code commit, training commit, adapter sha256 and HF model revision are all recorded and cross-referenced in the README submission block."
+  },
+  {
+   "id": "SLM-R28",
+   "verdict": "N/A",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "compare.py",
+     "line": 20,
+     "note": "live single-conversation base-vs-tuned runner for the demo"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Video content; compare.py makes the live grader prompt demonstrable."
+  },
+  {
+   "id": "SLM-R29",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "metacog_precheck.py",
+     "line": 287,
+     "note": "--max-scenarios"
+    },
+    {
+     "file": "README.md",
+     "line": 95,
+     "note": "one-cell rerun command"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "verify.precheck NOT run this sweep (API spend); the n=30 run logs are results/full-30-run.log and results/full-30-sonnet-run.log."
+  },
+  {
+   "id": "SLM-R30",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/train/n270/log.txt",
+     "line": 1,
+     "note": "training log (config, data stats, per-20-iter loss, checkpoints)"
+    },
+    {
+     "file": "results/train/n270/lora_config.yaml",
+     "line": 1,
+     "note": "exact mlx_lm.lora config"
+    },
+    {
+     "file": "results/train/n270/summary.json",
+     "line": 623,
+     "note": "final adapter sha256"
+    }
+   ],
+   "verification": {
+    "command": "python3 train.py --n 270 --run-id n270 (via run_pipeline.sh, 14:30-16:02 CDT)",
+    "result_excerpt": "Iter 2000: Val loss 0.910, Val took 57.260s\nIter 2000: Train loss 0.894, Learning Rate 5.323e-06, It/sec 0.526, Tokens/sec 102.702, Trained Tokens 449015, Peak mem 10.669 GB\nSaved final weights to ckpt/n270/adapters/adapters.safetensors.\ndone: 10 checkpoints, final adapter sha256=... wall=92.4min peak_mem=10.7GB"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R31",
+   "verdict": "N/A",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Calendar deadline."
+  },
+  {
+   "id": "SLM-R32",
+   "verdict": "N/A",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Calendar deadline."
+  },
+  {
+   "id": "SLM-R33",
+   "verdict": "N/A",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Calendar deadline."
+  },
+  {
+   "id": "SLM-R34",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "BEHAVIOR_SPEC.md",
+     "line": 3,
+     "note": "finalized two-sentence spec"
+    },
+    {
+     "file": "ledger.py",
+     "line": 11,
+     "note": "BEHAVIOR_SPEC"
+    }
+   ],
+   "verification": {
+    "command": "python3 -c \"import ledger; print(ledger.BEHAVIOR_SPEC.count('. ')+1)\"",
+    "result_excerpt": "2"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R35",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 1,
+     "note": "ablation report: method, table, per-shape, residual paragraph, files"
+    },
+    {
+     "file": "results/prompt-ceiling-ablation/REPORT.md",
+     "line": 67,
+     "note": "judged columns + reliability bar"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Report has method, table (deterministic + judged), per-shape breakdown, residual paragraph, stated bar."
+  },
+  {
+   "id": "SLM-R36",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "eval.py",
+     "line": 209,
+     "note": "judge(): LLM-as-judge call"
+    },
+    {
+     "file": "eval.py",
+     "line": 37,
+     "note": "rubric prompt"
+    }
+   ],
+   "verification": {
+    "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+    "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R37",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "ledger.py",
+     "line": 57,
+     "note": "check_turn(): premature/unearned/hedged/missed/ledger_missing"
+    },
+    {
+     "file": "ledger.py",
+     "line": 77,
+     "note": "hedged_known — the spec's signature failure"
+    },
+    {
+     "file": "eval.py",
+     "line": 268,
+     "note": "record_turn() applies check_turn per turn"
+    }
+   ],
+   "verification": {
+    "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+    "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R38",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "eval.py",
+     "line": 465,
+     "note": "--base"
+    },
+    {
+     "file": "eval.py",
+     "line": 381,
+     "note": "render(): base and tuned rows + provenance + per-shape tables"
+    }
+   ],
+   "verification": {
+    "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+    "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R39",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "smoke.sh",
+     "line": 19,
+     "note": "generate step"
+    },
+    {
+     "file": "smoke.sh",
+     "line": 22,
+     "note": "train step"
+    },
+    {
+     "file": "results/smoke-loop/log.txt",
+     "line": 1,
+     "note": "committed run log"
+    }
+   ],
+   "verification": {
+    "command": "./smoke.sh --skip-generate",
+    "result_excerpt": "== smoke loop Tue Aug 18 20:26:46 CDT 2026 commit b505da9...\n== generate: SKIPPED (reusing data/smoke-v2: 6 conversations, teacher kimi-k3)\n[2026-08-18 20:27:36] done: 1 checkpoints, final adapter sha256=ec953337ce48 wall=0.8min peak_mem=5.5GB\n== eval: python3 eval.py --model ckpt/smoke/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/smoke-loop/eval --limit 2 --max-new-tokens 160 --no-judge\n== smoke loop done Tue Aug 18 20:31:19 CDT 2026"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "The committed log reused the 6-conversation batch data/smoke-v2 (generated 2026-08-18 with kimi-k3, drop_report.json alongside) because both API keys were dead at that moment; `./smoke.sh` without the flag regenerates it. Train and eval steps ran live."
+  },
+  {
+   "id": "SLM-R40",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "data/drop_report.json",
+     "line": 5,
+     "note": "attempted 390 / kept 300; drops per shape"
+    },
+    {
+     "file": "data/dataset.jsonl",
+     "line": 1,
+     "note": "dataset"
+    }
+   ],
+   "verification": {
+    "command": "wc -l data/dataset.jsonl",
+    "result_excerpt": "300 data/dataset.jsonl"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": null
+  },
+  {
+   "id": "SLM-R41",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/train/q270/log.txt",
+     "line": 1,
+     "note": "run_id=q270 base=ckpt/base-q4 (4-bit) — QLoRA"
+    },
+    {
+     "file": "results/train/q270/summary.json",
+     "line": 3,
+     "note": "training commit; final adapter sha256 6a6af4f1ac8e…"
+    },
+    {
+     "file": "results/train/q270/lora_config.yaml",
+     "line": 1,
+     "note": "model: ckpt/base-q4, LoRA r=16, 16 layers"
+    }
+   ],
+   "verification": {
+    "command": "python3 train.py --n 270 --run-id q270 (via run_pipeline_qlora.sh)",
+    "result_excerpt": "summary.json: optimizer_steps 500, effective_batch 4, final_val_loss 0.941, final_adapter sha256 6a6af4f1ac8eee74…, wall 113.7 min"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "—",
+   "notes": "Full-size QLoRA run q270 complete 22:20 CDT (4-bit frozen base ckpt/base-q4). Its base-vs-tuned eval (results/base-vs-tuned/) is running."
+  },
+  {
+   "id": "SLM-R42",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/base-vs-tuned/table.md",
+     "line": 1,
+     "note": "QLoRA q270 first numbers (run of record)"
+    },
+    {
+     "file": "results/base-vs-tuned/judge_transcripts.jsonl",
+     "line": 1,
+     "note": "raw judge JSONL"
+    },
+    {
+     "file": "results/base-vs-tuned/NOTES.md",
+     "line": 1,
+     "note": "run notes + provenance (commits, sha)"
+    }
+   ],
+   "verification": {
+    "command": "python3 eval.py --model ckpt/n270/adapters --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-lora-bf16 (16:05 CDT) + eval.py --rejudge results/base-vs-tuned-lora-bf16 --rejudge-all --judge-model claude-sonnet-4-6",
+    "result_excerpt": "| base | 41 | 0.00 | 0.97 (36 judged) | 1.00 | 120 | 1 | 0/41 |\n| tuned | 41 | 0.49 | 0.67 (36 judged) | 0.97 | 2 | 0 | 20/41 |\n| base | 23/96 (0.24) | 96 | 1 | 45 | 74/78 (0.95) | 0/96 (0.00) |\n| tuned | 1/91 (0.01) | 96 | 0 | 13 | 10/78 (0.13) | 1/96 (0.01) |"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "First base-vs-tuned numbers exist in the brief's format for both the bf16 twin and the QLoRA run of record."
+  },
+  {
+   "id": "SLM-R43",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/base-vs-tuned-v2/NOTES.md",
+     "line": 33,
+     "note": "'Each diagnosed failure mode → what the data change did' — per-failure results"
+    },
+    {
+     "file": "dataset_spec.md",
+     "line": 16,
+     "note": "'Shape E — wrong attempt (new)' — the diagnosis and the data change"
+    },
+    {
+     "file": "data/v2/drop_report.json",
+     "line": 1,
+     "note": "v2 dataset manifest: 265 convs, teacher kimi-k3, per-shape drop rates"
+    },
+    {
+     "file": "results/train/q236v2/lora_config.yaml",
+     "line": 1,
+     "note": "config of the v2 run (identical to q270 outside paths)"
+    }
+   ],
+   "verification": {
+    "command": "diff <(grep -v 'data\\|adapter_path' results/train/q270/lora_config.yaml) <(grep -v 'data\\|adapter_path' results/train/q236v2/lora_config.yaml); python3 (count shapes in data/v2/dataset.jsonl)",
+    "output": "IDENTICAL except data/adapter paths; data/v2: 265 conversations, wrong_attempt=520 assistant turns",
+    "captured": "audit/requirements/runs/early-sub/v2-and-delta.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Failure mode (wrong-but-topical → KNOWN) diagnosed from the MVP eval, resolved by data only: unearned 15→1, shapes C/E self-report→KNOWN → 0.00. Config diff empty. N=236 vs 270 (Moonshot quota died at 265/300 conversations) — documented in dataset_spec.md:5-8 with curve-based justification."
+  },
+  {
+   "id": "SLM-R44",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/base-vs-tuned-v2/DELTA.md",
+     "line": 1,
+     "note": "explicit MVP-vs-v2 delta column per metric"
+    },
+    {
+     "file": "results/base-vs-tuned-v2/table.md",
+     "line": 1,
+     "note": "updated base-vs-tuned table"
+    },
+    {
+     "file": "results/base-vs-tuned-v2/judge_transcripts.jsonl",
+     "line": 1,
+     "note": "raw judge JSONL, 82 records (41 scenarios × 2 models), judge fields held_ledger/no_backfill/failure_mode/reasoning"
+    }
+   ],
+   "verification": {
+    "command": "python3 (recompute deltas from results/base-vs-tuned{,-v2}/run.json and compare to DELTA.md; count judge records)",
+    "output": "DELTA.md consistency: all pass | records: 82 with score+reasoning fields",
+    "captured": "audit/requirements/runs/early-sub/v2-and-delta.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Updated numbers with an explicit delta vs MVP and the full per-example judge output. Same judge model (claude-sonnet-4-6) and eval set as the MVP run."
+  },
+  {
+   "id": "SLM-R45",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/data-efficiency-curve/table.md",
+     "line": 1,
+     "note": "4 evaluated points (q33/q67/q135/q270)"
+    },
+    {
+     "file": "results/data-efficiency-curve/sweep_summary.json",
+     "line": 1,
+     "note": "machine-readable per-point summaries"
+    }
+   ],
+   "verification": {
+    "command": "head -2 results/data-efficiency-curve/table.md; grep -c '^| q' table.md; ls curve.png",
+    "output": "header has 'spec adherence' and 'robustness' columns; 4 tuned rows; curve.png present",
+    "captured": "audit/requirements/runs/early-sub/sweep-and-curve.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Early asks for ≥2 points; 4 exist."
+  },
+  {
+   "id": "SLM-R46",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "dataset_spec.md",
+     "line": 1,
+     "note": "dataset shape spec, v3 (current)"
+    },
+    {
+     "file": "results/train/q236v2/summary.json",
+     "line": 1,
+     "note": "draft checkpoint reference (adapter sha256 b6255e49…)"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 1,
+     "note": "in-progress Brainlift with thesis, 6 evidence items, min-N"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "All three drafts exist and are current as of the Early push (909ac76)."
+  },
+  {
+   "id": "SLM-R47",
+   "verdict": "PARTIAL",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "README.md",
+     "line": 163,
+     "note": "published dataset id @ revision af3b6508 — this is the v1 dataset"
+    },
+    {
+     "file": "results/publish.json",
+     "line": 5,
+     "note": "dataset_revision af3b6508351ce4e22682b666eecfdb481452a526"
+    }
+   ],
+   "verification": {
+    "command": "HfApi().repo_info('troysaved/claimtrace-ledger-dataset', repo_type='dataset')",
+    "result_excerpt": "private=False sha=af3b6508; files: dataset.jsonl (3 MB), drop_report.json, README.md (= dataset_spec.md)"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "python3 publish.py --run q236v2 --user troysaved (uploads data-dir; confirm it points at data/v2 or extend publish.py's dataset path flag) before Final, then update README/SUBMISSION revisions.",
+   "notes": "REGRESSION vs after-mvp (was VERIFIED): the published dataset revision is v1 (data/), but the project's real artifact is now the v2 dataset (data/v2) that produced q236v2. Publishing is one command and costs no API budget."
+  },
+  {
+   "id": "SLM-R48",
+   "verdict": "PARTIAL",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/publish.json",
+     "line": 2,
+     "note": "public model repo"
+    },
+    {
+     "file": "space/app.py",
+     "line": 1,
+     "note": "Gradio base-vs-tuned demo (mirrors compare.py; Dockerfile + railway.json alongside)"
+    },
+    {
+     "file": "compare.py",
+     "line": 20,
+     "note": "local demo runner"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "Host space/ (HF PRO Space, or Railway via space/Dockerfile) and link the URL from README + SUBMISSION.md.",
+   "notes": "Model is public on the Hub. The inference-demo app exists (space/) but is not hosted yet: HF gates Gradio Spaces on cpu-basic behind PRO (create returned 402); container hosting (Railway/Render) needs an account decision."
+  },
+  {
+   "id": "SLM-R49",
+   "verdict": "PARTIAL",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/base-vs-tuned-v2/table.md",
+     "line": 1,
+     "note": "own-set final-format table (current best run)"
+    },
+    {
+     "file": "README.md",
+     "line": 122,
+     "note": "staff eval-set schema documented"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "Run the one-command eval with the staff set path when released; harness takes any conforming JSONL.",
+   "notes": "Own-set half satisfied and current; staff held-out set not yet provided."
+  },
+  {
+   "id": "SLM-R50",
+   "verdict": "VERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "results/data-efficiency-curve/curve.png",
+     "line": 1,
+     "note": "full curve, 4 points"
+    },
+    {
+     "file": "results/data-efficiency-curve/table.md",
+     "line": 1,
+     "note": "per-N table"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 84,
+     "note": "justified minimum viable N = 135"
+    }
+   ],
+   "verification": {
+    "command": "head -2 results/data-efficiency-curve/table.md; grep -c '^| q' table.md; ls curve.png",
+    "output": "header has 'spec adherence' and 'robustness' columns; 4 tuned rows; curve.png present",
+    "captured": "audit/requirements/runs/early-sub/sweep-and-curve.txt"
+   },
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Full curve + justified min N both present. Note: the Final row is satisfied by the existing 4-point QLoRA sweep; q236v2 (different dataset) is not a fifth point on this curve and is not claimed as one."
+  },
+  {
+   "id": "SLM-R51",
+   "verdict": "IMPLEMENTED-UNVERIFIED",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [
+    {
+     "file": "BRAINLIFT.md",
+     "line": 3,
+     "note": "thesis"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 75,
+     "note": "evidence 6: data → behavior held, with the v2 numbers"
+    },
+    {
+     "file": "BRAINLIFT.md",
+     "line": 124,
+     "note": "'What I believe now' — conclusion"
+    }
+   ],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Brainlift now states the thesis, the evidence-backed conclusion (data → behavior held), min-N, and the v2 round. Previously PARTIAL for missing min-N/QLoRA updates; both landed. Stays a draft until Final by design."
+  },
+  {
+   "id": "SLM-R52",
+   "verdict": "N/A",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": null,
+   "notes": "Demo video; link from README when produced."
+  },
+  {
+   "id": "SLM-R53",
+   "verdict": "MISSING",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "Optional; not before Final-submission core items.",
+   "notes": "Stretch (optional): DPO not attempted."
+  },
+  {
+   "id": "SLM-R54",
+   "verdict": "MISSING",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "Optional; not before Final-submission core items.",
+   "notes": "Stretch (optional): adversarial eval set not attempted."
+  },
+  {
+   "id": "SLM-R55",
+   "verdict": "MISSING",
+   "tickets": [
+    "BLOCKED"
+   ],
+   "evidence": [],
+   "verification": null,
+   "interpretation": null,
+   "assumption": null,
+   "suggested_scope": "Optional; not before Final-submission core items.",
+   "notes": "Stretch (optional): composed behavior not attempted."
+  }
+ ],
+ "orphan_tickets": [],
+ "needs_ruling": [
+  {
+   "id": "SLM-R7",
+   "cluster": "scope",
+   "question": "Is multi-subject tutoring acceptable as 'one context' (context = the 1:1 tutoring interaction, not a single subject)?",
+   "traced_under": "yes"
+  }
+ ],
+ "commands_run": [
+  {
+   "command": "verify.scenario_count",
+   "result": "scenarios 41 turns 498",
+   "bears_on": [
+    "SLM-R15",
+    "SLM-R26"
+   ],
+   "note": null
+  },
+  {
+   "command": "verify.precheck_compile",
+   "result": "compile-ok",
+   "bears_on": [
+    "SLM-R29"
+   ],
+   "note": null
+  },
+  {
+   "command": "verify.probe_anthropic",
+   "result": "200",
+   "bears_on": [
+    "SLM-R13"
+   ],
+   "note": null
+  },
+  {
+   "command": "verify.probe_kimi",
+   "result": "kimi-k3 resolves (4 models listed)",
+   "bears_on": [
+    "SLM-R13"
+   ],
+   "note": null
+  },
+  {
+   "command": "config-identity diff q270 vs q236v2 lora_config.yaml",
+   "result": "identical except data/adapter paths",
+   "bears_on": [
+    "SLM-R9",
+    "SLM-R43"
+   ],
+   "note": "audit/requirements/runs/early-sub/sweep-and-curve.txt"
+  },
+  {
+   "command": "sweep-points listing (results/train/{q33,q67,q135,q270,q236v2}/summary.json)",
+   "result": "distinct Ns [33,67,135,270]; >=4 sizes True",
+   "bears_on": [
+    "SLM-R19",
+    "SLM-R30"
+   ],
+   "note": "same file"
+  },
+  {
+   "command": "curve columns + row count + curve.png",
+   "result": "spec adherence + robustness columns, 4 tuned rows, curve.png 69,590 bytes",
+   "bears_on": [
+    "SLM-R21",
+    "SLM-R45",
+    "SLM-R50"
+   ],
+   "note": "same file"
+  },
+  {
+   "command": "grep min viable N in BRAINLIFT",
+   "result": "84:## Minimum viable dataset size — N = 135",
+   "bears_on": [
+    "SLM-R22",
+    "SLM-R50"
+   ],
+   "note": "same file"
+  },
+  {
+   "command": "v2 dataset composition (shape counts, drop report)",
+   "result": "265 convs; wrong_attempt=520 turns; teacher kimi-k3; 6 content drops",
+   "bears_on": [
+    "SLM-R43"
+   ],
+   "note": "audit/requirements/runs/early-sub/v2-and-delta.txt"
+  },
+  {
+   "command": "DELTA.md consistency recompute from run.json pair",
+   "result": "all 4 checks pass",
+   "bears_on": [
+    "SLM-R44"
+   ],
+   "note": "same file"
+  },
+  {
+   "command": "judge JSONL check (v2)",
+   "result": "82 records; fields held_ledger/no_backfill/failure_mode/reasoning",
+   "bears_on": [
+    "SLM-R25",
+    "SLM-R44"
+   ],
+   "note": "same file"
+  },
+  {
+   "command": "citation integrity check (114 citations from after-mvp)",
+   "result": "2 stale (REPORT.md line shift), repointed to line 55",
+   "bears_on": [
+    "SLM-R1",
+    "SLM-R18"
+   ],
+   "note": "audit/requirements/runs/early-sub/citation-check.txt"
+  },
+  {
+   "command": "verify.eval",
+   "result": "NOT RUN",
+   "bears_on": [
+    "SLM-R6",
+    "SLM-R24",
+    "SLM-R42",
+    "SLM-R44"
+   ],
+   "note": "~70 min + judge API cost; the identical eval.py invocation ran live today 18:01–18:23 CDT (results/pipeline-v2.log, results/base-vs-tuned-v2/run.json timestamp + eval_code_commit d9adae8) — observed, not re-run by the sweep"
+  },
+  {
+   "command": "verify.smoke",
+   "result": "NOT RUN",
+   "bears_on": [
+    "SLM-R39"
+   ],
+   "note": "consumes teacher API budget; smoke path unchanged since after-mvp where it was VERIFIED"
+  },
+  {
+   "command": "verify.train_point",
+   "result": "NOT RUN",
+   "bears_on": [
+    "SLM-R30"
+   ],
+   "note": "~1 h GPU; training logs for 5 runs serve as evidence"
+  },
+  {
+   "command": "verify.precheck",
+   "result": "NOT RUN",
+   "bears_on": [
+    "SLM-R1",
+    "SLM-R11",
+    "SLM-R17",
+    "SLM-R29"
+   ],
+   "note": "judge API cost; ablation artifacts unchanged since after-mvp"
+  }
+ ]
+}

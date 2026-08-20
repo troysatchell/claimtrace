@@ -1,0 +1,4 @@
+citations checked: 114
+problems: 2
+  ('SLM-R1', 'results/prompt-ceiling-ablation/REPORT.md', 28, 'STALE -> 55')
+  ('SLM-R18', 'results/prompt-ceiling-ablation/REPORT.md', 28, 'STALE -> 55')

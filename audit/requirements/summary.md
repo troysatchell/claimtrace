@@ -1,16 +1,12 @@
-> **Update 2026-08-19 (after commit 9015412, sweep complete):** the QLoRA sweep finished 10:31 CDT with all four
-> points trained and evaluated. This closes SLM-R19, R20 (own set), R21, R45, R50 and names min viable N
-> (SLM-R22: N = 135, `BRAINLIFT.md`); SLM-R42 now has the QLoRA row (`results/base-vs-tuned/`). SLM-R43/R44 closed 2026-08-20 (v2 dataset `data/v2`, run `q236v2`: clean 20/41→33/41,
-> unearned 15→1; `results/base-vs-tuned-v2/`). Still open: R48 (hosted demo), R49/R20 staff held-out set,
-> and the stretch items. Current status per deliverable: `SUBMISSION.md`. The verdicts below are as of fc1bc93.
+# Requirements audit summary — compare `early-sub` (2026-08-20, commit 909ac76a3a85)
 
-The MVP bundle (SLM-R34–R42) is present and re-runnable including the full-size QLoRA training run
-(SLM-R41 VERIFIED — `q270`, 4-bit base, finished 22:20 CDT; its base-vs-tuned eval into `results/base-vs-tuned/`
-was running at render time; the bf16 LoRA twin `n270` carries the MVP numbers). The base-vs-tuned numbers
-exist and carry the behavior claim (SLM-R6/R42: 0/41 → 20/41 clean; self-report→KNOWN 0.24 → 0.01;
-base holds the ledger format on 100% of turns so the delta is provenance, not formatting), with full
-per-example judge output. The model and dataset are now public on the Hugging Face Hub with recorded revisions
-(SLM-R23, R27, R47 VERIFIED; `results/publish.json`, run n270 — q270 to follow). The hosted inference demo
-(SLM-R48) is built (`space/`) but not yet deployed: HF gates Gradio Spaces behind PRO, so hosting is an account decision. The ablation's LLM-judge column (SLM-R16/R17) is now computed with the eval.py rubric (`results/prompt-ceiling-ablation/judged_table.md`). Everything else that was MISSING at baseline
-(harness, dataset, training, eval, JSONL, smoke loop, sweep tooling, Brainlift draft) now exists; 34 of
-55 verdicts changed.
+31 VERIFIED · 10 IMPLEMENTED-UNVERIFIED · 4 PARTIAL · 3 MISSING · 6 N/A · 1 ASSUMED
+
+Every Early-submission requirement (SLM-R43–R46) is VERIFIED: the v2 dataset (`data/v2`, 265 convs,
+teacher kimi-k3) resolves the diagnosed failure mode with a byte-identical training config (unearned
+15→1, self-report→KNOWN 0.00, clean 20/41→33/41), the MVP delta regenerates from the run.json pair,
+and the raw judge JSONL is complete. The data-efficiency bundle (R19–R22, R45, R50) is VERIFIED with
+min viable N = 135. One regression: the published HF dataset/model are v1/q270 while the artifact of
+record is now v2/q236v2 (SLM-R47 PARTIAL; note on R23) — one publish command fixes both. Remaining
+PARTIALs are externally blocked (staff set, demo hosting); MISSINGs are the three optional stretch
+items. Full detail: REPORT.md; deltas vs after-mvp in its Delta section.

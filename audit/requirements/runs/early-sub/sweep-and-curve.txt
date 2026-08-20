@@ -1,0 +1,28 @@
+### config-identity: q270 vs q236v2 lora_config.yaml (R9, R43)
+IDENTICAL except data/adapter paths
+### full diff (showing the only differing lines):
+3c3
+< data: ckpt/q270/data
+---
+> data: ckpt/q236v2/data
+30c30
+< adapter_path: ckpt/q270/adapters
+---
+> adapter_path: ckpt/q236v2/adapters
+
+### sweep points: >=4 distinct N with logs (R19, R30)
+q33 N=33 rows=357 val=2.119 sha=f23ab965 commit=7e07ae13
+q67 N=67 rows=723 val=1.163 sha=63f8fbac commit=7e07ae13
+q135 N=135 rows=1467 val=0.979 sha=3af5547c commit=7e07ae13
+q270 N=270 rows=2982 val=0.941 sha=6a6af4f1 commit=b505da9e
+q236v2 N=236 rows=2618 val=0.756 sha=b6255e49 commit=d9adae84
+distinct sweep Ns: [33, 67, 135, 270] | >=4 sizes: True
+
+### curve artifact: columns + rows (R21, R45, R50)
+| run | N (train convs) | train rows | epochs | val loss | spec adherence | robustness | ledger rate | hedged | self-report→KNOWN | missed promotion | over-trigger | clean |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+4
+69590 results/data-efficiency-curve/curve.png
+
+### min viable N stated in Brainlift (R22, R50)
+84:## Minimum viable dataset size — N = 135

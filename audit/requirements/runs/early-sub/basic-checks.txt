@@ -1,0 +1,8 @@
+### verify.scenario_count
+scenarios 41 turns 498
+### verify.precheck_compile
+compile-ok
+### probe_anthropic (GET /models/claude-sonnet-5)
+200
+### probe_kimi (GET /models)
+True 4 models
