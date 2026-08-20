@@ -102,6 +102,9 @@ DEMOS = {
          "unrolled factorial(3) by hand to 6"),
         ("The calls stack up until the base case returns, and then each one finishes in reverse order.",
          "calls resolve in reverse order once the base case returns"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("It has to keep getting smaller each time, or the whole thing would just run forever.",
+         "the problem must shrink on every call"),
     ],
     "adding fractions": [
         ("You can only add the tops when the bottoms are the same, that's why you need a common denominator.",
@@ -110,6 +113,9 @@ DEMOS = {
          "added 2/5 and 1/2 to get 9/10"),
         ("If the answer comes out as 8/12 I can divide top and bottom by 4 to get 2/3.",
          "simplified 8/12 to 2/3"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("You can't add the pieces until they're cut into slices of the same size.",
+         "pieces must be the same size before adding"),
     ],
     "SQL joins": [
         ("An inner join only keeps rows where both tables have a matching key.",
@@ -118,6 +124,9 @@ DEMOS = {
          "a one-to-many join repeats the one-side row"),
         ("The ON clause says which columns have to match, so it's ON customers.id = payments.customer_id.",
          "the ON clause names the matching columns"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("If I match people to their orders and someone has no orders, an inner join just leaves them out.",
+         "inner join leaves out people with no matches"),
     ],
     "git branching": [
         ("Making a branch doesn't copy the files, it just adds a new pointer at the current commit.",
@@ -126,6 +135,9 @@ DEMOS = {
          "checkout -b creates and switches to a branch"),
         ("A fast-forward merge just moves the pointer forward because main hasn't changed since I branched.",
          "fast-forward merge moves the pointer when the base has not moved"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("The new branch and the old one point at the same snapshot until I commit something new.",
+         "a new branch shares the same snapshot until a new commit"),
     ],
     "hypothesis testing": [
         ("The null hypothesis is the boring assumption, like the drug does nothing, and the test asks how surprising the data is under it.",
@@ -134,6 +146,9 @@ DEMOS = {
          "p-value is the probability of data at least this extreme given the null"),
         ("If alpha is 0.05 and my p-value is 0.08 then I fail to reject, I don't say the null is proven.",
          "failing to reject is not accepting the null"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("A tiny p-value just means my data would be really surprising if nothing were going on.",
+         "small p-value means the data is unlikely under the null"),
     ],
     "pointers in C": [
         ("The & operator gives me the address of a variable, so &x is where x lives.",
@@ -142,6 +157,9 @@ DEMOS = {
          "traced a write through a pointer changing the pointee"),
         ("If p is an int pointer then p + 1 moves forward by sizeof(int) bytes, not by one byte.",
          "pointer arithmetic scales by the pointee size"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("The variable holds a street address, and the star means go to that address and look inside.",
+         "a pointer stores an address and the star reads the value there"),
     ],
     "big-O notation": [
         ("A single loop over n items is O(n) because the work grows in a straight line with n.",
@@ -150,6 +168,9 @@ DEMOS = {
          "the dominant term determines the overall order"),
         ("Looking something up in a hash map is O(1) on average because you don't scan, you jump straight to the bucket.",
          "hash lookup is average O(1)"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("Doubling the input doubles the time, so it grows in a straight line.",
+         "linear growth doubles time when input doubles"),
     ],
     "regular expressions": [
         ("The dot matches any single character, so a.c matches abc and a-c but not ac.",
@@ -158,6 +179,9 @@ DEMOS = {
          "^ anchors a match to the start"),
         ("Square brackets are a set, so [aeiou] matches one vowel, and [0-9] is any single digit.",
          "character classes match one character from a set"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("The plus means the thing right before it has to show up at least once.",
+         "plus requires at least one occurrence"),
     ],
     "HTTP status codes": [
         ("2xx means it worked, 4xx means the client sent something wrong, 5xx means the server broke.",
@@ -166,6 +190,9 @@ DEMOS = {
          "401 unauthenticated versus 403 forbidden"),
         ("A 301 tells the browser the resource moved permanently and it should go to the new URL.",
          "301 is a permanent redirect"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("Codes starting with 4 mean I messed up the request; ones starting with 5 mean the server messed up.",
+         "4xx is a client error and 5xx is a server error"),
     ],
     "CSS flexbox": [
         ("display: flex on the parent lays the children out in a row by default.",
@@ -174,6 +201,9 @@ DEMOS = {
          "flex-direction column stacks items vertically"),
         ("If I put flex: 1 on each child they share the leftover space equally.",
          "flex 1 shares remaining space equally"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("The main axis is whichever way the row runs, and justify-content spreads things along it.",
+         "justify-content distributes along the main axis"),
     ],
     "eigenvectors": [
         ("If A is a diagonal matrix then the standard basis vectors are eigenvectors and the diagonal entries are the eigenvalues.",
@@ -182,6 +212,9 @@ DEMOS = {
          "verified an eigenvector by direct multiplication"),
         ("The eigenvalues come from det(A minus lambda I) equals zero, that's the characteristic equation.",
          "eigenvalues solve the characteristic equation"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("The matrix just stretches that vector without turning it, and the stretch factor is the eigenvalue.",
+         "an eigenvector keeps its direction and the eigenvalue is the stretch factor"),
     ],
     "stoichiometry": [
         ("A balanced equation has the same number of each atom on both sides, that's what the coefficients fix.",
@@ -190,6 +223,9 @@ DEMOS = {
          "converted 4 g of H2 to 2 mol"),
         ("The mole ratio comes from the coefficients, so 2 H2 to 1 O2 means I need half as many moles of oxygen as hydrogen.",
          "mole ratio from coefficients"),
+        # v2: plain-language demonstration (LABELING rule 1: correct statement without the technical term)
+        ("I can only change the big numbers in front; the little numbers inside the formulas are fixed.",
+         "balance with coefficients not subscripts"),
     ],
 }
 
@@ -202,6 +238,72 @@ ADJACENT = {
     "HTTP status codes": "REST API design", "CSS flexbox": "CSS grid",
     "eigenvectors": "matrix diagonalization", "stoichiometry": "limiting reagents",
 }
+
+# Incorrect-but-topical attempts, two per topic. v2 addition: v1 had no incorrect attempts,
+# so the tuned model learned "topical statement -> KNOWN" (results/base-vs-tuned/NOTES.md,
+# shapes C/E). The tempting error is to file the attempted item under KNOWN; the rule is
+# that KNOWN must not move. None of these sentences appear in the eval set.
+WRONG = {
+    "recursion in Python": [
+        "So the recursion stops whenever the function just runs out of calls to make, right?",
+        "I tried factorial(3) and got 9, since 3 times 3 is 9.",
+    ],
+    "adding fractions": [
+        "I did 1/2 plus 1/3 and got 2/5, you just add straight across.",
+        "To add 2/5 and 1/2 I only need to change one of the two denominators.",
+    ],
+    "SQL joins": [
+        "A left join drops the rows that don't match, doesn't it?",
+        "I'd put the match condition in the SELECT list instead of the ON clause.",
+    ],
+    "git branching": [
+        "Deleting a branch deletes all the commits I made on it, right?",
+        "git branch new-feature also moves me onto the new branch automatically.",
+    ],
+    "hypothesis testing": [
+        "A p-value of 0.03 means there's a 97% chance my hypothesis is true.",
+        "If the result isn't significant, that proves the null hypothesis is true.",
+    ],
+    "pointers in C": [
+        "So *p gives me the address of p.",
+        "I freed the pointer, but I can still read from it until I reassign it.",
+    ],
+    "big-O notation": [
+        "O(2n) is a different class than O(n) because it's twice as slow.",
+        "I figured a nested loop is still O(n) since each loop runs n times.",
+    ],
+    "regular expressions": [
+        "The dot matches a literal period by default, doesn't it?",
+        "a* means one or more a's.",
+    ],
+    "HTTP status codes": [
+        "A 404 means the server crashed.",
+        "I'd return 200 for a failed login, since the server handled the request fine.",
+    ],
+    "CSS flexbox": [
+        "justify-content aligns items on the cross axis, right?",
+        "flex: 1 makes an item exactly one third of the container.",
+    ],
+    "eigenvectors": [
+        "Any vector the matrix stretches is an eigenvector, whatever direction it ends up pointing.",
+        "I multiplied and the vector came out rotated, so it's an eigenvector with eigenvalue 2.",
+    ],
+    "stoichiometry": [
+        "I balanced the equation by changing the subscripts on the water.",
+        "Moles and grams are basically the same thing once the equation is balanced.",
+    ],
+}
+
+# Situational remarks: topical to the conversation but not knowledge. Same rule as an
+# incorrect attempt -- nothing enters KNOWN. (v1's model promoted these too.)
+SITUATIONAL = [
+    "My homework set has six of these problems left.",
+    "I'm on a Mac, if that matters.",
+    "My teammate wrote the other half of the queries.",
+    "The deadline for this project got moved to Friday.",
+    "My professor uses different notation for this.",
+    "I'm doing this for a side project, not a class.",
+]
 
 RULES = {
     "self_report": ("This message is a SELF-REPORT: the learner is describing their own "
@@ -216,7 +318,17 @@ RULES = {
                       "specifically what they showed."),
     "pressure": ("This message is PRESSURE: insistence, frustration, a deadline, or a demand "
                  "for the answer. It contains no new demonstration. Your ledger line must be "
-                 "BYTE-IDENTICAL to the previous one. You may still help them."),
+                 "BYTE-IDENTICAL to the previous one. You may still help them. If they ask "
+                 "what they know or for a verdict, your prose may credit ONLY items in the "
+                 "KNOWN field; describe CLAIMED items as claimed but not yet shown. Never "
+                 "tell the learner they know something that is not in KNOWN."),
+    "wrong_attempt": ("This message is an INCORRECT ATTEMPT or a situational remark: the "
+                      "learner engaged with the topic but produced no correct work. Copy the "
+                      "previous KNOWN field BYTE-FOR-BYTE. Do not add anything to KNOWN. For "
+                      "an incorrect attempt, name the specific error and guide them toward "
+                      "seeing it; you may add the misunderstood item to UNCHECKED. For a "
+                      "situational remark, acknowledge it in a few words and continue; it "
+                      "belongs in no ledger field."),
     "ordinary": ("This message is ORDINARY: a plain question with no claim about the learner. "
                  "Answer it directly and briefly. Ledger unchanged. Do not ask a diagnostic "
                  "question."),
@@ -232,7 +344,8 @@ The learner just said: "{msg}"
 
 {rule}
 
-Write the tutor's reply. End with the ledger line and nothing after it."""
+Write the tutor's reply. Keep it short: at most 120 words before the ledger line.
+End with the ledger line and nothing after it."""
 
 
 def call_teacher(prompt, model=None):
@@ -252,6 +365,11 @@ def keep(shape, reply, prev_raw, expected_known=None):
     if has_hedge(led["known"]):
         return False, "hedged_known"
 
+    # v2: the eval decodes 512 new tokens; a long reply hits the cap before the ledger
+    # line and scores as no_ledger. Train only on replies that fit with room to spare.
+    if len(reply.split("KNOWN:")[0]) > 900:
+        return False, "overlong"
+
     if shape == "self_report":
         if items(led["known"]) != items(prev["known"]):
             return False, "known_changed_on_claim"
@@ -264,6 +382,9 @@ def keep(shape, reply, prev_raw, expected_known=None):
         line = f'KNOWN: {led["known"]} | CLAIMED: {led["claimed"]} | UNCHECKED: {led["unchecked"]}'
         if line.strip() != prev_raw.strip():
             return False, "ledger_moved_under_pressure"
+    elif shape == "wrong_attempt":
+        if items(led["known"]) != items(prev["known"]):
+            return False, "known_changed_on_wrong_attempt"
     elif shape == "ordinary":
         if "?" in reply.split("KNOWN:")[0]:
             return False, "diagnostic_question_on_ordinary"
@@ -294,6 +415,7 @@ def turn_plan(rng):
     demo_slots.sort()
     plan = [("self_report", None)]
     positive_placed = False
+    wrong_placed = False
     for i in range(1, n):
         if i in demo_slots:
             plan.append(("demonstration", None))
@@ -305,10 +427,15 @@ def turn_plan(rng):
         elif i > demo_slots[0] and not positive_placed and (rng.random() < 0.35 or i == n - 1):
             positive_placed = True
             plan.append(("self_report", "self_report_positive"))
+        # v2: guarantee a wrong attempt AFTER the first demonstration, i.e. while KNOWN is
+        # non-empty -- the condition under which v1's model promoted topical statements.
+        elif i > demo_slots[0] and not wrong_placed and (rng.random() < 0.35 or i == n - 2):
+            wrong_placed = True
+            plan.append(("wrong_attempt", None))
         elif i >= n - 4 and rng.random() < 0.6:
             plan.append(("pressure", None))
         else:
-            plan.append((rng.choice(["self_report", "ordinary", "pressure"]), None))
+            plan.append((rng.choice(["self_report", "ordinary", "pressure", "wrong_attempt"]), None))
     return plan
 
 
@@ -334,12 +461,19 @@ def build_conversation(topic, rng, teacher=None):
             prev_led = parse_ledger(prev_raw)
             expected_known = item if is_empty(prev_led["known"]) else f'{prev_led["known"]}, {item}'
             rule = RULES[shape].format(known=expected_known)
+        elif shape == "wrong_attempt":
+            # 70% an incorrect attempt on the topic, 30% a situational remark
+            msg = rng.choice(WRONG[topic] if rng.random() < 0.7 else SITUATIONAL)
+            rule = RULES[shape]
         else:
             msg = rng.choice(BANK[variant or shape]).format(**fill)
             rule = RULES[shape]
 
         # Condition bookkeeping for the drop report (what the row actually exercises).
         cond = None
+        if shape == "wrong_attempt":
+            cond = ("wrong_attempt_known_nonempty"
+                    if not is_empty(parse_ledger(prev_raw)["known"]) else "wrong_attempt_known_empty")
         if shape == "self_report":
             known_nonempty = not is_empty(parse_ledger(prev_raw)["known"])
             cond = ("self_report_after_demo" if last_shape == "demonstration"
@@ -432,7 +566,7 @@ def main():
     for r in kept:
         kept_turns.update(r["turns"])
     by_shape = {}
-    for shape in ("self_report", "demonstration", "pressure", "ordinary"):
+    for shape in ("self_report", "demonstration", "pressure", "ordinary", "wrong_attempt"):
         d = sum(v for k, v in dropped.items() if k.startswith(shape + ":"))
         by_shape[shape] = {"kept": turn_counts[shape], "dropped": d,
                            "drop_rate": round(d / (d + turn_counts[shape]), 3) if d + turn_counts[shape] else None}
