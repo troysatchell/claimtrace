@@ -1,11 +1,11 @@
 {
   "model_repo": "troysaved/claimtrace-qwen3-1.7b",
-  "model_revision": "4de80c2a06ad27e020584a638661651cf3f8a39e",
+  "model_revision": "f6532284babb0fbb1388ce98a6aa28523e3c899c",
   "dataset_repo": "troysaved/claimtrace-ledger-dataset",
-  "dataset_revision": "af3b6508351ce4e22682b666eecfdb481452a526",
-  "run": "q270",
-  "train_commit": "b505da9edde5d8dc3723a793a67733b5f5f012c1",
-  "adapter_sha256": "6a6af4f1ac8eee742c240d172fe6dc57076ee24fcce374ec315bd166b89cdd03",
+  "dataset_revision": "ef2f4a2bccba9b22dacbb3aea5ec19e1667f7877",
+  "run": "q236v2",
+  "train_commit": "d9adae84bcbfca62399ae669b16329779f51165b",
+  "adapter_sha256": "b6255e4963bce9e73587848034cf9e9ff445dbc5b91d2d4f2bf6078d7d022813",
   "published_by": "troysaved",
-  "timestamp": "2026-08-19T11:42:39-0500"
+  "timestamp": "2026-08-20T19:25:25-0500"
 }

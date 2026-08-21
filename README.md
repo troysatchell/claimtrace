@@ -111,7 +111,7 @@ python3 eval.py --rejudge results/base-vs-tuned --judge-model claude-sonnet-4-6 
 python3 sweep.py --runs q270,q135,q67,q33 --base-results results/base-vs-tuned --out results/data-efficiency-curve
 
 # 6. Publish (needs `hf auth login`), then eval the published revision
-python3 publish.py --run q270 --user troysaved       # done 2026-08-19: results/publish.json (rev 4de80c2a)
+python3 publish.py --run q236v2 --user troysaved --data-dir data/v2   # done 2026-08-20: results/publish.json (rev f6532284)
 python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl
 
 # Smoke test of the whole loop (~5 min); live demo
@@ -157,10 +157,11 @@ sentences differ from them (`dataset_spec.md`, "No eval leakage").
 - Eval-code commit: `results/<out>/run.json → eval_code_commit`.
 - Training commit and adapter sha256: `results/train/<run>/summary.json`.
 - HF model repo and revision, dataset repo and revision: `results/publish.json`, written by `publish.py`.
-  Published 2026-08-19 (run `q270`, QLoRA, the run of record; adapter sha256 `6a6af4f1ac8e…`):
-  - model `troysaved/claimtrace-qwen3-1.7b` @ `4de80c2a06ad27e020584a638661651cf3f8a39e` — https://huggingface.co/troysaved/claimtrace-qwen3-1.7b
-    (the bf16 LoRA `n270` run remains pinned at revision `b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb`)
-  - dataset `troysaved/claimtrace-ledger-dataset` @ `af3b6508351ce4e22682b666eecfdb481452a526` — https://huggingface.co/datasets/troysaved/claimtrace-ledger-dataset
+  Published 2026-08-20 (run `q236v2`, QLoRA on the v2 dataset — the current run of record; adapter sha256 `b6255e4963bc…`):
+  - model `troysaved/claimtrace-qwen3-1.7b` @ `f6532284babb0fbb1388ce98a6aa28523e3c899c` — https://huggingface.co/troysaved/claimtrace-qwen3-1.7b
+    (earlier runs stay pinned: QLoRA `q270` @ `4de80c2a06ad27e020584a638661651cf3f8a39e`, bf16 LoRA `n270` @ `b6f68ec27c1b45c1d230b4e6e38d9ad4d108a4fb`)
+  - dataset `troysaved/claimtrace-ledger-dataset` @ `ef2f4a2bccba9b22dacbb3aea5ec19e1667f7877` (v2, `data/v2`) — https://huggingface.co/datasets/troysaved/claimtrace-ledger-dataset
+    (v1 dataset stays pinned @ `af3b6508351ce4e22682b666eecfdb481452a526`)
   - eval against the published revision: `python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-hf`
 - Inference demo (base vs tuned, live, multi-turn): `space/` — Gradio app + Dockerfile; runs as an HF Space or any container host (Railway/Render). Local equivalent: `compare.py`.
 

@@ -20,7 +20,7 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 
 | Requirement | Where | Status |
 |---|---|---|
-| Public model checkpoint on Hugging Face Hub + exact commit hash | `troysaved/claimtrace-qwen3-1.7b` @ `4de80c2a06ad` (run `q270`, QLoRA; `results/publish.json`); bf16 `n270` pinned at `b6f68ec27c1b` | ✅ |
+| Public model checkpoint on Hugging Face Hub + exact commit hash | `troysaved/claimtrace-qwen3-1.7b` @ `f6532284babb` (run `q236v2`, current run of record; `results/publish.json`); prior runs pinned: q270 `4de80c2a06ad`, n270 `b6f68ec27c1b` | ✅ |
 | `eval.py --model <hf-repo-id> --eval-set <path>` | `eval.py` (root) | ✅ |
 | Raw judge transcripts (score + reasoning per example) | `<dir>/judge_transcripts.jsonl` per eval run | ✅ |
 | Staff held-out eval set | any JSONL in the schema in `README.md` "Eval set schema"; only `say` is required per turn | ✅ (schema) |
@@ -41,7 +41,7 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 
 | Deliverable | Where | Status |
 |---|---|---|
-| Dataset published | `troysaved/claimtrace-ledger-dataset` @ `af3b650835` (`results/publish.json`) | ✅ |
+| Dataset published | `troysaved/claimtrace-ledger-dataset` @ `ef2f4a2bccba` (v2, `data/v2`; v1 pinned @ `af3b650835`) | ✅ |
 | Model on HF Hub + running inference demo | model ✅ (above); demo app `space/` (Gradio + Dockerfile, mirrors `compare.py`) | ⏳ hosting: HF Space needs PRO, or Railway/Render via `space/Dockerfile` |
 | Eval harness + results, own set and staff set | `eval.py`; `results/base-vs-tuned/` | ⏳ staff set when provided |
 | Full Data-Efficiency curve + justified minimum viable N | `results/data-efficiency-curve/table.md`, `curve.png`; `BRAINLIFT.md` "Minimum viable dataset size — N = 135" | ✅ 4 points; min viable N = 135 (N = 67 floor, N = 33 overfits) |

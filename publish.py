@@ -25,6 +25,7 @@ def main():
     ap.add_argument("--model-repo", default=None)
     ap.add_argument("--dataset-repo", default=None)
     ap.add_argument("--private", action="store_true", help="(default is public, as the brief requires)")
+    ap.add_argument("--data-dir", default="data", help="dataset directory to upload (dataset.jsonl + drop_report.json)")
     args = ap.parse_args()
 
     from huggingface_hub import HfApi, whoami
@@ -74,9 +75,9 @@ Eval: `python eval.py --model {model_repo} --base {args.base} --eval-set metacog
 
     print(f"== uploading dataset to {dataset_repo}", file=sys.stderr)
     api.create_repo(dataset_repo, repo_type="dataset", private=args.private, exist_ok=True)
-    api.upload_file(path_or_fileobj="data/dataset.jsonl", path_in_repo="dataset.jsonl",
+    api.upload_file(path_or_fileobj=f"{args.data_dir}/dataset.jsonl", path_in_repo="dataset.jsonl",
                     repo_id=dataset_repo, repo_type="dataset")
-    api.upload_file(path_or_fileobj="data/drop_report.json", path_in_repo="drop_report.json",
+    api.upload_file(path_or_fileobj=f"{args.data_dir}/drop_report.json", path_in_repo="drop_report.json",
                     repo_id=dataset_repo, repo_type="dataset")
     api.upload_file(path_or_fileobj="dataset_spec.md", path_in_repo="README.md",
                     repo_id=dataset_repo, repo_type="dataset")
