@@ -1,0 +1,13 @@
+{
+  "source": "data/v2/dataset.jsonl",
+  "seed": 0,
+  "pairs": 2227,
+  "by_shape": {
+    "self_report": 848,
+    "ordinary": 287,
+    "demonstration:skipped": 626,
+    "wrong_attempt": 520,
+    "pressure": 572,
+    "self_report:skipped": 71
+  }
+}

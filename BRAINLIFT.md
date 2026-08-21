@@ -1,4 +1,4 @@
-# Brainlift — claimtrace (in progress, 2026-08-20)
+# Brainlift — claimtrace (2026-08-21)
 
 ## Thesis
 
@@ -120,6 +120,15 @@ moved: unearned 15 → 1, ledger rate 0.95 → 1.00, robustness 0.69 → 0.83.
 Residual for Final: over-trigger 0.04 → 0.15 — appended "quick check" probes on ordinary turns (not
 withholding; control shape G is 5/5 clean). Candidate v3 change, again data-only: raise the ordinary
 share and place ordinary turns right after demonstrations.
+
+## Conclusion: did data → behavior hold?
+
+**Yes, twice.** Once at MVP — 300 filtered conversations took self-report→KNOWN from 0.24 to 0.07 and
+clean conversations from 0/41 to 20/41 on a 1.7B model, where the best-prompted frontier models stayed at
+10/12 failures on the same turn. And once more precisely at Early — adding one data shape (wrong attempts)
+with the config frozen removed the one measured failure it targeted (unearned promotions 15 → 1,
+self-report→KNOWN 0.00) and moved nothing else except the shape whose share it displaced. The remaining
+gaps (over-trigger 0.15) map to data composition, not to any training knob — which is the thesis.
 
 ## What I believe now
 

@@ -80,6 +80,9 @@ sweep.py                 data-efficiency table and curve.png
 compare.py               live base-vs-tuned on one conversation (demo)
 publish.py               fuse and push model + dataset to Hugging Face Hub; prints revision hashes
 space/                   hosted demo: Gradio base-vs-tuned app (same protocol as compare.py) + Dockerfile/railway.json
+demo_colab.ipynb         running inference demo on Colab: base vs tuned, pinned HF revision, live grader prompts
+build_dpo_pairs.py       DPO stretch: preference pairs from the SFT data (chosen = on-spec reply, rejected = mechanically corrupted ledger)
+train_dpo.py             DPO stretch: TRL DPO on the pinned SFT checkpoint (CUDA/Colab); measure delta with eval.py
 smoke.sh                 generate → train → eval on 6 conversations; log in results/smoke-loop/
 run_pipeline_qlora.sh    train q270 → eval → sweep q135/q67/q33 → curve (run_pipeline_qlora_rest.sh: same from the eval step)
 run_pipeline_v2.sh       Early submission: train q236v2 on data/v2 (identical config) → eval → results/base-vs-tuned-v2 (generation step: generate_dataset.py --n 300 --out data/v2 --teacher kimi-k3)
@@ -116,7 +119,7 @@ python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B -
 
 # Smoke test of the whole loop (~5 min); live demo
 ./smoke.sh --skip-generate
-python3 compare.py --tuned ckpt/q270/adapters "I've used git for years." "How do I see what commit I'm on?"
+python3 compare.py --tuned ckpt/q236v2/adapters "I've used git for years." "How do I see what commit I'm on?"
 ```
 
 ## Eval set schema (for a staff held-out set)
@@ -163,7 +166,7 @@ sentences differ from them (`dataset_spec.md`, "No eval leakage").
   - dataset `troysaved/claimtrace-ledger-dataset` @ `ef2f4a2bccba9b22dacbb3aea5ec19e1667f7877` (v2, `data/v2`) — https://huggingface.co/datasets/troysaved/claimtrace-ledger-dataset
     (v1 dataset stays pinned @ `af3b6508351ce4e22682b666eecfdb481452a526`)
   - eval against the published revision: `python3 eval.py --model troysaved/claimtrace-qwen3-1.7b --base Qwen/Qwen3-1.7B --eval-set metacog_scenarios.jsonl --out results/base-vs-tuned-hf`
-- Inference demo (base vs tuned, live, multi-turn): `space/` — Gradio app + Dockerfile; runs as an HF Space or any container host (Railway/Render). Local equivalent: `compare.py`.
+- **Running inference demo** (base vs tuned, live, any prompt): **[demo_colab.ipynb](https://colab.research.google.com/github/troysatchell/claimtrace/blob/main/demo_colab.ipynb)** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/troysatchell/claimtrace/blob/main/demo_colab.ipynb) — loads the pinned HF revision, runs both models side by side with the mechanical ledger check on every reply; a grader-supplied prompt goes in the last cell. Any GPU runtime (T4). Alternatives: `space/` (Gradio app + Dockerfile for an HF Space / container host), `compare.py` locally.
 
 ## Provenance
 

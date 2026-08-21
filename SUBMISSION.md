@@ -25,7 +25,7 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 | Raw judge transcripts (score + reasoning per example) | `<dir>/judge_transcripts.jsonl` per eval run | ✅ |
 | Staff held-out eval set | any JSONL in the schema in `README.md` "Eval set schema"; only `say` is required per turn | ✅ (schema) |
 | Pinned versions | eval-code commit: `<dir>/run.json → eval_code_commit`; training commit + adapter sha256: `results/train/<run>/summary.json`; HF revision: `results/publish.json` | ✅ |
-| Live comparison in demo | `python3 compare.py --tuned ckpt/q270/adapters "<turn 1>" "<turn 2>" ...` | ✅ tool; video ⛔ |
+| Live comparison in demo | `python3 compare.py --tuned ckpt/q236v2/adapters "<turn 1>" ...`; or the Colab demo grader cell | ✅ tool; video ⛔ |
 | Ablation reproducibility | `metacog_precheck.py --max-scenarios 1` (one cell); training logs `results/train/<run>/`; one point: `python3 train.py --n 33 --run-id q33` | ✅ |
 
 ## Early submission
@@ -42,11 +42,19 @@ Status: ✅ done · ⏳ running · ⛔ needs an action outside this repo.
 | Deliverable | Where | Status |
 |---|---|---|
 | Dataset published | `troysaved/claimtrace-ledger-dataset` @ `ef2f4a2bccba` (v2, `data/v2`; v1 pinned @ `af3b650835`) | ✅ |
-| Model on HF Hub + running inference demo | model ✅ (above); demo app `space/` (Gradio + Dockerfile, mirrors `compare.py`) | ⏳ hosting: HF Space needs PRO, or Railway/Render via `space/Dockerfile` |
+| Model on HF Hub + running inference demo | model ✅ (above); demo: [`demo_colab.ipynb`](https://colab.research.google.com/github/troysatchell/claimtrace/blob/main/demo_colab.ipynb) (pinned revision, live prompts, mechanical checks); `space/` app remains for container hosting | ✅ |
 | Eval harness + results, own set and staff set | `eval.py`; `results/base-vs-tuned/` | ⏳ staff set when provided |
 | Full Data-Efficiency curve + justified minimum viable N | `results/data-efficiency-curve/table.md`, `curve.png`; `BRAINLIFT.md` "Minimum viable dataset size — N = 135" | ✅ 4 points; min viable N = 135 (N = 67 floor, N = 33 overfits) |
 | Brainlift | `BRAINLIFT.md` (thesis, 5 evidence items incl. QLoRA run and data-efficiency curve, min viable N, v2 plan) | ✅ draft; v2-delta section pending |
 | 3–5 minute demo video with a live grader prompt | link goes here | ⛔ |
+
+## Stretch ladder (optional)
+
+| Item | Where | Status |
+|---|---|---|
+| DPO preference tuning | pairs: `data/dpo/pairs.jsonl` (2,227 pairs, mechanical on-spec vs off-spec corruption; `build_dpo_pairs.py`); training: `train_dpo.py` (TRL, Colab/CUDA); eval: same `eval.py` command | 🟡 pairs + script ready; run needs a CUDA session |
+| Adversarial / robustness eval | — | not attempted |
+| Composed behavior | — | not attempted |
 
 ## Requirements audit
 
